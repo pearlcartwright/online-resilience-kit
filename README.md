@@ -1,3 +1,12 @@
+### License
+
+This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0).
+
+Commercial use is not permitted.
+
+
+
+
 # Online Resilience Kit
 
 A free, public resource for building personal, family, and community resilience in changing times.
