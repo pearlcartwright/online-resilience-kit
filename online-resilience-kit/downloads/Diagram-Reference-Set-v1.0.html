@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OFFLINE NETWORK RESILIENCE SYSTEM — DIAGRAM REFERENCE SET</title>
+    <style>
+        :root { color-scheme: light only; }
+
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #000000;
+            background: #ffffff;
+            max-width: 816px;
+            margin: 0 auto;
+            padding: 72px;
+        }
+
+        h1 { font-family: Calibri, sans-serif; font-size: 24pt; font-weight: bold; margin-top: 24pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h2 { font-family: Calibri, sans-serif; font-size: 16pt; font-weight: bold; margin-top: 18pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h3 { font-family: Calibri, sans-serif; font-size: 13pt; font-weight: bold; margin-top: 12pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+
+        p { margin-top: 0; margin-bottom: 6pt; }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 10pt; }
+        th, td { border: 1px solid #000000; padding: 5px 7px; text-align: left; vertical-align: top; font-size: 10pt; }
+        th { font-weight: bold; background-color: #e8eef7; }
+
+        ul, ol { margin-top: 4pt; margin-bottom: 6pt; padding-left: 36px; }
+        li { margin-bottom: 3pt; }
+
+        .page-break { page-break-after: always; border-top: 1px solid #cccccc; margin-top: 40pt; margin-bottom: 0; }
+
+        .cover-page {
+            text-align: center;
+            padding-top: 80pt;
+            padding-bottom: 60pt;
+            border: 3px solid #1a1a1a;
+            margin-bottom: 0;
+        }
+
+        .cover-main-title {
+            font-family: Calibri, sans-serif;
+            font-size: 28pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            letter-spacing: 2pt;
+            margin-bottom: 0;
+            margin-top: 0;
+            text-transform: uppercase;
+        }
+
+        .cover-sub-title {
+            font-family: Calibri, sans-serif;
+            font-size: 16pt;
+            font-weight: bold;
+            color: #2b5797;
+            margin-top: 10pt;
+            margin-bottom: 18pt;
+            text-transform: uppercase;
+            letter-spacing: 1pt;
+        }
+
+        .cover-rule {
+            border: none;
+            border-top: 2px solid #2b5797;
+            margin: 16pt auto;
+            width: 60%;
+        }
+
+        .cover-meta {
+            font-family: Calibri, sans-serif;
+            font-size: 12pt;
+            color: #333333;
+            margin-bottom: 6pt;
+        }
+
+        .cover-note {
+            font-family: Calibri, sans-serif;
+            font-size: 10pt;
+            color: #555555;
+            font-style: italic;
+            margin-top: 18pt;
+            margin-bottom: 4pt;
+        }
+
+        .cover-license {
+            font-family: Calibri, sans-serif;
+            font-size: 10pt;
+            color: #555555;
+            margin-top: 2pt;
+        }
+
+        .section-rule {
+            border: none;
+            border-top: 1px solid #2b5797;
+            margin-top: 6pt;
+            margin-bottom: 10pt;
+        }
+
+        .figure-block {
+            margin-top: 24pt;
+            margin-bottom: 12pt;
+        }
+
+        .figure-number {
+            font-family: Calibri, sans-serif;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #2b5797;
+            text-transform: uppercase;
+            letter-spacing: 1pt;
+            margin-bottom: 2pt;
+        }
+
+        .figure-title {
+            font-family: Calibri, sans-serif;
+            font-size: 14pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-top: 0;
+            margin-bottom: 4pt;
+        }
+
+        .figure-caption {
+            font-family: Calibri, sans-serif;
+            font-size: 10pt;
+            color: #444444;
+            font-style: italic;
+            margin-bottom: 10pt;
+            border-left: 3px solid #2b5797;
+            padding-left: 8pt;
+        }
+
+        .diagram-box {
+            font-family: Consolas, monospace;
+            font-size: 8.5pt;
+            line-height: 1.35;
+            background-color: #f9f9f9;
+            border: 1px solid #cccccc;
+            padding: 12px 14px;
+            margin-top: 8pt;
+            margin-bottom: 10pt;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .diagram-label {
+            font-family: Calibri, sans-serif;
+            font-size: 9pt;
+            font-weight: bold;
+            color: #2b5797;
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
+            margin-bottom: 2pt;
+            margin-top: 8pt;
+        }
+
+        .callout {
+            border: 1px solid #cccccc;
+            border-left: 3px solid #2b5797;
+            background-color: #f0f4fb;
+            padding: 10px 12px;
+            margin: 10pt 0;
+        }
+
+        .callout-warning {
+            border-left-color: #cc0000;
+            background-color: #fce8e8;
+        }
+
+        .callout-note {
+            border-left-color: #555555;
+            background-color: #f5f5f5;
+        }
+
+        .callout p {
+            margin: 0;
+            font-size: 10pt;
+        }
+
+        .callout-label {
+            font-weight: bold;
+            margin-bottom: 3pt;
+            font-size: 10pt;
+        }
+
+        .tof-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10pt;
+            margin-bottom: 10pt;
+        }
+
+        .tof-table td {
+            border: none;
+            border-bottom: 1px dotted #aaaaaa;
+            padding: 5px 4px;
+            font-size: 10.5pt;
+            vertical-align: bottom;
+        }
+
+        .tof-table td:first-child {
+            font-weight: bold;
+            color: #2b5797;
+            white-space: nowrap;
+            width: 100px;
+        }
+
+        .tof-table td:last-child {
+            text-align: right;
+            width: 40px;
+            color: #555555;
+        }
+
+        .footer-note {
+            font-family: Calibri, sans-serif;
+            font-size: 8.5pt;
+            color: #777777;
+            text-align: center;
+            border-top: 1px solid #cccccc;
+            margin-top: 28pt;
+            padding-top: 6pt;
+        }
+
+        .parts-table th {
+            background-color: #e8eef7;
+        }
+
+        .parts-table tr:last-child td {
+            font-weight: bold;
+            background-color: #f0f4fb;
+        }
+
+        .signal-table th {
+            background-color: #e8eef7;
+            font-size: 10pt;
+        }
+
+        .signal-table td {
+            font-size: 10pt;
+        }
+
+        @media print {
+            body { padding: 0; max-width: none; }
+            .page-break { page-break-after: always; }
+            .diagram-box { font-size: 7.5pt; }
+        }
+    </style>
+</head>
+<body data-id="0">
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- COVER PAGE                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="1" class="cover-page">
+    <p data-id="2" class="cover-meta" style="font-size:10pt; color:#888888; letter-spacing:2pt; text-transform:uppercase; margin-bottom:28pt;">COMPANION DOCUMENT TO THE FIELD MANUAL</p>
+
+    <p data-id="3" class="cover-main-title">OFFLINE NETWORK</p>
+    <p data-id="4" class="cover-main-title">RESILIENCE SYSTEM</p>
+
+    <hr data-id="5" class="cover-rule">
+
+    <p data-id="6" class="cover-sub-title">DIAGRAM REFERENCE SET</p>
+
+    <p data-id="7" class="cover-meta" style="font-size:13pt; font-weight:bold; color:#1a1a1a; margin-bottom:6pt;">Figures 1–10</p>
+    <p data-id="8" class="cover-meta">System Architecture &nbsp;·&nbsp; Wiring &nbsp;·&nbsp; Organization &nbsp;·&nbsp; Field Reference</p>
+
+    <hr data-id="9" class="cover-rule">
+
+    <p data-id="10" class="cover-meta" style="margin-top:20pt;"><strong data-id="11">Edition:</strong> v1.0 — May 2026</p>
+
+    <p data-id="12" class="cover-note">"All diagrams designed to be reproduced by hand or photocopied.<br data-id="13">No special equipment required."</p>
+
+    <p data-id="14" class="cover-note" style="margin-top:18pt;">Companion document to the Field Manual. Reproduce freely.</p>
+    <p data-id="15" class="cover-license"><strong data-id="16">License:</strong> CC BY-SA 4.0 — Creative Commons Attribution-ShareAlike 4.0 International</p>
+</div>
+
+<div data-id="17" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="18" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- TABLE OF FIGURES                                    -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<h2 data-id="19" style="color:#2b5797; margin-top:0;">Table of Figures</h2>
+<hr data-id="20" class="section-rule">
+
+<table data-id="21" class="tof-table">
+    <tr data-id="22">
+        <td data-id="23">Figure 1</td>
+        <td data-id="24">The Three Pillars of Community Resilience</td>
+        <td data-id="25">3</td>
+    </tr>
+    <tr data-id="26">
+        <td data-id="27">Figure 2</td>
+        <td data-id="28">Community Mesh Network Topology</td>
+        <td data-id="29">4</td>
+    </tr>
+    <tr data-id="30">
+        <td data-id="31">Figure 3</td>
+        <td data-id="32">Single Mesh Node — Wiring and Assembly Diagram</td>
+        <td data-id="33">5</td>
+    </tr>
+    <tr data-id="34">
+        <td data-id="35">Figure 4</td>
+        <td data-id="36">Power System Hierarchy</td>
+        <td data-id="37">6</td>
+    </tr>
+    <tr data-id="38">
+        <td data-id="39">Figure 5</td>
+        <td data-id="40">Community Cell Structure</td>
+        <td data-id="41">7</td>
+    </tr>
+    <tr data-id="42">
+        <td data-id="43">Figure 6</td>
+        <td data-id="44">Communication Tree</td>
+        <td data-id="45">8</td>
+    </tr>
+    <tr data-id="46">
+        <td data-id="47">Figure 7</td>
+        <td data-id="48">USB Kit Folder Structure</td>
+        <td data-id="49">9</td>
+    </tr>
+    <tr data-id="50">
+        <td data-id="51">Figure 8</td>
+        <td data-id="52">Go-Box Layout Diagram</td>
+        <td data-id="53">10</td>
+    </tr>
+    <tr data-id="54">
+        <td data-id="55">Figure 9</td>
+        <td data-id="56">Visual Signal Reference Chart</td>
+        <td data-id="57">11</td>
+    </tr>
+    <tr data-id="58">
+        <td data-id="59">Figure 10</td>
+        <td data-id="60">Information Runner Route Map Template</td>
+        <td data-id="61">12</td>
+    </tr>
+</table>
+
+<div data-id="62" class="callout callout-note" style="margin-top:16pt;">
+    <p data-id="63" class="callout-label">HOW TO USE THIS DOCUMENT</p>
+    <p data-id="64">Each figure in this set is a stand-alone reference. Figures may be removed, photocopied, and distributed individually. Every diagram uses only text characters and standard box-drawing symbols so that it can be faithfully reproduced by hand, on a whiteboard, or on any printer. Figures are numbered sequentially and cross-referenced in the companion Field Manual. Blank fields (shown as underscores or empty table cells) are designed to be filled in for your specific community before deployment.</p>
+</div>
+
+<div data-id="65" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="66" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 1                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="67" class="figure-block">
+    <p data-id="68" class="figure-number">Figure 1 of 10</p>
+    <p data-id="69" class="figure-title">THE THREE PILLARS OF COMMUNITY RESILIENCE</p>
+    <hr data-id="70" class="section-rule">
+    <p data-id="71" class="figure-caption">"The system rests on three independent, mutually reinforcing pillars. When one fails, the others continue to function. True resilience requires all three."</p>
+</div>
+
+<div data-id="72" class="diagram-box">
+╔══════════════════════════════════════════════════════════════════════╗
+║              COMMUNITY COMMUNICATIONS RESILIENCE                     ║
+╠═════════════════════╦════════════════════════╦═══════════════════════╣
+║                     ║                        ║                       ║
+║     PILLAR 1        ║       PILLAR 2          ║      PILLAR 3         ║
+║                     ║                        ║                       ║
+║   MESH              ║   RADIO                ║   PHYSICAL            ║
+║   NETWORKS          ║   COMMUNICATIONS       ║   DISTRIBUTION        ║
+║                     ║                        ║                       ║
+║   Device-to-device, ║   Licensed &           ║   Runners, boards,    ║
+║   no internet       ║   unlicensed bands.    ║   printed materials,  ║
+║   required.         ║   Works with no        ║   visual signals.     ║
+║   Self-healing      ║   infrastructure       ║   Zero power          ║
+║   routes.           ║   at all.              ║   required.           ║
+║                     ║                        ║                       ║
+║   ─────────────     ║   ─────────────────    ║   ─────────────────   ║
+║   Meshtastic /      ║   Amateur / GMRS /     ║   Message runners     ║
+║   LoRa radio        ║   FRS radio            ║   Bulletin boards     ║
+║   Briar app         ║   Repeaters / Simplex  ║   Flag signals        ║
+║   GoTenna           ║   HF / Winlink         ║   Whiteboard hubs     ║
+║   (WiFi direct)     ║   JS8Call / APRS       ║   Mirror / light      ║
+║                     ║                        ║                       ║
+╠═════════════════════╬════════════════════════╬═══════════════════════╣
+║  RANGE: 1–15 km     ║  RANGE: Local–global   ║  RANGE: Walking dist  ║
+║  SPEED: Seconds     ║  SPEED: Seconds        ║  SPEED: Min to hours  ║
+║  POWER: Very low    ║  POWER: Low–moderate   ║  POWER: None needed   ║
+║  LICENSE: None req  ║  LICENSE: Varies       ║  LICENSE: None        ║
+╚═════════════════════╩════════════════════════╩═══════════════════════╝
+
+  ↑ When any single pillar fails, the remaining two still function. ↑
+  ↑ When two pillars fail, the third provides baseline capability.  ↑</div>
+
+<p data-id="73">Each pillar is fully independent. A mesh network outage (power failure, device damage) does not affect radio communications or physical runners. A radio blackout does not stop messages from traveling by foot. Physical disruption of runner routes does not silence radio or mesh. In practice, all three pillars operate simultaneously, reinforcing each other: runners carry messages to mesh node custodians, radio nets relay summaries to the regional network, and visual signals keep households without any electronic equipment informed.</p>
+
+<p data-id="74">Communities should aim to activate all three pillars before an emergency occurs. The most common failure point is over-reliance on a single system — particularly internet-dependent apps that fail the moment connectivity is lost.</p>
+
+<div data-id="75" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="76" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 2                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="77" class="figure-block">
+    <p data-id="78" class="figure-number">Figure 2 of 10</p>
+    <p data-id="79" class="figure-title">COMMUNITY MESH NETWORK TOPOLOGY</p>
+    <hr data-id="80" class="section-rule">
+    <p data-id="81" class="figure-caption">"A mesh network has no central point of failure. Messages route around damaged nodes automatically. The more nodes, the more resilient the network."</p>
+</div>
+
+<div data-id="82" class="diagram-box">
+                              NODE-01
+                           [Hub / High Ground]
+                                  ●
+                              ↗       ↘
+                          ↗               ↘
+               NODE-02                       NODE-03  ✗
+           [Church Steeple]               [FAILED — Water Tower]
+                   ●                             ╳
+               ↗       ↘                     (traffic
+           ↗               ↘                  reroutes
+       NODE-04           NODE-05              around  ↘
+    [Community Center]  [School Roof]         NODE-03)  ↘
+            ●                 ●                           ↘
+            ↕                 ↕                        NODE-06
+            ↕         ↔ ↔ ↔ ↔ ↔ ↔                    [Library]
+        NODE-07    NODE-08                                  ●
+      [Fire Station] [Hilltop Home]                        ↙
+            ●             ●                           ↙
+            ↕             ↕                      NODE-01
+             ↘           ↙                    (loop confirmed)
+              ↘         ↙
+               ↘       ↙
+                ●─────●
+          [NODE-04 ↔ NODE-07 ↔ NODE-08 cross-links provide
+           reroute path when NODE-03 link is unavailable]
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+REROUTE EXAMPLE: NODE-01 → NODE-02 → NODE-04 → NODE-08 → NODE-06
+  (bypasses failed NODE-03 automatically — no user action needed)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+COVERAGE NOTE: Each node covers approx. 2 km radius (open terrain).
+  Urban / obstructed terrain: reduce to ~0.5–1 km effective radius.
+
+┌──────────────────────────────────────────────────────────┐
+│  LEGEND                                                  │
+│  ● = Active node          ✗ / ╳ = Failed / offline node  │
+│  ↔ = Active radio link (typical 1–5 km range)            │
+│  - - = Rerouted path around failure                      │
+│  ↕ = Bidirectional link (same as ↔, shown vertically)    │
+│  [ ] = Node location description                         │
+└──────────────────────────────────────────────────────────┘</div>
+
+<div data-id="83" class="callout">
+    <p data-id="84" class="callout-label">MINIMUM VIABLE NETWORK</p>
+    <p data-id="85">Three nodes are the minimum to demonstrate mesh routing around a single failure. Recommended density: one node per 2 km² of coverage area, with each node visible (line of sight preferred) to at least two others. Nodes at elevation — church steeples, water towers, hilltops, rooftops — dramatically extend range and should be prioritized during deployment.</p>
+</div>
+
+<div data-id="86" class="callout callout-note">
+    <p data-id="87" class="callout-label">NODE NAMING CONVENTION</p>
+    <p data-id="88">Assign alphanumeric IDs (NODE-01, NODE-02 …) in order of installation. Record each node's GPS coordinates, custodian name, and power source in the Node Registry (USB Kit → 05_DATA → Node_Registry.csv). Update whenever a node is added, relocated, or decommissioned.</p>
+</div>
+
+<div data-id="89" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="90" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 3                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="91" class="figure-block">
+    <p data-id="92" class="figure-number">Figure 3 of 10</p>
+    <p data-id="93" class="figure-title">SINGLE MESH NODE — WIRING AND ASSEMBLY DIAGRAM</p>
+    <hr data-id="94" class="section-rule">
+    <p data-id="95" class="figure-caption">"A complete Meshtastic mesh node. All components connect as shown. The entire assembly fits in a weatherproof enclosure roughly the size of a shoebox."</p>
+</div>
+
+<div data-id="96" class="diagram-box">
+                        SOLAR PANEL
+                    (10–30W, 12V or 5V)
+                            │
+                            │  DC cable (red = +, black = –)
+                            ▼
+                  ┌─────────────────────┐
+                  │   SOLAR CHARGE      │
+                  │   CONTROLLER        │
+                  │   (PWM or MPPT)     │
+                  │   10A minimum       │
+                  └──────────┬──────────┘
+                             │
+                   ┌─────────┴──────────┐
+                   │                    │
+                   ▼                    ▼
+         ┌──────────────────┐  ┌──────────────────────┐
+         │    BATTERY       │  │    LOAD OUTPUT        │
+         │   (LiFePO4       │  │   (to device USB      │
+         │   12V / 7Ah+)    │  │    or 12V power rail) │
+         │                  │  └──────────┬────────────┘
+         │  [■■■■■■■■■□□]   │             │
+         │  Charge display  │             │ USB or 12V→5V buck
+         └──────────────────┘             ▼
+                                ┌─────────────────────────┐
+                                │    MESHTASTIC DEVICE     │
+                                │   (TTGO T-Beam  OR       │
+                                │    Heltec LoRa 32)       │
+                                │                          │
+                                │   ┌──────────────────┐  │
+                                │   │  LoRa Radio Tx   │  │
+                                │   │  915 MHz (US/CA) │  │
+                                │   │  868 MHz (EU)    │  │
+                                │   └────────┬─────────┘  │
+                                └────────────┼────────────┘
+                                             │  coax cable
+                                             │  (SMA connector)
+                                             │  keep as short
+                                             │  as possible
+                                             ▼
+                                    ┌────────────────┐
+                                    │    ANTENNA      │
+                                    │  (fiberglass    │
+                                    │   whip or       │
+                                    │   J-pole)       │
+                                    │  Mount as HIGH  │
+                                    │  as possible    │
+                                    └────────────────┘
+
+OPTIONAL ADDITIONS (connect via USB from Meshtastic device):
+  Device ──USB──► Raspberry Pi Zero 2W  (store-and-forward relay)
+  Device ──USB──► External GPS module   (location beacon reporting)
+  Enclosure ────► Desiccant pack        (moisture / condensation control)
+  Enclosure ────► LED pilot light       (visual "node is alive" indicator)</div>
+
+<p data-id="97" class="diagram-label">COMPONENT PARTS LIST</p>
+<table data-id="98" class="parts-table">
+    <tr data-id="99">
+        <th data-id="100">Component</th>
+        <th data-id="101">Specification</th>
+        <th data-id="102">Approx. Cost (USD)</th>
+    </tr>
+    <tr data-id="103">
+        <td data-id="104">Meshtastic device (TTGO T-Beam)</td>
+        <td data-id="105">915 MHz, built-in GPS &amp; battery connector</td>
+        <td data-id="106">$35–50</td>
+    </tr>
+    <tr data-id="107">
+        <td data-id="108">Antenna (fiberglass whip)</td>
+        <td data-id="109">915 MHz, 3 dBi gain, SMA male</td>
+        <td data-id="110">$15–25</td>
+    </tr>
+    <tr data-id="111">
+        <td data-id="112">Solar panel</td>
+        <td data-id="113">10–20W, 12V nominal</td>
+        <td data-id="114">$20–35</td>
+    </tr>
+    <tr data-id="115">
+        <td data-id="116">Solar charge controller</td>
+        <td data-id="117">PWM or MPPT, 10A, 12V</td>
+        <td data-id="118">$12–20</td>
+    </tr>
+    <tr data-id="119">
+        <td data-id="120">LiFePO4 battery</td>
+        <td data-id="121">12V, 7Ah (84Wh) — fire-safe chemistry</td>
+        <td data-id="122">$40–60</td>
+    </tr>
+    <tr data-id="123">
+        <td data-id="124">Weatherproof enclosure</td>
+        <td data-id="125">IP65 rated, ABS plastic, ~20×15×10 cm</td>
+        <td data-id="126">$15–30</td>
+    </tr>
+    <tr data-id="127">
+        <td data-id="128">Coax cable + connectors</td>
+        <td data-id="129">RG-58, 1 m, SMA male both ends</td>
+        <td data-id="130">$8–15</td>
+    </tr>
+    <tr data-id="131">
+        <td data-id="132">12V → 5V USB buck converter</td>
+        <td data-id="133">3A output, USB-A or USB-C</td>
+        <td data-id="134">$6–12</td>
+    </tr>
+    <tr data-id="135">
+        <td data-id="136"><strong data-id="137">TOTAL</strong></td>
+        <td data-id="138"></td>
+        <td data-id="139"><strong data-id="140">~$151–247</strong></td>
+    </tr>
+</table>
+
+<div data-id="141" class="callout callout-note">
+    <p data-id="142" class="callout-label">ANTENNA PLACEMENT</p>
+    <p data-id="143">Antenna height is the single most important factor in range. Every doubling of antenna height roughly doubles line-of-sight range. Mount on a mast, fence post, or rooftop bracket. Keep coax cable short (under 2 m if possible) to minimize signal loss.</p>
+</div>
+
+<div data-id="144" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="145" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 4                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="146" class="figure-block">
+    <p data-id="147" class="figure-number">Figure 4 of 10</p>
+    <p data-id="148" class="figure-title">POWER SYSTEM HIERARCHY</p>
+    <hr data-id="149" class="section-rule">
+    <p data-id="150" class="figure-caption">"Power sources in priority order. When one source fails, fall back to the next. Pre-wire switching so transitions are seamless during emergencies."</p>
+</div>
+
+<div data-id="151" class="diagram-box">
+┌─────────────────────────────────────────────────────────────────┐
+│  TIER 1: AC MAINS POWER                                         │
+│  Normal grid electricity — 120V AC (North America)              │
+│  Status: Use when available. No action required.                │
+│  Duration: Indefinite while grid is live                        │
+│  Best for: All equipment. Charge all backup systems now.        │
+└──────────────────────────┬──────────────────────────────────────┘
+                            │  GRID FAILS ▼
+┌──────────────────────────▼──────────────────────────────────────┐
+│  TIER 2: UPS / BATTERY BACKUP                                   │
+│  Uninterruptible Power Supply — 12V or 120V AC inverter         │
+│  Status: Automatic switchover — no interruption                 │
+│  Duration: 2–8 hours (communications equipment only)            │
+│  Best for: Routers, mesh nodes, radio charging, laptops         │
+└──────────────────────────┬──────────────────────────────────────┘
+                            │  UPS DEPLETED ▼
+┌──────────────────────────▼──────────────────────────────────────┐
+│  TIER 3: GENERATOR                                              │
+│  Gasoline or propane portable generator                         │
+│  Status: Manual start required (practice this beforehand)       │
+│  Duration: Fuel-limited — store 5+ gallons in approved cans     │
+│  Best for: High-draw equipment, battery recharging              │
+│  ⚠ NEVER operate indoors or in garages — CO poisoning risk ⚠   │
+└──────────────────────────┬──────────────────────────────────────┘
+                            │  FUEL EXHAUSTED ▼
+┌──────────────────────────▼──────────────────────────────────────┐
+│  TIER 4: SOLAR + BATTERY BANK                                   │
+│  Photovoltaic panels + LiFePO4 deep-cycle storage               │
+│  Status: Fully automatic if pre-installed                       │
+│  Duration: Indefinite with adequate daily sunlight              │
+│  Best for: Mesh nodes, low-power radio, LED lighting            │
+│  Note: Size system for 3× daily load minimum (cloudy days)      │
+└──────────────────────────┬──────────────────────────────────────┘
+                            │  CLOUDY / DEPLETED ▼
+┌──────────────────────────▼──────────────────────────────────────┐
+│  TIER 5: HUMAN POWER                                            │
+│  Hand-crank radio, bicycle generator, shake-charge flashlight   │
+│  Status: Always available — zero fuel or infrastructure needed  │
+│  Duration: Limited by human endurance                           │
+│  Capacity: Low — emergency receiving and short transmissions    │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+<p data-id="152" class="diagram-label">POWER BUDGET REFERENCE TABLE</p>
+<table data-id="153">
+    <tr data-id="154">
+        <th data-id="155">Device</th>
+        <th data-id="156">Current Draw</th>
+        <th data-id="157">Voltage</th>
+        <th data-id="158">Wattage</th>
+    </tr>
+    <tr data-id="159">
+        <td data-id="160">Meshtastic node (receive / relay mode)</td>
+        <td data-id="161">~80 mA</td>
+        <td data-id="162">5V</td>
+        <td data-id="163">0.4 W</td>
+    </tr>
+    <tr data-id="164">
+        <td data-id="165">Baofeng UV-5R (receiving)</td>
+        <td data-id="166">~150 mA</td>
+        <td data-id="167">7.4V</td>
+        <td data-id="168">1.1 W</td>
+    </tr>
+    <tr data-id="169">
+        <td data-id="170">Baofeng UV-5R (transmitting, 5W)</td>
+        <td data-id="171">~1.6 A</td>
+        <td data-id="172">7.4V</td>
+        <td data-id="173">11.8 W</td>
+    </tr>
+    <tr data-id="174">
+        <td data-id="175">Raspberry Pi 4 (idle)</td>
+        <td data-id="176">~600 mA</td>
+        <td data-id="177">5V</td>
+        <td data-id="178">3.0 W</td>
+    </tr>
+    <tr data-id="179">
+        <td data-id="180">LED lantern (low setting)</td>
+        <td data-id="181">~50 mA</td>
+        <td data-id="182">12V</td>
+        <td data-id="183">0.6 W</td>
+    </tr>
+</table>
+
+<div data-id="184" class="diagram-box">SIZING FORMULA:  Watt-hours needed = Watts × Hours of use per day
+
+EXAMPLE: Mesh node running 24 hours continuously
+  = 0.4W × 24h = 9.6 Wh per day
+
+BATTERY RECOMMENDATION: Size battery at 3× daily draw (buffer for clouds/shortfall)
+  = 9.6 Wh × 3 = 28.8 Wh  ≈  2.4 Ah at 12V  (round up to 7Ah for margin)
+
+SOLAR PANEL RECOMMENDATION: Panel wattage ≥ daily Wh ÷ peak sun hours
+  Example: 9.6 Wh ÷ 4 peak hours = 2.4W minimum  →  use 10W panel for margin</div>
+
+<div data-id="185" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="186" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 5                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="187" class="figure-block">
+    <p data-id="188" class="figure-number">Figure 5 of 10</p>
+    <p data-id="189" class="figure-title">COMMUNITY CELL STRUCTURE</p>
+    <hr data-id="190" class="section-rule">
+    <p data-id="191" class="figure-caption">"Organize your community into geographic cells of 10–20 households. Each cell is self-sufficient. Cells connect upward to clusters, then to the regional network."</p>
+</div>
+
+<div data-id="192" class="diagram-box">
+╔══════════════════════════════════════════════════════════════════════════╗
+║                         REGIONAL NETWORK                                 ║
+║              (Amateur radio HF / Winlink / linked repeaters)             ║
+║              Managed by: Network Coordinator (call sign / contact: ___ ) ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║   ┌───────────────────────────┐    ┌───────────────────────────┐         ║
+║   │       CLUSTER A           │    │       CLUSTER B           │  · · ·  ║
+║   │   (3–5 Cells)             │    │   (3–5 Cells)             │         ║
+║   │   VHF/UHF simplex net     │    │   VHF/UHF simplex net     │         ║
+║   │   or mesh backbone link   │    │   or mesh backbone link   │         ║
+║   │                           │    │                           │         ║
+║   │  ┌─────────┐ ┌─────────┐  │    │  ┌─────────┐ ┌─────────┐ │         ║
+║   │  │ CELL 1  │ │ CELL 2  │  │    │  │ CELL 4  │ │ CELL 5  │ │         ║
+║   │  │         │ │         │  │    │  │         │ │         │ │         ║
+║   │  │ 10–20   │ │ 10–20   │  │    │  │ 10–20   │ │ 10–20   │ │         ║
+║   │  │ house-  │ │ house-  │  │    │  │ house-  │ │ house-  │ │         ║
+║   │  │ holds   │ │ holds   │  │    │  │ holds   │ │ holds   │ │         ║
+║   │  │         │ │         │  │    │  │         │ │         │ │         ║
+║   │  │ ■ Block │ │ ■ Block │  │    │  │ ■ Block │ │ ■ Block │ │         ║
+║   │  │ Captain │ │ Captain │  │    │  │ Captain │ │ Captain │ │         ║
+║   │  └─────────┘ └─────────┘  │    │  └─────────┘ └─────────┘ │         ║
+║   │       ┌─────────┐  · · ·  │    │       ┌─────────┐  · · · │         ║
+║   │       │ CELL 3  │         │    │       │ CELL 6  │        │         ║
+║   │       │ ■ Block │         │    │       │ ■ Block │        │         ║
+║   │       │ Captain │         │    │       │ Captain │        │         ║
+║   │       └─────────┘         │    │       └─────────┘        │         ║
+║   └───────────────────────────┘    └──────────────────────────┘         ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+CELL STRUCTURE (detail — each cell):
+  ■ Block Captain  ──►  Household Lead A  ──►  3–5 households (door knock)
+                   ──►  Household Lead B  ──►  3–5 households
+                   ──►  Household Lead C  ──►  3–5 households
+                   ──►  Household Lead D  ──►  3–5 households
+
+COMMUNICATION FLOW (upward — reporting / emergencies):
+  Household  ──►  Block Captain  ──►  Cluster Lead  ──►  Net Coordinator
+  (in person)    (FRS/GMRS ch.)      (VHF / mesh)       (HF / Winlink)
+
+COMMUNICATION FLOW (downward — alerts / information):
+  Net Coordinator  ──►  Cluster Lead  ──►  Block Captain  ──►  Household
+                        (radio net)       (radio + door)      (door knock)</div>
+
+<div data-id="193" class="callout">
+    <p data-id="194" class="callout-label">NO SINGLE POINT OF FAILURE</p>
+    <p data-id="195">If a Block Captain is unreachable during an emergency, any household in that cell may step up and take on coordination. Every cell member should know the name and contact of their Household Lead, their Block Captain, and the Cluster Lead. Pre-designate a backup for every role in the tree. Write backup names in the contact list — never rely only on memory.</p>
+</div>
+
+<div data-id="196" class="callout callout-note">
+    <p data-id="197" class="callout-label">SELF-SUFFICIENCY PRINCIPLE</p>
+    <p data-id="198">Each cell should be able to sustain basic internal communications and welfare checks for a minimum of 72 hours without any upward connection to the cluster or regional network. Design cell resources (water, first aid, information boards) accordingly.</p>
+</div>
+
+<div data-id="199" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="200" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 6                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="201" class="figure-block">
+    <p data-id="202" class="figure-number">Figure 6 of 10</p>
+    <p data-id="203" class="figure-title">COMMUNICATION TREE</p>
+    <hr data-id="204" class="section-rule">
+    <p data-id="205" class="figure-caption">"A communication tree ensures a message reaches 100+ people in under 30 minutes using only one-to-one contacts. Each person contacts only 3–5 others."</p>
+</div>
+
+<div data-id="206" class="diagram-box">
+                          ┌───────────────────┐
+                          │    NET CONTROL     │
+                          │  (Coordinator)     │
+                          │  Call sign: _____  │
+                          └─────────┬──────────┘
+              ┌────────────────────┬┴───────────────────┐
+              ▼                    ▼                     ▼
+       ┌────────────┐       ┌────────────┐       ┌────────────┐
+       │ CLUSTER A  │       │ CLUSTER B  │       │ CLUSTER C  │
+       │   Lead     │       │   Lead     │       │   Lead     │
+       └─────┬──────┘       └─────┬──────┘       └─────┬──────┘
+      ┌──────┼──────┐      ┌──────┼──────┐      ┌──────┼──────┐
+      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼      ▼
+    Cell   Cell   Cell   Cell   Cell   Cell   Cell   Cell   Cell
+    Cap.   Cap.   Cap.   Cap.   Cap.   Cap.   Cap.   Cap.   Cap.
+      │      │      │
+   ┌──┴──┐ ┌─┴─┐ ┌──┴──┐
+   ▼     ▼ ▼   ▼ ▼     ▼
+  HHL   HHL HHL HHL   HHL
+ (3–5) (3–5)(3–5)(3–5)(3–5)
+
+HHL = Household Lead — contacts 3–5 individual households directly
+Each contact is one-to-one: in person, door knock, FRS radio, or phone.
+
+─────────────────────────────────────────────────────────────────────────
+REACH CALCULATION
+─────────────────────────────────────────────────────────────────────────
+  Level 0: Net Control contacts 3 Cluster Leads         =    3 contacts
+  Level 1: Each Cluster Lead contacts 3 Cell Captains   =    9 contacts
+  Level 2: Each Cell Captain contacts 4 HH Leads        =   36 contacts
+  Level 3: Each HH Lead contacts 4 households           =  144 households
+  ─────────────────────────────────────────────────────────────────────
+  TOTAL REACH: ~144 households in just 4 relay steps
+  ESTIMATED TIME: 15–30 min (radio) │ 30–60 min (in-person / door knock)
+
+─────────────────────────────────────────────────────────────────────────
+REDUNDANCY RULE
+─────────────────────────────────────────────────────────────────────────
+  Every person in the tree MUST know:
+    (a) Their primary contact above them  (who sends them messages)
+    (b) Their backup contact above them   (if primary is unreachable)
+    (c) All contacts below them           (who they must reach)
+    (d) The backup for each contact below (in case that person is out)
+
+  Record this on a physical card. Store card at home AND in go-bag.</div>
+
+<div data-id="207" class="callout callout-note">
+    <p data-id="208" class="callout-label">TREE ACTIVATION PROTOCOL</p>
+    <p data-id="209">Net Control activates the tree by announcing on the primary calling frequency: <em data-id="210">"[COMMUNITY NAME] NET — TREE ACTIVATION — PRIORITY [ROUTINE / URGENT / EMERGENCY] — ALL CLUSTER LEADS ACKNOWLEDGE."</em> Each Cluster Lead acknowledges, then immediately begins contacting Cell Captains. The tree should be exercised (tested) at least quarterly with a routine check-in to confirm all contacts are current and reachable.</p>
+</div>
+
+<div data-id="211" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="212" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 7                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="213" class="figure-block">
+    <p data-id="214" class="figure-number">Figure 7 of 10</p>
+    <p data-id="215" class="figure-title">USB KIT FOLDER STRUCTURE</p>
+    <hr data-id="216" class="section-rule">
+    <p data-id="217" class="figure-caption">"The standard USB kit folder structure. Organize every USB drive identically so any community member can navigate any kit without instruction."</p>
+</div>
+
+<div data-id="218" class="diagram-box">
+USB_RESILIENCE_KIT_v1.0/          (32 GB minimum — 64 GB recommended)
+│
+├── README.txt                     ← READ THIS FIRST (plain text, any device)
+├── START_HERE.html                ← Open in any browser — no internet needed
+│
+├── 01_MANUALS/                    (~50–200 MB)
+│   ├── Field_Manual_v1.0.pdf
+│   ├── Quick_Cards_v1.0.pdf
+│   ├── Workshop_Curriculum_v1.0.pdf
+│   ├── Meshtastic_Documentation.pdf
+│   ├── ARRL_Emergency_Comms_Guide.pdf
+│   └── Ham_License_Study_Guide.pdf
+│
+├── 02_MAPS/                       (~500 MB – 2 GB)
+│   ├── OsmAnd_Map_Files/
+│   │   └── [region_name].obf      ← Download from OsmAnd website
+│   ├── PDF_Maps/
+│   │   ├── Neighborhood_Map.pdf
+│   │   ├── Node_Location_Map.pdf
+│   │   └── Evacuation_Routes.pdf
+│   └── Grid_Reference_Sheet.pdf
+│
+├── 03_SOFTWARE/                   (~500 MB – 2 GB)
+│   ├── Windows/
+│   │   ├── MeshtasticFlasher_Setup.exe
+│   │   ├── CHIRP_Setup.exe        ← Radio programming software
+│   │   ├── Kiwix_Setup.exe        ← Offline Wikipedia viewer
+│   │   └── 7-Zip_Setup.exe        ← Archive tool (open .7z files)
+│   ├── Android_APKs/
+│   │   ├── Meshtastic.apk
+│   │   ├── Briar.apk              ← Offline-capable secure messaging
+│   │   └── OsmAnd.apk             ← Offline maps
+│   └── Firmware/
+│       └── meshtastic_[device].bin ← Pre-flashed firmware for your node type
+│
+├── 04_MEDIA/                      (~1–5 GB)
+│   ├── Training_Videos/
+│   │   └── [session_name].mp4
+│   └── Workshop_Slides/
+│       └── Session_[n].pptx
+│
+├── 05_DATA/                       (~10 MB)
+│   ├── Community_Contacts_ENCRYPTED.7z  ← Password protected — share pwd
+│   ├── Node_Registry.csv                    separately and securely
+│   └── Frequency_List.csv
+│
+├── 06_TEMPLATES/                  (~5 MB)
+│   ├── Message_Form.pdf           ← Standardized written message template
+│   ├── Runner_Log_Sheet.pdf
+│   ├── Incident_Log.pdf
+│   └── AAR_Template.pdf           ← After Action Review
+│
+└── 07_KIWIX_LIBRARY/              (~1 GB – 90 GB depending on selections)
+    ├── wikipedia_en_[date].zim    ← Full offline encyclopedia
+    └── medwiki_en_[date].zim      ← Medical reference (offline)
+
+─────────────────────────────────────────────────────────────────────────
+SIZE ESTIMATES
+─────────────────────────────────────────────────────────────────────────
+  Without large Wikipedia ZIM file:   ~5–10 GB  →  32 GB drive sufficient
+  With full English Wikipedia ZIM:    ~30–100 GB →  use 128 GB drive
+  RECOMMENDED STANDARD KIT:           64 GB USB 3.0 (widely available ~$10)
+
+MAINTENANCE: Update kit contents at every quarterly exercise.
+  Check that all software versions are current and all PDFs are latest.</div>
+
+<div data-id="219" class="callout callout-note">
+    <p data-id="220" class="callout-label">DUPLICATION AND DISTRIBUTION</p>
+    <p data-id="221">Every Block Captain and Cluster Lead should hold a copy of the USB kit. Store one sealed copy in the go-box (Figure 8). Keep a master copy at the community hub, updated at each quarterly exercise. USB drives are inexpensive — err toward over-distribution. A kit that exists only in one location is not a resilience resource.</p>
+</div>
+
+<div data-id="222" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="223" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 8                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="224" class="figure-block">
+    <p data-id="225" class="figure-number">Figure 8 of 10</p>
+    <p data-id="226" class="figure-title">GO-BOX LAYOUT DIAGRAM</p>
+    <hr data-id="227" class="section-rule">
+    <p data-id="228" class="figure-caption">"A go-box is a portable, self-contained emergency communications station in a single hard case. It can be deployed in under 10 minutes and operates independently of any infrastructure."</p>
+</div>
+
+<div data-id="229" class="diagram-box">
+┌──────────────────────────────────────────────────────────────────────┐
+│                     GO-BOX  (OPEN — TOP VIEW)                        │
+│                  Pelican 1510 carry-on size or similar               │
+│                  Approx. 56 × 36 × 23 cm (22" × 14" × 9")           │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  ┌───────────────────────────┐  ┌────────────────────────────────┐   │
+│  │                           │  │                                │   │
+│  │    VHF / UHF RADIO        │  │      BATTERY PACK              │   │
+│  │    Yaesu FT-60R  OR       │  │      LiFePO4, 12V, 20 Ah       │   │
+│  │    Baofeng UV-5R          │  │      (240 Wh — ~6 days @ node) │   │
+│  │    + spare battery        │  │                                │   │
+│  │    + programming cable    │  │  [■■■■■■■■■■■□□] Charge level  │   │
+│  │                           │  │  Check monthly. Top up before  │   │
+│  └───────────────────────────┘  │  storing.                      │   │
+│                                 └────────────────────────────────┘   │
+│  ┌─────────────────────┐  ┌─────────────┐  ┌──────────────────────┐  │
+│  │                     │  │             │  │                      │  │
+│  │  MESHTASTIC DEVICE  │  │   SOLAR     │  │  CABLES + ADAPTERS   │  │
+│  │  (T-Beam / Heltec)  │  │   PANEL     │  │  · Coax (RG-58, SMA) │  │
+│  │  + 915 MHz antenna  │  │  (foldable  │  │  · USB-A / USB-C     │  │
+│  │  + USB config cable │  │   10–20W)   │  │  · DC barrel 5.5mm   │  │
+│  │                     │  │             │  │  · 12V lighter adapt │  │
+│  └─────────────────────┘  └─────────────┘  └──────────────────────┘  │
+│                                                                       │
+│  ┌──────────────────────────────────────────────────────────────────┐ │
+│  │  LOGBOOK  │  QUICK-CARDS  │  LICENSE COPY  │  HEADSET + MIC     │ │
+│  │  (blank)  │  (laminated)  │  (FCC/amateur) │  (audio privacy)   │ │
+│  └──────────────────────────────────────────────────────────────────┘ │
+│                                                                       │
+│  ┌────────────────────┐  ┌────────────────────────────────────────┐   │
+│  │  USB KIT DRIVE     │  │  LAPTOP / TABLET  (optional —          │   │
+│  │  (32–64 GB, sealed │  │  strongly recommended for Winlink,     │   │
+│  │   in antistatic    │  │  JS8Call, VARA, digital modes)         │   │
+│  │   bag)             │  │  + charging cable stored alongside     │   │
+│  └────────────────────┘  └────────────────────────────────────────┘   │
+│                                                                       │
+└───────────────────────────────────────────────────────────────────────┘
+
+ANTENNA (stored separately — deploy externally at destination):
+  ├── VHF / UHF: Telescoping whip or roll-up J-pole (store in case lid)
+  └── LoRa 915 MHz: Whip on SMA connector (attach directly to T-Beam)
+
+─────────────────────────────────────────────────────────────────────────
+DEPLOYMENT ORDER (memorize — practice before an emergency)
+─────────────────────────────────────────────────────────────────────────
+  1. Select elevated, open location (hilltop, roof, parking structure)
+  2. Extend / mount antennas FIRST (height = range)
+  3. Connect: Battery → Charge controller → Radio / Device
+  4. Power on radio → scan calling frequencies → announce check-in
+  5. Enable Meshtastic device → confirm mesh node is visible on network
+  6. Open logbook → record: time, location, operator, frequency, callsign
+  7. Begin relaying traffic as needed. Log ALL messages sent and received.</div>
+
+<div data-id="230" class="callout callout-warning">
+    <p data-id="231" class="callout-label">⚠ MONTHLY MAINTENANCE REQUIRED</p>
+    <p data-id="232">Check battery charge level monthly. LiFePO4 batteries self-discharge slowly but will fail if left fully depleted for extended periods. Test radio function quarterly. Verify USB kit contents are current. Run through the deployment order as a timed drill at least twice per year.</p>
+</div>
+
+<div data-id="233" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="234" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 9                                            -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="235" class="figure-block">
+    <p data-id="236" class="figure-number">Figure 9 of 10</p>
+    <p data-id="237" class="figure-title">VISUAL SIGNAL REFERENCE CHART</p>
+    <hr data-id="238" class="section-rule">
+    <p data-id="239" class="figure-caption">"Pre-agreed visual signals allow communication when all electronic systems have failed. Post this chart at every community hub. Review it before you need it."</p>
+</div>
+
+<div data-id="240" class="diagram-box">
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                   COMMUNITY VISUAL SIGNAL REFERENCE                       ║
+╠══════════════════════╦════════════════════════════╦═══════════════════════╣
+║  COLOR FLAGS / TAPE  ║  MEANING                   ║  WINDOW SIGN TEXT     ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [  GREEN  ]         ║  All clear — we are safe   ║  "OK"                 ║
+║  Hung in window      ║  and have what we need.    ║  or "ALL OK"          ║
+║  or on fence post    ║  No assistance required.   ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [ YELLOW ]          ║  Caution — we need         ║  "CHECK ON US"        ║
+║                      ║  information or a          ║  or "NEED INFO"       ║
+║                      ║  wellness check-in.        ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [  RED   ]          ║  EMERGENCY —               ║  "HELP"               ║
+║                      ║  immediate assistance      ║  or "HELP NOW"        ║
+║                      ║  needed urgently.          ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [ ORANGE ]          ║  Medical need —            ║  "MEDICAL"            ║
+║                      ║  injury or illness,        ║  or "INJURY"          ║
+║                      ║  needs medical attention.  ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [  BLUE  ]          ║  Resources available       ║  "SUPPLIES HERE"      ║
+║                      ║  to share — water, food,   ║  or "WATER AVAILABLE" ║
+║                      ║  medicine, shelter.        ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [ BLACK  ]          ║  Do not enter —            ║  "HAZARD"             ║
+║                      ║  structural damage,        ║  or "UNSAFE"          ║
+║                      ║  chemical, or other        ║                       ║
+║                      ║  confirmed hazard.         ║                       ║
+║                      ║                            ║                       ║
+╠══════════════════════╬════════════════════════════╬═══════════════════════╣
+║                      ║                            ║                       ║
+║  [ WHITE  ]          ║  Evacuated —               ║  "EVACUATED"          ║
+║                      ║  no one is inside this     ║  + date + destination ║
+║                      ║  structure. Gone to: ___   ║  (write on sign)      ║
+║                      ║                            ║                       ║
+╚══════════════════════╩════════════════════════════╩═══════════════════════╝</div>
+
+<div data-id="241" class="diagram-box">DOOR / STRUCTURE SEARCH MARKINGS  (Standard Search & Rescue format)
+
+     ┌──────────┐
+     │  DATE /  │   ← TOP: Date and time search was completed
+     │  TIME    │
+  ───┤    X     ├───
+  TE │          │ HZ   ← RIGHT: Hazards found (gas leak, structural, etc.)
+  AM │          │          Write "NONE" if no hazards
+  ───┤          ├───
+     │ SURVIVORS│   ← BOTTOM: Number found alive / number deceased
+     │  #alive  │            Example: "2/0" = 2 alive, 0 deceased
+     └──────────┘
+     ↑
+  LEFT: Team ID (who performed the search)
+
+  Large X is drawn on door or facing wall with spray paint or marker.
+  Each quadrant is filled in by the search team after clearing the structure.
+
+─────────────────────────────────────────────────────────────────────────
+MIRROR / LIGHT FLASH SIGNALS
+─────────────────────────────────────────────────────────────────────────
+  Flash — Flash — Flash, pause, repeat  =  DISTRESS: I need help
+  One long steady beam, held             =  PRESENCE: I am here, I am OK
+  Flash — Flash, pause, repeat           =  APPROACH: Safe to come to me
+
+─────────────────────────────────────────────────────────────────────────
+WHISTLE SIGNALS  (Universal — recognized by most emergency services)
+─────────────────────────────────────────────────────────────────────────
+  ▪ ▪ ▪   Three short blasts          =  DISTRESS — emergency, need help
+  ━━━━━━  One long blast              =  ALL CLEAR — safe, come ahead
+  ▪ ▪     Two short blasts            =  STOP / WAIT — do not proceed yet</div>
+
+<div data-id="242" class="callout callout-warning">
+    <p data-id="243" class="callout-label">⚠ CRITICAL: PRACTICE BEFORE YOU NEED IT</p>
+    <p data-id="244">Establish and agree on these signals with your community before an emergency occurs. Review at every quarterly exercise. Post this chart — laminated — at every community hub, inside every go-box, and on every bulletin board. A signal system that has not been practiced will not be used correctly under stress.</p>
+</div>
+
+<div data-id="245" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="246" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- FIGURE 10                                           -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<div data-id="247" class="figure-block">
+    <p data-id="248" class="figure-number">Figure 10 of 10</p>
+    <p data-id="249" class="figure-title">INFORMATION RUNNER ROUTE MAP TEMPLATE</p>
+    <hr data-id="250" class="section-rule">
+    <p data-id="251" class="figure-caption">"Pre-plan runner routes before an emergency. Routes should be walkable, use safe paths, and avoid likely hazard zones. Every route needs a primary and alternate path."</p>
+</div>
+
+<div data-id="252" class="diagram-box">
+RUNNER ROUTE MAP — [NEIGHBORHOOD NAME] — v_____   Date completed: __________
+Completed by: _____________________________   Contact: ______________________
+
+─────────────────────────────────────────────────────────────────────────
+LEGEND
+─────────────────────────────────────────────────────────────────────────
+  ■  = Community Hub (primary bulletin board / coordination point)
+  ●  = Drop point / dead drop location (leave messages here)
+  ★  = Node custodian home (mesh node hosted at this address)
+  ── = Primary runner route (fastest, most reliable path)
+  -- = Alternate runner route (if primary is blocked or flooded)
+  //// = Likely hazard zone (flood plain, structural risk, low bridge)
+  [ ] = Hub / location label
+
+─────────────────────────────────────────────────────────────────────────
+EXAMPLE MAP LAYOUT  (replace with your actual neighborhood geography)
+─────────────────────────────────────────────────────────────────────────
+
+   ■ HUB-01              ────────────────────────►  ■ HUB-02
+   [Community Center]                               [Fire Station]
+        │                                                │
+        │  primary route (Oak St — 0.4 mi)              │ primary route
+        ▼                                               ▼
+   ● DROP-01                                       ● DROP-02
+   [Library front steps]                           [Church porch]
+        │                                                │
+        └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+              alternate route via Elm Ave
+              (use if Main St is flooded — add 0.2 mi)
+        │
+        │  secondary branch
+        ▼
+   ★ NODE-04                              ★ NODE-07
+   [Smith residence, 221 Oak St]         [Jones residence, 14 Hill Rd]
+   (mesh node — check if online)         (mesh node — hilltop site)
+
+  //// HAZARD ZONE: River floodplain below Bridge St — avoid in rain ////
+
+  [FILL IN YOUR NEIGHBORHOOD MAP ABOVE THIS LINE]
+  [Use graph paper or a printed street map as the base — overlay in pencil]</div>
+
+<p data-id="253" class="diagram-label">ROUTE REGISTRY TABLE</p>
+<table data-id="254">
+    <tr data-id="255">
+        <th data-id="256">Route ID</th>
+        <th data-id="257">From</th>
+        <th data-id="258">To</th>
+        <th data-id="259">Distance</th>
+        <th data-id="260">Est. Time (walk)</th>
+        <th data-id="261">Hazard / Notes</th>
+    </tr>
+    <tr data-id="262">
+        <td data-id="263">RT-01</td>
+        <td data-id="264"></td>
+        <td data-id="265"></td>
+        <td data-id="266"></td>
+        <td data-id="267"></td>
+        <td data-id="268"></td>
+    </tr>
+    <tr data-id="269">
+        <td data-id="270">RT-02</td>
+        <td data-id="271"></td>
+        <td data-id="272"></td>
+        <td data-id="273"></td>
+        <td data-id="274"></td>
+        <td data-id="275"></td>
+    </tr>
+    <tr data-id="276">
+        <td data-id="277">RT-03</td>
+        <td data-id="278"></td>
+        <td data-id="279"></td>
+        <td data-id="280"></td>
+        <td data-id="281"></td>
+        <td data-id="282"></td>
+    </tr>
+    <tr data-id="283">
+        <td data-id="284">RT-04</td>
+        <td data-id="285"></td>
+        <td data-id="286"></td>
+        <td data-id="287"></td>
+        <td data-id="288"></td>
+        <td data-id="289"></td>
+    </tr>
+    <tr data-id="290">
+        <td data-id="291">RT-05</td>
+        <td data-id="292"></td>
+        <td data-id="293"></td>
+        <td data-id="294"></td>
+        <td data-id="295"></td>
+        <td data-id="296"></td>
+    </tr>
+</table>
+
+<p data-id="297" class="diagram-label">RUNNER ASSIGNMENT TABLE</p>
+<table data-id="298">
+    <tr data-id="299">
+        <th data-id="300">Route ID</th>
+        <th data-id="301">Primary Runner</th>
+        <th data-id="302">Backup Runner</th>
+        <th data-id="303">Contact / Notes</th>
+    </tr>
+    <tr data-id="304">
+        <td data-id="305">RT-01</td>
+        <td data-id="306"></td>
+        <td data-id="307"></td>
+        <td data-id="308"></td>
+    </tr>
+    <tr data-id="309">
+        <td data-id="310">RT-02</td>
+        <td data-id="311"></td>
+        <td data-id="312"></td>
+        <td data-id="313"></td>
+    </tr>
+    <tr data-id="314">
+        <td data-id="315">RT-03</td>
+        <td data-id="316"></td>
+        <td data-id="317"></td>
+        <td data-id="318"></td>
+    </tr>
+    <tr data-id="319">
+        <td data-id="320">RT-04</td>
+        <td data-id="321"></td>
+        <td data-id="322"></td>
+        <td data-id="323"></td>
+    </tr>
+    <tr data-id="324">
+        <td data-id="325">RT-05</td>
+        <td data-id="326"></td>
+        <td data-id="327"></td>
+        <td data-id="328"></td>
+    </tr>
+</table>
+
+<div data-id="329" class="diagram-box">RUNNER BRIEFING NOTES  (review before every deployment)
+─────────────────────────────────────────────────────────────────────────
+  • WALK — do not run unless the situation is immediately life-threatening.
+    Conserve energy. A tired runner makes mistakes and cannot complete routes.
+
+  • Travel in pairs whenever possible. Solo travel only when no pair is
+    available and the message is urgent.
+
+  • Know your alternate route BEFORE you leave. Walk it at least once
+    before an emergency so you know the terrain.
+
+  • Carry written messages ONLY. Never rely on memory for message content.
+    Use the standard Message Form (USB Kit → 06_TEMPLATES → Message_Form.pdf).
+
+  • If a route is blocked or unsafe:
+      → Return to origin immediately
+      → Report blockage to Block Captain or Hub
+      → Wait for new routing instructions before departing again
+
+  • At each drop point: leave one copy of the message, retain one copy.
+    Record the time of drop in your runner log.
+
+  • At destination: obtain a written acknowledgement signature if possible.
+    Record: time delivered, name of recipient, any reply message received.</div>
+
+<div data-id="330" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+<!-- PAGE BREAK -->
+<div data-id="331" class="page-break"></div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!-- NOTES FOR REPRODUCTION                              -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<h2 data-id="332" style="color:#2b5797; margin-top:0;">Notes for Reproduction</h2>
+<hr data-id="333" class="section-rule">
+
+<p data-id="334">All diagrams in this document are designed to be reproduced by any of the following methods — with no special software, equipment, or training required:</p>
+
+<ol data-id="335">
+    <li data-id="336"><strong data-id="337">Photocopied directly from this document.</strong> Each figure is contained within a single page or page spread. Figures may be copied individually and distributed as stand-alone reference sheets. Black-and-white photocopying is fully supported — no color is required for any diagram to be legible and functional.</li>
+
+    <li data-id="338"><strong data-id="339">Hand-drawn onto whiteboards or flip charts for workshop use.</strong> All diagrams use standard characters, lines, and box-drawing symbols that can be reproduced with a marker. The ASCII/text art format is deliberately chosen for this purpose. Instructors should practice drawing key figures (especially Figures 1, 2, 5, and 6) before workshops.</li>
+
+    <li data-id="340"><strong data-id="341">Scaled and printed as posters for community hubs.</strong> Figures 1, 5, 9 and 10 are particularly suitable for large-format printing and posting at community bulletin boards, fire stations, libraries, and other hubs. Print at A3 (11×17") or larger for readability at a distance.</li>
+
+    <li data-id="342"><strong data-id="343">Transcribed into digital formats for the USB kit.</strong> All text in this document is plain Unicode. Figures may be copied into plain text files (.txt), spreadsheets, or any word processor without loss of structure, provided a monospace font (Consolas, Courier New, or equivalent) is used for diagram sections.</li>
+</ol>
+
+<div data-id="344" class="callout callout-note" style="margin-top:12pt;">
+    <p data-id="345" class="callout-label">INTENTIONAL DESIGN CHOICE</p>
+    <p data-id="346">The ASCII and text-art format used throughout this diagram set is intentional — not a limitation. It ensures that every diagram in this set remains fully accessible and reproducible even if all electronic versions are unavailable, all printers are offline, and all software is inaccessible. A diagram that can only be read on a screen is not a resilience resource. A diagram that can be drawn from memory with a pencil is.</p>
+</div>
+
+<h3 data-id="347">Adapting Diagrams for Your Community</h3>
+
+<p data-id="348">Every blank field in this document — underscores, empty table cells, placeholder labels — is an invitation to customize. Before storing this document in your USB kit or distributing printed copies, fill in the following:</p>
+
+<ul data-id="349">
+    <li data-id="350"><strong data-id="351">Figure 2:</strong> Replace NODE-01 through NODE-08 with your actual node IDs, locations, and custodian names. Mark failed or planned-but-not-yet-installed nodes accordingly.</li>
+    <li data-id="352"><strong data-id="353">Figure 5:</strong> Replace CLUSTER A / CLUSTER B and CELL 1–6 with your geographic cluster and cell names. Add the name and contact of each Block Captain and Cluster Lead.</li>
+    <li data-id="354"><strong data-id="355">Figure 6:</strong> Fill in the name and call sign of your Net Control operator and all Cluster Leads, Cell Captains, and Household Leads. Add backup contacts for each position.</li>
+    <li data-id="356"><strong data-id="357">Figure 9:</strong> If your community agrees to modify any visual signal meanings, note the change clearly on every copy and record the date of the revision.</li>
+    <li data-id="358"><strong data-id="359">Figure 10:</strong> Draw or paste in your actual neighborhood street map as the base layer. Use the route and runner tables to record all assignments. Store a filled-in copy in USB Kit folders <strong data-id="360">02_MAPS</strong> and <strong data-id="361">05_DATA</strong>.</li>
+</ul>
+
+<p data-id="362">Store the completed, community-specific version of this document in your USB kit alongside the blank master. Distribute printed copies to every Block Captain and Cluster Lead. Review and update at every quarterly exercise.</p>
+
+<h3 data-id="363">Version Control</h3>
+
+<p data-id="364">When you make community-specific edits, update the version number and date in the document title and on the cover page. Use the format: <strong data-id="365">v1.0-[COMMUNITY]-[YYYYMM]</strong> (e.g., v1.0-NORTHSIDE-202606). This makes it easy to identify which version of the document a given copy belongs to, and whether it is current.</p>
+
+<div data-id="366" class="callout" style="margin-top:20pt;">
+    <p data-id="367" class="callout-label">LICENSE</p>
+    <p data-id="368">This document is released under the <strong data-id="369">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</strong> license. You are free to copy, distribute, adapt, and build upon this work for any purpose, including commercial purposes, provided you give appropriate credit and distribute any derivative works under the same license. No permission is required to photocopy, hand-copy, or digitally reproduce this document for community preparedness purposes.</p>
+</div>
+
+<div data-id="370" style="margin-top:24pt; text-align:center;">
+    <p data-id="371" style="font-size:10pt; color:#555555; font-style:italic;">— End of Diagram Reference Set —</p>
+    <p data-id="372" style="font-size:9pt; color:#888888;">OFFLINE NETWORK RESILIENCE SYSTEM — DIAGRAM REFERENCE SET v1.0 — May 2026</p>
+    <p data-id="373" style="font-size:9pt; color:#888888;">CC BY-SA 4.0 — Companion to the Field Manual — Reproduce freely</p>
+</div>
+
+<div data-id="374" class="footer-note">Offline Network Resilience System — Diagram Reference Set v1.0 | CC BY-SA 4.0 | Reproduce freely.</div>
+
+</body>
+</html>

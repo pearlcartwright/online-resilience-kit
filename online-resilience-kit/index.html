@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<title>Offline Network Resilience — USB Kit & Pre-Grid Prep Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest" defer></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        mil: {
+          darkest: '#0f172a',
+          primary: '#1e293b',
+          accent: '#334155',
+          bright: '#10b981',
+          text: '#e2e8f0',
+          highlight: '#f8fafc',
+          amber: '#f59e0b',
+          critical: '#ef4444',
+          success: '#059669',
+          successLight: '#10b981',
+          muted: '#94a3b8',
+          indigo: '#6366f1',
+          sky: '#0ea5e9',
+        }
+      },
+      fontFamily: {
+        body: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"Courier New"', 'Courier', 'monospace'],
+      }
+    }
+  }
+};
+</script>
+<style>
+* { box-sizing: border-box; }
+body { background: #0f172a; color: #e2e8f0; font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #10b981; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.blink-dot { animation: blink 1.2s infinite; }
+.blink-slow { animation: blink 2s infinite; }
+.tab-btn-active { border-bottom: 2px solid #10b981 !important; color: #f8fafc !important; background: transparent !important; }
+.check-item.checked { text-decoration: line-through; opacity: 0.65; }
+.check-item.checked .check-bg { background: rgba(5,150,105,0.15); border-color: #10b981 !important; }
+.check-item.checked .check-icon { color: #fff; }
+.category-header { cursor: pointer; user-select: none; }
+.category-content { overflow: hidden; transition: max-height 0.3s ease; }
+.tree-item { cursor: pointer; transition: background 0.15s, color 0.15s; border-radius: 6px; }
+.tree-item:hover { background: rgba(255,255,255,0.04); color: #e2e8f0; }
+.tree-item.active { background: rgba(16,185,129,0.1); border-left: 2px solid #10b981; color: #f8fafc; }
+.tree-folder > .tree-children { display: none; }
+.tree-folder.open > .tree-children { display: block; }
+.dl-card { transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+.dl-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); border-color: #10b981; }
+.badge-critical { background: #ef4444; color: #fff; border-radius: 9999px; padding: 2px 10px; font-size: 0.7rem; font-weight: 600; }
+.badge-important { background: #f59e0b; color: #0f172a; border-radius: 9999px; padding: 2px 10px; font-size: 0.7rem; font-weight: 600; }
+.badge-recommended { background: #334155; color: #94a3b8; border-radius: 9999px; padding: 2px 10px; font-size: 0.7rem; font-weight: 600; }
+.platform-badge { background: #0f172a; border: 1px solid #334155; color: #10b981; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; }
+.progress-bar-fill { transition: width 0.4s ease; }
+.copied-toast { position: fixed; bottom: 24px; right: 24px; background: #059669; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 0.875rem; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+.copied-toast.show { opacity: 1; }
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  .print-manifest-content { background: #fff !important; color: #000 !important; }
+  .print-manifest-content * { color: #000 !important; border-color: #333 !important; }
+  .print-manifest-content input, .print-manifest-content textarea { border: 1px solid #999 !important; background: #fff !important; }
+  .print-manifest-content table { border-collapse: collapse; }
+  .print-manifest-content th, .print-manifest-content td { border: 1px solid #666 !important; padding: 4px 8px !important; }
+}
+.print-only { display: none; }
+.kit-dl-btn-active { background: #10b981; color: #0f172a; cursor: pointer; font-weight: 600; border-radius: 8px; }
+.kit-dl-btn-active:hover { background: #059669; }
+.kit-dl-btn-disabled { background: #1e293b; color: #475569; cursor: not-allowed; border: 1px solid #334155; border-radius: 8px; }
+.kit-badge-core { background: #10b981; color: #0f172a; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.kit-badge-print { background: #f59e0b; color: #0f172a; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.kit-badge-facilitator { background: #6366f1; color: #fff; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.kit-badge-offline { background: #0ea5e9; color: #0f172a; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.kit-badge-everything { background: #059669; color: #fff; border-radius: 9999px; font-size: 0.7rem; font-weight: 600; }
+.format-badge { background: #0f172a; border: 1px solid #334155; color: #10b981; font-size: 0.6rem; padding: 2px 8px; border-radius: 4px; font-family: 'Courier New', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+.collapsible-header { cursor: pointer; user-select: none; transition: background 0.15s; border-radius: 8px; }
+.collapsible-header:hover { background: rgba(255,255,255,0.04); }
+.collapsible-body { overflow: hidden; max-height: 0; transition: max-height 0.4s ease; }
+.collapsible-body.open { max-height: 5000px; }
+.kit-tooltip { position: relative; }
+.kit-tooltip .kit-tooltip-text {
+  visibility: hidden; opacity: 0; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: #0f172a; color: #e2e8f0; font-size: 0.7rem; padding: 6px 12px; border-radius: 8px; border: 1px solid #334155;
+  white-space: nowrap; z-index: 10; pointer-events: none; transition: opacity 0.2s;
+}
+.kit-tooltip:hover .kit-tooltip-text { visibility: visible; opacity: 1; }
+
+/* ===== SPLASH OVERLAY ===== */
+@keyframes splashFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes splashFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+#splash-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #060a10;
+  margin: 0;
+  padding: 0;
+  animation: splashFadeIn 0.6s ease-out forwards;
+}
+#splash-overlay.fade-out { animation: splashFadeOut 0.5s ease-in forwards; }
+#splash-overlay::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(226,232,240,0.01) 2px, rgba(226,232,240,0.01) 4px);
+}
+.splash-outer-wrap {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+@media (max-width: 640px) {
+  .splash-outer-wrap {
+    padding: 24px 12px;
+  }
+}
+.splash-frame {
+  position: relative;
+  border: 1px solid rgba(245,158,11,0.5);
+  box-shadow: inset 0 0 60px rgba(245,158,11,0.03);
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 840px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 8px;
+  margin: 0;
+}
+@media (min-width: 768px) { .splash-frame { padding: 48px 56px; } }
+@media (max-width: 640px) {
+  .splash-frame {
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 24px 16px;
+  }
+}
+.splash-transmission {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem; color: #f59e0b; letter-spacing: 0.25em; text-transform: uppercase;
+  position: absolute; top: 12px; left: 28px;
+}
+@media (min-width: 768px) { .splash-transmission { top: 20px; left: 56px; } }
+.splash-cursor { display: inline-block; animation: cursorBlink 1s step-end infinite; color: #f59e0b; }
+.splash-container { max-width: 720px; width: 100%; }
+.splash-rule { border: none; border-top: 1px solid rgba(245,158,11,0.3); margin: 28px 0; }
+.splash-heading {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem; color: #f59e0b; letter-spacing: 0.2em;
+  text-transform: uppercase; font-variant: small-caps; margin-bottom: 14px;
+}
+.splash-body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem; color: #cbd5e1; line-height: 1.9;
+}
+@media (min-width: 768px) { .splash-body { font-size: 1rem; } }
+.splash-body-emphasis {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.05rem; color: #f8fafc; line-height: 1.9; font-weight: 500;
+}
+@media (min-width: 768px) { .splash-body-emphasis { font-size: 1.1rem; } }
+.splash-enter-btn {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.95rem; color: #f59e0b; background: transparent;
+  border: 1px solid #f59e0b; padding: 12px 32px; cursor: pointer;
+  letter-spacing: 0.05em; font-weight: 600; border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.splash-enter-btn:hover { background: #f59e0b; color: #0f172a; }
+
+.section-heading {
+  font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #10b981; margin-bottom: 16px;
+}
+
+.header-bar {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-bottom: 1px solid #334155;
+}
+
+.prep-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #334155; border-radius: 9999px;
+  padding: 4px 14px; font-size: 0.8rem; font-weight: 600;
+  transition: border-color 0.3s;
+}
+
+.tab-bar {
+  background: #1e293b; border-bottom: 2px solid #334155;
+}
+.tab-btn {
+  padding: 14px 20px; font-size: 0.85rem; font-weight: 500; color: #94a3b8;
+  border: none; border-bottom: 2px solid transparent; cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  background: transparent;
+}
+.tab-btn:hover { color: #e2e8f0; background: rgba(255,255,255,0.04); }
+
+.alert-card {
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.3);
+  border-radius: 10px; padding: 20px;
+}
+</style>
+</head>
+<body data-id="0" class="min-h-screen flex flex-col">
+<app-icon data-id="1" hidden data-icon="radio" data-palette="Dark"></app-icon>
+
+<!-- ===== SPLASH OVERLAY ===== -->
+<div data-id="2" id="splash-overlay">
+  <div data-id="3" class="splash-outer-wrap">
+    <div data-id="4" class="splash-frame">
+      <span data-id="5" class="splash-transmission" id="splash-transmission-label"></span><span data-id="6" class="splash-cursor" id="splash-cursor-el" style="position:absolute;top:12px;font-family:'Courier New',Courier,monospace;font-size:0.7rem;display:none;">█</span>
+      <div data-id="7" class="splash-container">
+        <div data-id="8" style="margin-bottom:8px;">
+          <div data-id="9" style="font-size:0.72rem;color:#f59e0b;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:10px;font-family:'Courier New',monospace;">OFFLINE NETWORK RESILIENCE SYSTEM — v1.0</div>
+          <div data-id="10" style="font-size:2rem;color:#f8fafc;font-weight:700;line-height:1.3;margin-bottom:12px;font-family:'Inter',system-ui,sans-serif;">"When infrastructure fails,<br data-id="11">community survives."</div>
+          <div data-id="12" style="font-size:0.8rem;color:#64748b;font-style:italic;">Lyndhurst, OH · May 2026 · Released to the commons</div>
+        </div>
+
+        <hr data-id="13" class="splash-rule"/>
+
+        <div data-id="14" class="splash-heading">// WHAT THIS IS</div>
+        <div data-id="15" class="splash-body" style="margin-bottom:0;">
+          The grid is fragile. We handed control of our communications — our ability to organize, to call for help, to simply speak to our neighbors — to a handful of corporations and a patchwork of infrastructure that was never designed to survive what's coming.<br data-id="16"><br data-id="17">
+          When it fails, most communities will have nothing.<br data-id="18"><br data-id="19">
+          This system is a response to that. A field manual. A prep kit. A framework built from open-source tools, amateur radio tradition, and the simple belief that communities should not need a corporation's permission to talk to each other.<br data-id="20"><br data-id="21">
+          It is not finished. It was never meant to be finished by one person.
+        </div>
+
+        <hr data-id="22" class="splash-rule"/>
+
+        <div data-id="23" class="splash-heading">// THIS NEEDS BATTLE TESTING</div>
+        <div data-id="24" class="splash-body" style="margin-bottom:0;">
+          This system was built as a starting point — a skeleton that needs people who've actually been in the field when things broke.<br data-id="25"><br data-id="26">
+          It needs radio operators who know what actually works when repeaters go down. Network engineers who've watched a mesh fail under load. Security researchers who can find the holes before bad actors do. Community organizers who know that the hard part isn't the technology — it's the people. First responders who can tell us what information actually matters in the first 72 hours.<br data-id="27"><br data-id="28">
+          If that's you: this project needs you more than it needs another document.
+        </div>
+
+        <hr data-id="29" class="splash-rule"/>
+
+        <div data-id="30" class="splash-heading">// THE POINT</div>
+        <div data-id="31" class="splash-body-emphasis" style="margin-bottom:0;">
+          Take this. Break it. Improve it. Redistribute it.<br data-id="32">
+          The goal is not a perfect manual.<br data-id="33">
+          The goal is communities that own their own communications.<br data-id="34">
+          No subscription. No terms of service. No kill switch.<br data-id="35">
+          Ours.
+        </div>
+
+        <hr data-id="36" class="splash-rule"/>
+
+        <div data-id="37" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;">
+          <div data-id="38" style="font-size:0.75rem;color:#64748b;line-height:1.7;min-width:200px;">
+            Released under CC BY-SA 4.0<br data-id="39">
+            Copy freely. Attribute if you can. Improve always.
+          </div>
+          <div data-id="40" style="text-align:center;">
+            <button data-id="41" id="splash-enter-btn" class="splash-enter-btn">[ &gt; ENTER THE KIT ]</button>
+            <div data-id="42" style="font-size:0.65rem;color:#475569;margin-top:10px;">[ show this again at any time from the footer ]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header data-id="43" id="header-bar-h1k2" class="no-print header-bar sticky top-0 z-50">
+  <div data-id="44" class="flex items-center justify-between px-4 md:px-6" style="height:56px;">
+    <div data-id="45" class="flex items-center gap-2 md:gap-3 min-w-0">
+      <button data-id="46" id="mobile-menu-btn-m1" class="md:hidden p-1 text-mil-bright"><i data-id="47" data-lucide="menu" class="w-5 h-5"></i></button>
+      <span data-id="48" class="inline-block w-2.5 h-2.5 rounded-full bg-mil-bright shrink-0"></span>
+      <span data-id="49" class="text-mil-highlight text-sm font-bold tracking-wide whitespace-nowrap">OFFLINE RESILIENCE SYSTEM</span>
+    </div>
+    <div data-id="50" class="hidden md:block text-center flex-1">
+      <span data-id="51" class="text-mil-muted text-xs tracking-wide">USB Kit & Pre-Grid Prep Hub</span>
+    </div>
+    <div data-id="52" class="flex items-center gap-2 shrink-0">
+      <span data-id="53" id="status-dot-d1" class="inline-block w-2 h-2 rounded-full bg-mil-critical blink-dot"></span>
+      <span data-id="54" id="prep-pct-header" class="prep-pill text-mil-critical">■ 0% READY</span>
+    </div>
+  </div>
+  <!-- TABS -->
+  <nav data-id="55" id="tab-nav-n1" class="tab-bar flex overflow-x-auto">
+    <button data-id="56" data-tab="tab1" class="tab-btn tab-btn-active flex-1 min-w-0 whitespace-nowrap">
+      <span data-id="57" class="hidden sm:inline"><span data-id="58" class="text-mil-amber mr-1">●</span> DO THIS FIRST</span><span data-id="59" class="sm:hidden"><span data-id="60" class="text-mil-amber mr-1">●</span> FIRST</span>
+    </button>
+    <button data-id="61" data-tab="tab2" class="tab-btn flex-1 min-w-0 whitespace-nowrap">
+      <span data-id="62" class="hidden sm:inline">USB KIT EXPLORER</span><span data-id="63" class="sm:hidden">USB</span>
+    </button>
+    <button data-id="64" data-tab="tab3" class="tab-btn flex-1 min-w-0 whitespace-nowrap">
+      <span data-id="65" class="hidden sm:inline">SOFTWARE DOWNLOADS</span><span data-id="66" class="sm:hidden">DOWNLOADS</span>
+    </button>
+    <button data-id="67" data-tab="tab5" class="tab-btn flex-1 min-w-0 whitespace-nowrap">
+      <span data-id="68" class="hidden sm:inline"><span data-id="69" class="text-mil-bright mr-1">●</span> GET THE KIT</span><span data-id="70" class="sm:hidden"><span data-id="71" class="text-mil-bright mr-1">●</span> KIT</span>
+    </button>
+    <button data-id="72" data-tab="tab4" class="tab-btn flex-1 min-w-0 whitespace-nowrap">
+      <span data-id="73" class="hidden sm:inline">PRINT MANIFEST</span><span data-id="74" class="sm:hidden">PRINT</span>
+    </button>
+  </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<nav data-id="75" id="mobile-menu-m1" class="hidden fixed inset-0 bg-mil-darkest z-[60] flex flex-col p-6">
+  <button data-id="76" id="mobile-menu-close-m1" class="self-end p-2 text-mil-bright mb-6"><i data-id="77" data-lucide="x" class="w-6 h-6"></i></button>
+  <span data-id="78" class="text-mil-highlight text-base font-bold tracking-wide mb-8">OFFLINE RESILIENCE SYSTEM</span>
+  <button data-id="79" data-tab="tab1" class="mobile-tab-btn text-left py-4 px-4 text-sm text-mil-highlight border-b border-mil-accent/30 rounded-lg hover:bg-mil-primary transition-colors"><span data-id="80" class="text-mil-amber mr-2">●</span> DO THIS FIRST</button>
+  <button data-id="81" data-tab="tab2" class="mobile-tab-btn text-left py-4 px-4 text-sm text-mil-text border-b border-mil-accent/30 rounded-lg hover:bg-mil-primary transition-colors">USB KIT EXPLORER</button>
+  <button data-id="82" data-tab="tab3" class="mobile-tab-btn text-left py-4 px-4 text-sm text-mil-text border-b border-mil-accent/30 rounded-lg hover:bg-mil-primary transition-colors">SOFTWARE DOWNLOADS</button>
+  <button data-id="83" data-tab="tab5" class="mobile-tab-btn text-left py-4 px-4 text-sm text-mil-bright border-b border-mil-accent/30 rounded-lg hover:bg-mil-primary transition-colors"><span data-id="84" class="text-mil-bright mr-2">●</span> GET THE KIT</button>
+  <button data-id="85" data-tab="tab4" class="mobile-tab-btn text-left py-4 px-4 text-sm text-mil-text border-b border-mil-accent/30 rounded-lg hover:bg-mil-primary transition-colors">PRINT MANIFEST</button>
+</nav>
+
+<main data-id="86" class="flex-1">
+
+<!-- ===== TAB 1: DO THIS FIRST ===== -->
+<section data-id="87" id="tab1" class="tab-content px-4 md:px-6 py-8 max-w-5xl mx-auto w-full">
+  <!-- Alert Banner -->
+  <div data-id="88" id="alert-banner-a1" class="alert-card mb-8">
+    <div data-id="89" class="flex items-start gap-4">
+      <span data-id="90" class="text-2xl mt-0.5">⚡</span>
+      <div data-id="91">
+        <p data-id="92" class="text-mil-amber font-bold text-sm md:text-base mb-1">BEFORE THE GRID GOES DOWN</p>
+        <p data-id="93" class="text-sm leading-relaxed" style="color:#fcd34d;">Complete every item on this list NOW, while you still have internet. Once power and connectivity fail, it is too late to download these tools.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Section -->
+  <div data-id="94" id="progress-section-p1" class="bg-mil-primary rounded-xl p-5 mb-8 border border-mil-accent/40 shadow-lg">
+    <div data-id="95" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+      <span data-id="96" class="text-mil-muted text-xs font-semibold uppercase tracking-widest">Prep Progress</span>
+      <span data-id="97" class="text-sm text-mil-text"><span data-id="98" id="tasks-done">0</span> / <span data-id="99" id="tasks-total">32</span> tasks · <span data-id="100" id="prep-score" class="font-bold text-mil-critical">0%</span></span>
+    </div>
+    <div data-id="101" class="w-full bg-mil-accent rounded-full h-2 overflow-hidden">
+      <div data-id="102" id="progress-fill" class="progress-bar-fill h-full rounded-full" style="width:0%;background:linear-gradient(90deg,#10b981,#34d399);"></div>
+    </div>
+  </div>
+
+  <!-- Checklist Categories -->
+  <div data-id="103" id="checklist-container-c1" class="space-y-4">
+
+    <!-- CAT 1: Mesh Network -->
+    <div data-id="104" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat1">
+      <div data-id="105" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="106" class="flex items-center gap-3">
+          <i data-id="107" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="108" class="text-mil-highlight text-sm font-semibold cat-title">📱 MESH NETWORK SOFTWARE</span>
+          <span data-id="109" class="text-xs text-mil-muted">(<span data-id="110" class="cat-count">0</span>/6)</span>
+        </div>
+      </div>
+      <div data-id="111" class="category-content border-t border-mil-accent/30">
+        <label data-id="112" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="mesh1">
+          <span data-id="113" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="114" type="checkbox" class="sr-only task-check"/><i data-id="115" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="116" class="flex-1 text-sm">Install Meshtastic app on Android</span>
+          <a data-id="117" href="https://play.google.com/store/apps/details?id=com.geeksville.mesh" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="118" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="mesh2">
+          <span data-id="119" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="120" type="checkbox" class="sr-only task-check"/><i data-id="121" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="122" class="flex-1 text-sm">Install Meshtastic app on iOS</span>
+          <a data-id="123" href="https://apps.apple.com/us/app/meshtastic/id1586432531" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="124" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="mesh3">
+          <span data-id="125" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="126" type="checkbox" class="sr-only task-check"/><i data-id="127" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="128" class="flex-1 text-sm">Download Meshtastic firmware for your device</span>
+          <a data-id="129" href="https://meshtastic.org/downloads" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="130" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="mesh4">
+          <span data-id="131" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="132" type="checkbox" class="sr-only task-check"/><i data-id="133" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="134" class="flex-1 text-sm">Bookmark the Meshtastic Web Flasher (use before grid fails)</span>
+          <a data-id="135" href="https://flasher.meshtastic.org" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">OPEN FLASHER →</a>
+        </label>
+        <label data-id="136" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="mesh5">
+          <span data-id="137" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="138" type="checkbox" class="sr-only task-check"/><i data-id="139" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="140" class="flex-1 text-sm">Flash your Meshtastic device and test it NOW</span>
+        </label>
+        <label data-id="141" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="mesh6">
+          <span data-id="142" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="143" type="checkbox" class="sr-only task-check"/><i data-id="144" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="145" class="flex-1 text-sm">Set up a community channel with a shared encryption key</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- CAT 2: Offline Maps -->
+    <div data-id="146" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat2">
+      <div data-id="147" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="148" class="flex items-center gap-3">
+          <i data-id="149" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="150" class="text-mil-highlight text-sm font-semibold cat-title">🗺 OFFLINE MAPS</span>
+          <span data-id="151" class="text-xs text-mil-muted">(<span data-id="152" class="cat-count">0</span>/5)</span>
+        </div>
+      </div>
+      <div data-id="153" class="category-content border-t border-mil-accent/30">
+        <label data-id="154" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="map1">
+          <span data-id="155" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="156" type="checkbox" class="sr-only task-check"/><i data-id="157" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="158" class="flex-1 text-sm">Install OsmAnd on Android</span>
+          <a data-id="159" href="https://play.google.com/store/apps/details?id=net.osmand" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="160" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="map2">
+          <span data-id="161" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="162" type="checkbox" class="sr-only task-check"/><i data-id="163" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="164" class="flex-1 text-sm">Install OsmAnd on iOS</span>
+          <a data-id="165" href="https://apps.apple.com/us/app/osmand-maps-travel-navigate/id934850257" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="166" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="map3">
+          <span data-id="167" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="168" type="checkbox" class="sr-only task-check"/><i data-id="169" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="170" class="flex-1 text-sm">Download offline maps for your region in OsmAnd (do while on WiFi — maps are large)</span>
+        </label>
+        <label data-id="171" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="map4">
+          <span data-id="172" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="173" type="checkbox" class="sr-only task-check"/><i data-id="174" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="175" class="flex-1 text-sm">Install Maps.me as backup mapping app</span>
+          <a data-id="176" href="https://maps.me/" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="177" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="map5">
+          <span data-id="178" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="179" type="checkbox" class="sr-only task-check"/><i data-id="180" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="181" class="flex-1 text-sm">Print paper backup maps of your neighborhood and key routes</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- CAT 3: Offline Reference -->
+    <div data-id="182" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat3">
+      <div data-id="183" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="184" class="flex items-center gap-3">
+          <i data-id="185" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="186" class="text-mil-highlight text-sm font-semibold cat-title">📚 OFFLINE REFERENCE</span>
+          <span data-id="187" class="text-xs text-mil-muted">(<span data-id="188" class="cat-count">0</span>/6)</span>
+        </div>
+      </div>
+      <div data-id="189" class="category-content border-t border-mil-accent/30">
+        <label data-id="190" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="ref1">
+          <span data-id="191" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="192" type="checkbox" class="sr-only task-check"/><i data-id="193" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="194" class="flex-1 text-sm">Install Kiwix on Windows/Mac/Linux</span>
+          <a data-id="195" href="https://www.kiwix.org/en/download/" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="196" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="ref2">
+          <span data-id="197" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="198" type="checkbox" class="sr-only task-check"/><i data-id="199" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="200" class="flex-1 text-sm">Install Kiwix on Android</span>
+          <a data-id="201" href="https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">GET APP →</a>
+        </label>
+        <label data-id="202" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="ref3">
+          <span data-id="203" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="204" type="checkbox" class="sr-only task-check"/><i data-id="205" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="206" class="flex-1 text-sm">Download Wikipedia ZIM file (English, All) from Kiwix library</span>
+          <a data-id="207" href="https://library.kiwix.org/#lang=eng&category=wikipedia" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">OPEN LIBRARY →</a>
+        </label>
+        <label data-id="208" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="ref4">
+          <span data-id="209" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="210" type="checkbox" class="sr-only task-check"/><i data-id="211" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="212" class="flex-1 text-sm">Download First Aid / Medical reference ZIM from Kiwix</span>
+          <a data-id="213" href="https://library.kiwix.org/#lang=eng&category=other" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">OPEN LIBRARY →</a>
+        </label>
+        <label data-id="214" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="ref5">
+          <span data-id="215" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="216" type="checkbox" class="sr-only task-check"/><i data-id="217" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="218" class="flex-1 text-sm">Save a copy of this field manual as PDF on your device</span>
+        </label>
+        <label data-id="219" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="ref6">
+          <span data-id="220" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="221" type="checkbox" class="sr-only task-check"/><i data-id="222" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="223" class="flex-1 text-sm">Print and laminate the 12 quick-cards</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- CAT 4: Radio Software -->
+    <div data-id="224" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat4">
+      <div data-id="225" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="226" class="flex items-center gap-3">
+          <i data-id="227" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="228" class="text-mil-highlight text-sm font-semibold cat-title">📻 RADIO SOFTWARE</span>
+          <span data-id="229" class="text-xs text-mil-muted">(<span data-id="230" class="cat-count">0</span>/7)</span>
+        </div>
+      </div>
+      <div data-id="231" class="category-content border-t border-mil-accent/30">
+        <label data-id="232" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio1">
+          <span data-id="233" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="234" type="checkbox" class="sr-only task-check"/><i data-id="235" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="236" class="flex-1 text-sm">Download CHIRP radio programming software (Windows/Mac/Linux)</span>
+          <a data-id="237" href="https://chirpmyradio.com/projects/chirp/wiki/Download" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="238" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio2">
+          <span data-id="239" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="240" type="checkbox" class="sr-only task-check"/><i data-id="241" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="242" class="flex-1 text-sm">Program local repeater frequencies into your radio using CHIRP</span>
+        </label>
+        <label data-id="243" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio3">
+          <span data-id="244" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="245" type="checkbox" class="sr-only task-check"/><i data-id="246" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="247" class="flex-1 text-sm">Download Winlink Express for email over radio</span>
+          <a data-id="248" href="https://downloads.winlink.org/User%20Programs/" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="249" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio4">
+          <span data-id="250" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="251" type="checkbox" class="sr-only task-check"/><i data-id="252" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="253" class="flex-1 text-sm">Download JS8Call for HF digital messaging</span>
+          <a data-id="254" href="https://js8call.com" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="255" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio5">
+          <span data-id="256" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="257" type="checkbox" class="sr-only task-check"/><i data-id="258" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="259" class="flex-1 text-sm">Install WSJT-X for weak signal digital modes</span>
+          <a data-id="260" href="https://wsjt.sourceforge.io/wsjtx.html" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="261" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="radio6">
+          <span data-id="262" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="263" type="checkbox" class="sr-only task-check"/><i data-id="264" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="265" class="flex-1 text-sm">Register a Winlink account NOW (requires internet)</span>
+          <a data-id="266" href="https://winlink.org/content/register_account_instructions" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">REGISTER →</a>
+        </label>
+        <label data-id="267" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="radio7">
+          <span data-id="268" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="269" type="checkbox" class="sr-only task-check"/><i data-id="270" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="271" class="flex-1 text-sm">Study for your ham radio Technician license</span>
+          <a data-id="272" href="https://hamstudy.org" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">STUDY FREE →</a>
+        </label>
+      </div>
+    </div>
+
+    <!-- CAT 5: Security -->
+    <div data-id="273" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat5">
+      <div data-id="274" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="275" class="flex items-center gap-3">
+          <i data-id="276" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="277" class="text-mil-highlight text-sm font-semibold cat-title">🔐 SECURITY AND COMMUNICATION</span>
+          <span data-id="278" class="text-xs text-mil-muted">(<span data-id="279" class="cat-count">0</span>/4)</span>
+        </div>
+      </div>
+      <div data-id="280" class="category-content border-t border-mil-accent/30">
+        <label data-id="281" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="sec1">
+          <span data-id="282" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="283" type="checkbox" class="sr-only task-check"/><i data-id="284" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="285" class="flex-1 text-sm">Download and install Briar (offline P2P messaging, Android)</span>
+          <a data-id="286" href="https://briarproject.org/download-briar/" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="287" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="sec2">
+          <span data-id="288" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="289" type="checkbox" class="sr-only task-check"/><i data-id="290" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="291" class="flex-1 text-sm">Download VeraCrypt for encrypted USB drive protection</span>
+          <a data-id="292" href="https://www.veracrypt.fr/en/Downloads.html" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="293" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="sec3">
+          <span data-id="294" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="295" type="checkbox" class="sr-only task-check"/><i data-id="296" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="297" class="flex-1 text-sm">Download 7-Zip for AES-256 encrypted archives</span>
+          <a data-id="298" href="https://www.7-zip.org/download.html" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">DOWNLOAD →</a>
+        </label>
+        <label data-id="299" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="sec4">
+          <span data-id="300" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="301" type="checkbox" class="sr-only task-check"/><i data-id="302" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="303" class="flex-1 text-sm">Create an encrypted archive of your community contact directory</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- CAT 6: Hardware -->
+    <div data-id="304" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden shadow" data-category="cat6">
+      <div data-id="305" class="category-header flex items-center justify-between p-4 hover:bg-white/[0.03] transition-colors">
+        <div data-id="306" class="flex items-center gap-3">
+          <i data-id="307" data-lucide="chevron-down" class="w-4 h-4 text-mil-bright cat-chevron transition-transform"></i>
+          <span data-id="308" class="text-mil-highlight text-sm font-semibold cat-title">🔧 HARDWARE AND PHYSICAL PREP</span>
+          <span data-id="309" class="text-xs text-mil-muted">(<span data-id="310" class="cat-count">0</span>/4)</span>
+        </div>
+      </div>
+      <div data-id="311" class="category-content border-t border-mil-accent/30">
+        <label data-id="312" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="hw1">
+          <span data-id="313" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="314" type="checkbox" class="sr-only task-check"/><i data-id="315" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="316" class="flex-1 text-sm">Obtain at least one Meshtastic-compatible LoRa device (TTGO T-Beam, Heltec LoRa 32, or similar)</span>
+          <a data-id="317" href="https://www.amazon.com/s?k=meshtastic+lora+device" target="_blank" rel="noopener" class="shrink-0 text-xs bg-mil-bright text-mil-darkest font-semibold px-3 py-1.5 rounded-lg hover:bg-mil-success transition-colors">FIND ON AMAZON →</a>
+        </label>
+        <label data-id="318" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="hw2">
+          <span data-id="319" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="320" type="checkbox" class="sr-only task-check"/><i data-id="321" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="322" class="flex-1 text-sm">Obtain a VHF/UHF handheld radio (Baofeng UV-5R or better)</span>
+        </label>
+        <label data-id="323" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors border-b border-mil-darkest" data-key="hw3">
+          <span data-id="324" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="325" type="checkbox" class="sr-only task-check"/><i data-id="326" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="327" class="flex-1 text-sm">Assemble a 32GB+ USB drive and copy all downloaded software to it</span>
+        </label>
+        <label data-id="328" class="check-item flex items-start gap-3 px-5 py-3.5 hover:bg-white/[0.03] cursor-pointer transition-colors" data-key="hw4">
+          <span data-id="329" class="check-bg mt-0.5 w-[18px] h-[18px] rounded border-2 border-mil-accent flex items-center justify-center shrink-0 transition-colors"><input data-id="330" type="checkbox" class="sr-only task-check"/><i data-id="331" data-lucide="check" class="w-3 h-3 text-white opacity-0 check-icon"></i></span>
+          <span data-id="332" class="flex-1 text-sm">Establish a monthly update day (first Sunday of each month) to refresh USB kit contents</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Actions -->
+  <div data-id="333" class="flex flex-col sm:flex-row gap-3 mt-8">
+    <button data-id="334" id="copy-checklist-btn" class="flex-1 flex items-center justify-center gap-2 bg-transparent border border-mil-accent text-mil-text font-semibold text-sm px-4 py-3 rounded-lg hover:border-mil-bright hover:text-mil-bright transition-colors">
+      <i data-id="335" data-lucide="clipboard-copy" class="w-4 h-4"></i> COPY CHECKLIST SUMMARY
+    </button>
+    <button data-id="336" id="reset-all-btn" class="flex items-center justify-center gap-2 bg-transparent text-mil-critical text-sm font-semibold px-4 py-3 rounded-lg hover:bg-mil-critical/10 transition-colors border border-mil-critical/50">
+      <i data-id="337" data-lucide="rotate-ccw" class="w-4 h-4"></i> RESET ALL
+    </button>
+  </div>
+</section>
+
+<!-- ===== TAB 2: USB KIT EXPLORER ===== -->
+<section data-id="338" id="tab2" class="tab-content hidden px-4 md:px-6 py-8 max-w-7xl mx-auto w-full">
+  <div data-id="339" class="flex flex-col md:flex-row gap-4 min-h-[70vh]">
+    <!-- LEFT: File Tree -->
+    <div data-id="340" class="w-full md:w-[35%] lg:w-[30%] bg-mil-darkest rounded-xl border border-mil-accent/40 flex flex-col overflow-hidden shadow">
+      <div data-id="341" class="p-4 border-b border-mil-accent/30">
+        <div data-id="342" class="relative">
+          <i data-id="343" data-lucide="search" class="w-4 h-4 text-mil-muted absolute left-3 top-1/2 -translate-y-1/2"></i>
+          <input data-id="344" id="tree-search-input" type="text" placeholder="Search files..." class="w-full bg-mil-primary text-mil-text text-sm pl-9 pr-3 py-2.5 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/50" />
+        </div>
+      </div>
+      <div data-id="345" id="file-tree" class="flex-1 overflow-y-auto p-3 text-sm font-mono"></div>
+      <div data-id="346" class="p-4 border-t border-mil-accent/30 text-xs text-mil-muted">
+        TOTAL USB SIZE: <span data-id="347" class="text-mil-bright font-bold">~28.4 GB</span><br data-id="348"/>
+        <span data-id="349" class="text-mil-muted/60">Recommend 32GB min / 64GB for full Wikipedia</span>
+      </div>
+    </div>
+    <!-- RIGHT: Detail Panel -->
+    <div data-id="350" id="detail-panel" class="flex-1 bg-mil-primary rounded-xl border border-mil-accent/40 p-6 overflow-y-auto shadow">
+      <div data-id="351" id="detail-content" class="text-sm leading-relaxed">
+        <div data-id="352" class="flex items-center gap-4 mb-6">
+          <i data-id="353" data-lucide="hard-drive" class="w-8 h-8 text-mil-bright"></i>
+          <div data-id="354">
+            <h2 data-id="355" class="font-mono text-mil-highlight text-lg font-bold">USB_RESILIENCE_KIT_v1.0</h2>
+            <p data-id="356" class="text-mil-muted text-xs">Root directory — Select a file or folder to view details</p>
+          </div>
+        </div>
+        <div data-id="357" class="bg-mil-darkest rounded-xl p-5 font-mono text-xs text-mil-text leading-relaxed whitespace-pre-wrap border border-mil-accent/20">═══════════════════════════════════════════
+  OFFLINE NETWORK RESILIENCE SYSTEM
+  USB KIT v1.0 — FIELD MANUAL
+═══════════════════════════════════════════
+
+README.txt
+
+This USB drive contains everything your
+community needs to communicate, navigate,
+and organize when the grid goes down.
+
+QUICK START:
+1. Open START_HERE.html in any browser
+2. Read the Field Manual in 01_MANUALS/
+3. Install software from 03_SOFTWARE/
+4. Load offline maps from 02_MAPS/
+5. Open Kiwix and load ZIM files from
+   07_KIWIX_LIBRARY/
+
+STRUCTURE:
+  01_MANUALS/    — Documentation & guides
+  02_MAPS/       — Offline maps & routes
+  03_SOFTWARE/   — Installers & firmware
+  04_MEDIA/      — Training videos & cards
+  05_DATA/       — Community data files
+  06_TEMPLATES/  — Printable forms
+  07_KIWIX_LIBRARY/ — Wikipedia offline
+
+This kit should be updated monthly.
+Distribute freely. CC BY-SA 4.0.
+
+When infrastructure fails,
+community survives.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TAB 3: SOFTWARE DOWNLOADS ===== -->
+<section data-id="358" id="tab3" class="tab-content hidden px-4 md:px-6 py-8 max-w-7xl mx-auto w-full">
+  <div data-id="359" class="text-center mb-10">
+    <h2 data-id="360" class="text-mil-highlight text-xl md:text-2xl font-bold mb-3">Download Everything Now — Before You Need It</h2>
+    <p data-id="361" class="text-mil-muted text-sm max-w-2xl mx-auto leading-relaxed">Use this list while you still have internet access. Every tool listed here enables offline functionality. Click the download links, save installers to your USB kit's <span data-id="362" class="font-mono text-mil-bright">03_SOFTWARE</span> folder.</p>
+  </div>
+
+  <!-- Download Cards Container -->
+  <div data-id="363" id="download-cards" class="space-y-10"></div>
+</section>
+
+<!-- ===== TAB 5: GET THE KIT ===== -->
+<section data-id="364" id="tab5" class="tab-content hidden px-4 md:px-6 py-8 max-w-5xl mx-auto w-full">
+
+  <!-- Info Banner -->
+  <div data-id="365" class="alert-card mb-10">
+    <div data-id="366" class="flex items-start gap-4">
+      <span data-id="367" class="text-2xl mt-0.5">📡</span>
+      <div data-id="368">
+        <p data-id="369" class="text-mil-amber font-bold text-sm md:text-base mb-1">HOW THIS WORKS</p>
+        <p data-id="370" class="text-sm leading-relaxed" style="color:#fcd34d;">This hub is the index. The actual kit files are hosted separately by your community custodian. If you received this URL from someone, the download links below should already be active. If they show <span data-id="371" class="font-mono text-mil-critical">'NOT CONFIGURED'</span>, contact whoever shared this with you — or scroll down to <span data-id="372" class="text-mil-bright font-semibold">CUSTODIAN SETUP</span> if you are the one hosting this page.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: CORE KIT DOCUMENTS -->
+  <div data-id="373" class="mb-5">
+    <h3 data-id="374" class="section-heading">Core Kit Documents</h3>
+  </div>
+
+  <div data-id="375" id="kit-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12"></div>
+
+  <!-- SECTION 2: CUSTODIAN SETUP (collapsible) -->
+  <div data-id="376" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden mb-6 shadow">
+    <div data-id="377" class="collapsible-header flex items-center justify-between p-5" id="custodian-collapse-header">
+      <div data-id="378" class="flex items-center gap-3">
+        <i data-id="379" data-lucide="chevron-right" class="w-4 h-4 text-mil-bright collapsible-chevron transition-transform"></i>
+        <span data-id="380" class="text-mil-highlight text-sm font-semibold">⚙ CUSTODIAN SETUP</span>
+      </div>
+      <span data-id="381" class="text-xs text-mil-muted">(only needed if YOU are hosting this page)</span>
+    </div>
+    <div data-id="382" class="collapsible-body border-t border-mil-accent/30" id="custodian-collapse-body">
+      <div data-id="383" class="p-5 md:p-7">
+        <p data-id="384" class="text-sm text-mil-muted leading-relaxed mb-5">You are hosting this page. Paste the public download URLs for each file below, then click <span data-id="385" class="text-mil-bright font-semibold">SAVE</span>. Links are stored locally in this browser — to update what visitors see, you must embed the URLs directly in the HTML file before uploading to your host.</p>
+
+        <div data-id="386" class="bg-mil-darkest rounded-xl p-5 border border-mil-accent/30 mb-6">
+          <p data-id="387" class="text-mil-bright text-xs uppercase tracking-wider font-semibold mb-3">RECOMMENDED WORKFLOW:</p>
+          <ol data-id="388" class="text-sm text-mil-muted leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li data-id="389">Upload your kit files to Proton Drive, Netlify, or any public host</li>
+            <li data-id="390">Copy the direct download/share link for each file</li>
+            <li data-id="391">Paste the links below and click <span data-id="392" class="text-mil-bright font-semibold">SAVE LINKS</span></li>
+            <li data-id="393">Open the HTML source file, find the section marked <span data-id="394" class="font-mono text-mil-amber">/* CUSTODIAN URLS */</span>, and paste the same links there as default values so visitors see them without needing to configure anything</li>
+            <li data-id="395">Re-upload the updated HTML to your host</li>
+          </ol>
+        </div>
+
+        <!-- Input fields -->
+        <div data-id="396" class="space-y-4 mb-6" id="custodian-inputs">
+          <div data-id="397">
+            <label data-id="398" class="block text-xs text-mil-bright mb-1.5 font-semibold">📘 FIELD MANUAL</label>
+            <input data-id="399" type="text" data-kitkey="manual" placeholder="Paste public download URL here..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-3 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/40" />
+          </div>
+          <div data-id="400">
+            <label data-id="401" class="block text-xs text-mil-bright mb-1.5 font-semibold">🃏 QUICK-CARDS (12 CARDS)</label>
+            <input data-id="402" type="text" data-kitkey="quickcards" placeholder="Paste public download URL here..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-3 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/40" />
+          </div>
+          <div data-id="403">
+            <label data-id="404" class="block text-xs text-mil-bright mb-1.5 font-semibold">🎓 WORKSHOP CURRICULUM</label>
+            <input data-id="405" type="text" data-kitkey="curriculum" placeholder="Paste public download URL here..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-3 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/40" />
+          </div>
+          <div data-id="406">
+            <label data-id="407" class="block text-xs text-mil-bright mb-1.5 font-semibold">💾 THIS HUB (HTML APP)</label>
+            <input data-id="408" type="text" data-kitkey="hub" placeholder="Paste public download URL here..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-3 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/40" />
+          </div>
+          <div data-id="409">
+            <label data-id="410" class="block text-xs text-mil-bright mb-1.5 font-semibold">📦 FULL KIT BUNDLE (ZIP)</label>
+            <input data-id="411" type="text" data-kitkey="bundle" placeholder="Paste public download URL here..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-3 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none placeholder:text-mil-muted/40" />
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div data-id="412" class="flex flex-col sm:flex-row gap-3">
+          <button data-id="413" id="custodian-save-btn" class="flex-1 flex items-center justify-center gap-2 bg-mil-bright text-mil-darkest font-semibold text-sm px-4 py-3 rounded-lg hover:bg-mil-success transition-colors">
+            <i data-id="414" data-lucide="save" class="w-4 h-4"></i> SAVE LINKS
+          </button>
+          <button data-id="415" id="custodian-clear-btn" class="flex items-center justify-center gap-2 bg-transparent text-mil-critical text-sm font-semibold px-4 py-3 rounded-lg hover:bg-mil-critical/10 transition-colors border border-mil-critical/50">
+            <i data-id="416" data-lucide="trash-2" class="w-4 h-4"></i> CLEAR ALL
+          </button>
+          <button data-id="417" id="custodian-embed-btn" class="flex items-center justify-center gap-2 bg-transparent border border-mil-accent text-mil-text text-sm font-semibold px-4 py-3 rounded-lg hover:border-mil-bright hover:text-mil-bright transition-colors">
+            <i data-id="418" data-lucide="clipboard-copy" class="w-4 h-4"></i> COPY EMBED CODE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: HOW TO HOST YOUR FILES (collapsible) -->
+  <div data-id="419" class="bg-mil-primary rounded-xl border border-mil-accent/40 overflow-hidden mb-6 shadow">
+    <div data-id="420" class="collapsible-header flex items-center justify-between p-5" id="hosting-collapse-header">
+      <div data-id="421" class="flex items-center gap-3">
+        <i data-id="422" data-lucide="chevron-right" class="w-4 h-4 text-mil-bright collapsible-chevron transition-transform"></i>
+        <span data-id="423" class="text-mil-highlight text-sm font-semibold">📡 HOW TO HOST YOUR FILES</span>
+      </div>
+      <span data-id="424" class="text-xs text-mil-muted">Click to expand</span>
+    </div>
+    <div data-id="425" class="collapsible-body border-t border-mil-accent/30" id="hosting-collapse-body">
+      <div data-id="426" class="p-5 md:p-7 space-y-6">
+
+        <!-- Option A -->
+        <div data-id="427" class="bg-mil-darkest rounded-xl p-5 border border-mil-accent/30">
+          <h4 data-id="428" class="text-mil-bright text-sm mb-3 flex items-center gap-2 font-semibold">
+            <i data-id="429" data-lucide="shield" class="w-4 h-4"></i>
+            OPTION A — PROTON DRIVE
+            <span data-id="430" class="badge-recommended">Recommended for privacy</span>
+          </h4>
+          <ol data-id="431" class="text-sm text-mil-muted leading-relaxed space-y-1.5 list-decimal list-inside mb-3">
+            <li data-id="432">Upload each file to Proton Drive</li>
+            <li data-id="433">Right-click the file → Share → Create public link</li>
+            <li data-id="434">Copy the link and paste it into Custodian Setup above</li>
+          </ol>
+          <p data-id="435" class="text-xs text-mil-muted/60 italic">Proton Drive links deliver a download — visitors will download the file, not view it in browser. This is fine and expected.</p>
+        </div>
+
+        <!-- Option B -->
+        <div data-id="436" class="bg-mil-darkest rounded-xl p-5 border border-mil-accent/30">
+          <h4 data-id="437" class="text-mil-bright text-sm mb-3 flex items-center gap-2 font-semibold">
+            <i data-id="438" data-lucide="globe" class="w-4 h-4"></i>
+            OPTION B — NETLIFY
+            <span data-id="439" class="badge-recommended">Same site, same host</span>
+          </h4>
+          <ol data-id="440" class="text-sm text-mil-muted leading-relaxed space-y-1.5 list-decimal list-inside mb-3">
+            <li data-id="441">Create a folder on your computer</li>
+            <li data-id="442">Put <span data-id="443" class="font-mono text-mil-bright">offline-resilience-kit.html</span> in the root, renamed to <span data-id="444" class="font-mono text-mil-bright">index.html</span></li>
+            <li data-id="445">Create a <span data-id="446" class="font-mono text-mil-bright">downloads/</span> subfolder</li>
+            <li data-id="447">Put all kit files in <span data-id="448" class="font-mono text-mil-bright">downloads/</span></li>
+            <li data-id="449">Drag the entire FOLDER (not just the HTML) to <span data-id="450" class="font-mono text-mil-bright">app.netlify.com/drop</span></li>
+            <li data-id="451">Your file URLs will be: <span data-id="452" class="font-mono text-mil-bright">yoursitename.netlify.app/downloads/field-manual.pdf</span></li>
+          </ol>
+          <p data-id="453" class="text-xs text-mil-muted/60 italic">This is the cleanest setup — everything lives in one place, no external dependencies.</p>
+        </div>
+
+        <!-- Option C -->
+        <div data-id="454" class="bg-mil-darkest rounded-xl p-5 border border-mil-accent/30">
+          <h4 data-id="455" class="text-mil-bright text-sm mb-3 flex items-center gap-2 font-semibold">
+            <i data-id="456" data-lucide="server" class="w-4 h-4"></i>
+            OPTION C — ANY PUBLIC FILE HOST
+          </h4>
+          <p data-id="457" class="text-sm text-mil-muted leading-relaxed mb-4">Any service that gives you a direct download URL works: Proton Drive, Google Drive (use direct link format), GitHub Releases, Archive.org (free, permanent, anonymous), or your own server.</p>
+          <div data-id="458" class="bg-mil-success/10 rounded-xl p-4 border border-mil-success/30">
+            <p data-id="459" class="text-sm text-mil-bright leading-relaxed"><i data-id="460" data-lucide="archive" class="w-4 h-4 inline-block mr-1 align-text-bottom"></i> <strong data-id="461">Internet Archive (archive.org)</strong> is free, permanent, requires only an email, and has never taken down community resources. Consider uploading the full kit there for long-term resilience.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===== TAB 4: PRINT MANIFEST ===== -->
+<section data-id="462" id="tab4" class="tab-content hidden px-4 md:px-6 py-8 max-w-5xl mx-auto w-full">
+  <div data-id="463" class="no-print mb-6">
+    <button data-id="464" id="print-btn" class="flex items-center gap-2 bg-mil-bright text-mil-darkest font-semibold text-sm px-6 py-3 rounded-lg hover:bg-mil-success transition-colors">
+      <i data-id="465" data-lucide="printer" class="w-4 h-4"></i> PRINT THIS PAGE
+    </button>
+  </div>
+
+  <div data-id="466" class="print-manifest-content bg-mil-primary rounded-xl border border-mil-accent/40 p-5 md:p-8 shadow">
+    <div data-id="467" class="text-center mb-8 border-b-2 border-mil-accent/30 pb-6">
+      <h1 data-id="468" class="text-mil-highlight text-xl md:text-2xl tracking-wider font-bold">USB KIT MANIFEST</h1>
+      <p data-id="469" class="text-mil-bright text-sm mt-2 font-medium">OFFLINE RESILIENCE SYSTEM</p>
+    </div>
+
+    <div data-id="470" class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-8">
+      <div data-id="471">
+        <label data-id="472" class="block text-xs text-mil-muted mb-1">Kit Version</label>
+        <p data-id="473" class="text-sm text-mil-highlight font-semibold">v1.0</p>
+      </div>
+      <div data-id="474">
+        <label data-id="475" class="block text-xs text-mil-muted mb-1">Date Generated</label>
+        <p data-id="476" id="manifest-date" class="text-sm text-mil-highlight font-semibold"></p>
+      </div>
+      <div data-id="477">
+        <label data-id="478" class="block text-xs text-mil-muted mb-1">Kit Custodian</label>
+        <input data-id="479" id="custodian-input" type="text" placeholder="Enter name..." class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-2.5 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none" />
+      </div>
+      <div data-id="480">
+        <label data-id="481" class="block text-xs text-mil-muted mb-1">Last Updated</label>
+        <input data-id="482" id="updated-input" type="date" class="w-full bg-mil-darkest text-mil-text text-sm px-4 py-2.5 rounded-lg border border-mil-accent/40 focus:border-mil-bright focus:outline-none" />
+      </div>
+    </div>
+
+    <!-- File Manifest Table -->
+    <h3 data-id="483" class="section-heading mt-8">File Manifest</h3>
+    <div data-id="484" class="overflow-x-auto mb-10">
+      <table data-id="485" id="manifest-table" class="w-full text-xs border-collapse">
+        <thead data-id="486">
+          <tr data-id="487" class="bg-mil-accent/30">
+            <th data-id="488" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Folder</th>
+            <th data-id="489" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">File Name</th>
+            <th data-id="490" class="text-left p-3 text-mil-highlight border border-mil-accent/30 hidden md:table-cell font-semibold">Description</th>
+            <th data-id="491" class="text-center p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Req?</th>
+            <th data-id="492" class="text-right p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Est. Size</th>
+          </tr>
+        </thead>
+        <tbody data-id="493" id="manifest-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Update Log -->
+    <h3 data-id="494" class="section-heading">Update Log</h3>
+    <div data-id="495" class="overflow-x-auto mb-10">
+      <table data-id="496" class="w-full text-xs border-collapse">
+        <thead data-id="497">
+          <tr data-id="498" class="bg-mil-accent/30">
+            <th data-id="499" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Date</th>
+            <th data-id="500" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Updated By</th>
+            <th data-id="501" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Changes Made</th>
+          </tr>
+        </thead>
+        <tbody data-id="502">
+          <tr data-id="503"><td data-id="504" class="p-3 border border-mil-accent/20 h-8 text-mil-muted"></td><td data-id="505" class="p-3 border border-mil-accent/20"></td><td data-id="506" class="p-3 border border-mil-accent/20"></td></tr>
+          <tr data-id="507"><td data-id="508" class="p-3 border border-mil-accent/20 h-8"></td><td data-id="509" class="p-3 border border-mil-accent/20"></td><td data-id="510" class="p-3 border border-mil-accent/20"></td></tr>
+          <tr data-id="511"><td data-id="512" class="p-3 border border-mil-accent/20 h-8"></td><td data-id="513" class="p-3 border border-mil-accent/20"></td><td data-id="514" class="p-3 border border-mil-accent/20"></td></tr>
+          <tr data-id="515"><td data-id="516" class="p-3 border border-mil-accent/20 h-8"></td><td data-id="517" class="p-3 border border-mil-accent/20"></td><td data-id="518" class="p-3 border border-mil-accent/20"></td></tr>
+          <tr data-id="519"><td data-id="520" class="p-3 border border-mil-accent/20 h-8"></td><td data-id="521" class="p-3 border border-mil-accent/20"></td><td data-id="522" class="p-3 border border-mil-accent/20"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Distribution Log -->
+    <h3 data-id="523" class="section-heading">Distribution Log</h3>
+    <div data-id="524" class="overflow-x-auto mb-10">
+      <table data-id="525" class="w-full text-xs border-collapse">
+        <thead data-id="526">
+          <tr data-id="527" class="bg-mil-accent/30">
+            <th data-id="528" class="text-center p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Copy #</th>
+            <th data-id="529" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Given To</th>
+            <th data-id="530" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Date</th>
+            <th data-id="531" class="text-left p-3 text-mil-highlight border border-mil-accent/30 font-semibold">Contact Info</th>
+          </tr>
+        </thead>
+        <tbody data-id="532" id="dist-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Hardware Checklist -->
+    <h3 data-id="533" class="section-heading">Hardware Checklist</h3>
+    <div data-id="534" class="bg-mil-darkest rounded-xl p-5 border border-mil-accent/30">
+      <div data-id="535" class="space-y-3 text-sm text-mil-text">
+        <div data-id="536">☐ USB Drive (32GB minimum, 64GB recommended)</div>
+        <div data-id="537">☐ Meshtastic device (flashed and tested)</div>
+        <div data-id="538">☐ VHF/UHF handheld radio (programmed)</div>
+        <div data-id="539">☐ Printed field manual</div>
+        <div data-id="540">☐ Laminated quick-card set (12 cards)</div>
+        <div data-id="541">☐ Go-bag with power bank</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer data-id="542" id="footer-f1" class="no-print bg-mil-darkest border-t border-mil-accent/40 py-8 px-4 mt-auto">
+  <div data-id="543" class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <button data-id="544" id="manifesto-footer-link" class="text-xs text-mil-bright hover:underline transition-colors cursor-pointer bg-transparent border-none p-0 font-medium">[ MANIFESTO ]</button>
+    <div data-id="545" class="text-center flex-1">
+      <p data-id="546" class="text-xs leading-relaxed" style="color:#475569;">
+        Offline Network Resilience System v1.0 | CC BY-SA 4.0 | Print freely. Distribute widely. When infrastructure fails, community survives.
+      </p>
+      <p data-id="547" class="text-xs mt-2" style="color:#334155;">Last updated: May 2026</p>
+      <p data-id="548" class="text-xs mt-1" style="color:#1e293b;">Made by Copilot</p>
+    </div>
+    <span data-id="549" class="hidden sm:inline w-[90px]"></span>
+  </div>
+</footer>
+
+<!-- Copied Toast -->
+<div data-id="550" id="copied-toast" class="copied-toast">✓ Copied!</div>
+
+<script>
+if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+  lucide.createIcons();
+}
+
+/* CUSTODIAN URLS — paste into your HTML before distributing */
+// const KIT_URLS = {
+//   manual:     "",
+//   quickcards: "",
+//   curriculum: "",
+//   hub:        "",
+//   bundle:     ""
+// };
+
+// ===== SPLASH HELPER: lock/unlock scroll on html+body =====
+function lockPageScroll() {
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+}
+function unlockPageScroll() {
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+}
+
+// ===== SPLASH OVERLAY LOGIC =====
+(function() {
+  var SPLASH_KEY = 'splashDismissed';
+  var splashEl = document.getElementById('splash-overlay');
+  var transmissionLabel = document.getElementById('splash-transmission-label');
+  var cursorEl = document.getElementById('splash-cursor-el');
+  var enterBtn = document.getElementById('splash-enter-btn');
+  var footerLink = document.getElementById('manifesto-footer-link');
+
+  function positionCursor() {
+    if (!transmissionLabel || !cursorEl) return;
+    cursorEl.style.left = (transmissionLabel.offsetLeft + transmissionLabel.offsetWidth + 2) + 'px';
+    cursorEl.style.top = transmissionLabel.offsetTop + 'px';
+  }
+
+  function typeTransmission(labelEl, cursorElLocal, cb) {
+    var text = 'TRANSMISSION BEGINS';
+    var i = 0;
+    labelEl.textContent = '';
+    if (cursorElLocal) {
+      cursorElLocal.style.display = 'inline';
+      cursorElLocal.style.left = (labelEl.offsetLeft + labelEl.offsetWidth + 2) + 'px';
+      cursorElLocal.style.top = labelEl.offsetTop + 'px';
+    }
+    var interval = setInterval(function() {
+      i++;
+      labelEl.textContent = text.substring(0, i);
+      if (cursorElLocal) {
+        cursorElLocal.style.left = (labelEl.offsetLeft + labelEl.offsetWidth + 2) + 'px';
+        cursorElLocal.style.top = labelEl.offsetTop + 'px';
+      }
+      if (i >= text.length) {
+        clearInterval(interval);
+        if (cb) cb();
+      }
+    }, Math.floor(1200 / text.length));
+  }
+
+  function dismissSplash() {
+    var overlay = document.getElementById('splash-overlay');
+    if (!overlay) return;
+    localStorage.setItem(SPLASH_KEY, 'true');
+    overlay.classList.add('fade-out');
+    setTimeout(function() {
+      overlay.remove();
+      unlockPageScroll();
+    }, 500);
+  }
+
+  // Initial load: check if splash should show
+  if (localStorage.getItem(SPLASH_KEY)) {
+    if (splashEl) splashEl.remove();
+  } else {
+    // Ensure splash is first child of body
+    if (splashEl && document.body.firstChild !== splashEl) {
+      document.body.prepend(splashEl);
+    }
+    lockPageScroll();
+    if (transmissionLabel && cursorEl) {
+      typeTransmission(transmissionLabel, cursorEl);
+    }
+    if (enterBtn) {
+      enterBtn.addEventListener('click', dismissSplash);
+    }
+  }
+
+  // Footer link to re-show manifesto
+  if (footerLink) {
+    footerLink.addEventListener('click', function() {
+      localStorage.removeItem(SPLASH_KEY);
+      var overlay = document.getElementById('splash-overlay');
+      if (!overlay) {
+        var splashHTML = '<div id="splash-overlay"><div class="splash-outer-wrap"><div class="splash-frame"><span class="splash-transmission" id="splash-transmission-label"></span><span class="splash-cursor" id="splash-cursor-el" style="position:absolute;top:12px;font-family:\'Courier New\',Courier,monospace;font-size:0.7rem;display:none;">\u2588</span><div class="splash-container"><div style="margin-bottom:8px;"><div style="font-size:0.72rem;color:#f59e0b;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:10px;font-family:\'Courier New\',monospace;">OFFLINE NETWORK RESILIENCE SYSTEM \u2014 v1.0</div><div style="font-size:2rem;color:#f8fafc;font-weight:700;line-height:1.3;margin-bottom:12px;font-family:\'Inter\',system-ui,sans-serif;">\u201cWhen infrastructure fails,<br>community survives.\u201d</div><div style="font-size:0.8rem;color:#64748b;font-style:italic;">Lyndhurst, OH \u00b7 May 2026 \u00b7 Released to the commons</div></div><hr class="splash-rule"/><div class="splash-heading">// WHAT THIS IS</div><div class="splash-body" style="margin-bottom:0;">The grid is fragile. We handed control of our communications \u2014 our ability to organize, to call for help, to simply speak to our neighbors \u2014 to a handful of corporations and a patchwork of infrastructure that was never designed to survive what\u2019s coming.<br><br>When it fails, most communities will have nothing.<br><br>This system is a response to that. A field manual. A prep kit. A framework built from open-source tools, amateur radio tradition, and the simple belief that communities should not need a corporation\u2019s permission to talk to each other.<br><br>It is not finished. It was never meant to be finished by one person.</div><hr class="splash-rule"/><div class="splash-heading">// THIS NEEDS BATTLE TESTING</div><div class="splash-body" style="margin-bottom:0;">This system was built as a starting point \u2014 a skeleton that needs people who\u2019ve actually been in the field when things broke.<br><br>It needs radio operators who know what actually works when repeaters go down. Network engineers who\u2019ve watched a mesh fail under load. Security researchers who can find the holes before bad actors do. Community organizers who know that the hard part isn\u2019t the technology \u2014 it\u2019s the people. First responders who can tell us what information actually matters in the first 72 hours.<br><br>If that\u2019s you: this project needs you more than it needs another document.</div><hr class="splash-rule"/><div class="splash-heading">// THE POINT</div><div class="splash-body-emphasis" style="margin-bottom:0;">Take this. Break it. Improve it. Redistribute it.<br>The goal is not a perfect manual.<br>The goal is communities that own their own communications.<br>No subscription. No terms of service. No kill switch.<br>Ours.</div><hr class="splash-rule"/><div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;"><div style="font-size:0.75rem;color:#64748b;line-height:1.7;min-width:200px;">Released under CC BY-SA 4.0<br>Copy freely. Attribute if you can. Improve always.</div><div style="text-align:center;"><button id="splash-enter-btn" class="splash-enter-btn">[ &gt; ENTER THE KIT ]</button><div style="font-size:0.65rem;color:#475569;margin-top:10px;">[ show this again at any time from the footer ]</div></div></div></div></div></div></div>';
+        document.body.insertAdjacentHTML('afterbegin', splashHTML);
+        overlay = document.getElementById('splash-overlay');
+      } else {
+        overlay.classList.remove('fade-out');
+        overlay.style.display = '';
+        // Re-prepend to ensure it's first child
+        document.body.prepend(overlay);
+      }
+      lockPageScroll();
+      var newLabel = document.getElementById('splash-transmission-label');
+      var newCursor = document.getElementById('splash-cursor-el');
+      if (newLabel) {
+        typeTransmission(newLabel, newCursor);
+      }
+      var newBtn = document.getElementById('splash-enter-btn');
+      if (newBtn) {
+        newBtn.addEventListener('click', function() {
+          var ov = document.getElementById('splash-overlay');
+          if (!ov) return;
+          localStorage.setItem(SPLASH_KEY, 'true');
+          ov.classList.add('fade-out');
+          setTimeout(function() {
+            ov.remove();
+            unlockPageScroll();
+          }, 500);
+        });
+      }
+    });
+  }
+})();
+
+// ===== DATA =====
+var FILE_TREE_DATA = {
+  name: 'USB_RESILIENCE_KIT_v1.0', type: 'folder', icon: 'hard-drive',
+  desc: 'Root directory of the Offline Resilience USB Kit. Contains all software, documentation, maps, and data needed for grid-down operations.',
+  size: '~28.4 GB total',
+  children: [
+    { name: 'README.txt', type: 'file', icon: 'file-text', size: '2 KB', desc: 'Quick-start instructions and kit overview. Read this first after inserting the USB drive.', source: 'Included in kit', update: 'Each release' },
+    { name: 'START_HERE.html', type: 'file', icon: 'globe', size: '45 KB', desc: 'Interactive HTML launcher — opens in any browser with no internet required. Provides navigation to all kit contents.', source: 'Generated by this app', update: 'Each release' },
+    { name: '01_MANUALS', type: 'folder', icon: 'book-open',
+      desc: 'Documentation and reference guides for all systems covered by this kit.',
+      size: '~85 MB', populate: 'Download PDFs from official sources and save here.',
+      children: [
+        { name: 'Field_Manual_v1.0.pdf', type: 'file', icon: 'file-text', size: '12 MB', desc: 'Complete field manual covering mesh networking, radio operations, community organization, and emergency protocols.', source: 'Generated from this system', update: 'Quarterly' },
+        { name: 'Meshtastic_Documentation.pdf', type: 'file', icon: 'file-text', size: '8 MB', desc: 'Official Meshtastic documentation — device setup, configuration, channel management, and troubleshooting.', source: 'meshtastic.org/docs', update: 'With firmware updates' },
+        { name: 'ARRL_Emergency_Comms_Guide.pdf', type: 'file', icon: 'file-text', size: '15 MB', desc: 'ARRL emergency communications handbook — net control procedures, message handling, and deployment guides.', source: 'arrl.org', update: 'Annually' },
+        { name: 'Ham_License_Study_Guide.pdf', type: 'file', icon: 'file-text', size: '25 MB', desc: 'Technician class license study guide with complete question pool and explanations.', source: 'hamstudy.org or ARRL', update: 'Every 4 years (question pool cycle)' },
+        { name: 'Winlink_User_Guide.pdf', type: 'file', icon: 'file-text', size: '5 MB', desc: 'Winlink Express user manual — setup, email over radio, peer-to-peer connections.', source: 'winlink.org', update: 'With software updates' },
+      ]
+    },
+    { name: '02_MAPS', type: 'folder', icon: 'map',
+      desc: 'Offline maps and geographic reference materials for your area of operations.',
+      size: '~500 MB – 2 GB (depends on region)', populate: 'Download OsmAnd .obf files for your region. Print and scan PDF maps of key routes.',
+      children: [
+        { name: 'OsmAnd_Map_Files', type: 'folder', icon: 'map-pin',
+          desc: 'OsmAnd offline map files (.obf format). Download these within the OsmAnd app while you have WiFi, then copy here as backup.',
+          size: '200 MB – 1.5 GB per region',
+          children: [
+            { name: '[your_region].obf', type: 'file', icon: 'file', size: 'Varies', desc: 'OsmAnd offline vector map for your region. Includes roads, trails, POIs, and address search. Download from within OsmAnd app settings.', source: 'OsmAnd app → Downloads', update: 'Monthly' },
+          ]
+        },
+        { name: 'PDF_Maps', type: 'folder', icon: 'image',
+          desc: 'Printable PDF maps for field use — designed to be printed, laminated, and carried.',
+          size: '~50 MB',
+          children: [
+            { name: 'Neighborhood_Map.pdf', type: 'file', icon: 'file-text', size: '15 MB', desc: 'Detailed map of your immediate neighborhood with key landmarks, rally points, and resource caches marked.', source: 'Create from OpenStreetMap', update: 'As needed' },
+            { name: 'Node_Location_Map.pdf', type: 'file', icon: 'file-text', size: '10 MB', desc: 'Map showing locations of all Meshtastic nodes, radio repeaters, and communication relay points.', source: 'Create from node registry', update: 'Monthly' },
+            { name: 'Evacuation_Routes.pdf', type: 'file', icon: 'file-text', size: '12 MB', desc: 'Primary and alternate evacuation routes with distances, terrain notes, and checkpoint locations.', source: 'Local emergency management', update: 'Annually' },
+          ]
+        },
+        { name: 'Grid_Reference_Sheet.pdf', type: 'file', icon: 'file-text', size: '3 MB', desc: 'MGRS/UTM grid reference overlay for your area — enables precise location reporting over radio without GPS.', source: 'Generate from USGS maps', update: 'Rarely changes' },
+      ]
+    },
+    { name: '03_SOFTWARE', type: 'folder', icon: 'package',
+      desc: 'Software installers and firmware files. All tested and verified before inclusion.',
+      size: '~1.2 GB', populate: 'Download each installer from its official source. Verify checksums when available.',
+      children: [
+        { name: 'Windows', type: 'folder', icon: 'monitor',
+          desc: 'Windows installers (.exe/.msi). Compatible with Windows 10 and later.',
+          size: '~450 MB',
+          children: [
+            { name: 'MeshtasticFlasher_Setup.exe', type: 'file', icon: 'file', size: '45 MB', desc: 'Meshtastic firmware flasher for Windows. Flash LoRa devices via USB.', source: 'meshtastic.org/downloads', update: 'With firmware releases' },
+            { name: 'CHIRP_Setup.exe', type: 'file', icon: 'file', size: '35 MB', desc: 'CHIRP radio programming software. Program frequencies into Baofeng and other radios.', source: 'chirpmyradio.com', update: 'Quarterly' },
+            { name: 'Winlink_Express_Setup.exe', type: 'file', icon: 'file', size: '42 MB', desc: 'Winlink Express — email over radio client for Windows.', source: 'winlink.org', update: 'Semi-annually' },
+            { name: 'JS8Call_Setup.exe', type: 'file', icon: 'file', size: '120 MB', desc: 'JS8Call — keyboard-to-keyboard messaging over HF radio.', source: 'js8call.com', update: 'Semi-annually' },
+            { name: 'Kiwix_Setup.exe', type: 'file', icon: 'file', size: '120 MB', desc: 'Kiwix offline Wikipedia reader for Windows.', source: 'kiwix.org', update: 'Semi-annually' },
+            { name: 'VeraCrypt_Setup.exe', type: 'file', icon: 'file', size: '35 MB', desc: 'VeraCrypt full-disk and container encryption.', source: 'veracrypt.fr', update: 'Annually' },
+            { name: '7-Zip_Setup.exe', type: 'file', icon: 'file', size: '2 MB', desc: '7-Zip archiver with AES-256 encryption support.', source: '7-zip.org', update: 'Annually' },
+          ]
+        },
+        { name: 'Android_APKs', type: 'folder', icon: 'smartphone',
+          desc: 'Android APK files for sideloading on devices without Google Play access.',
+          size: '~285 MB',
+          children: [
+            { name: 'Meshtastic.apk', type: 'file', icon: 'file', size: '25 MB', desc: 'Meshtastic Android app for device control and messaging.', source: 'GitHub releases or Play Store', update: 'With firmware releases' },
+            { name: 'Briar.apk', type: 'file', icon: 'file', size: '35 MB', desc: 'Briar encrypted P2P messenger — works over WiFi, Bluetooth, or Tor.', source: 'briarproject.org', update: 'Quarterly' },
+            { name: 'OsmAnd.apk', type: 'file', icon: 'file', size: '200 MB', desc: 'OsmAnd offline maps and navigation for Android.', source: 'GitHub releases or Play Store', update: 'Monthly' },
+            { name: 'Kiwix.apk', type: 'file', icon: 'file', size: '25 MB', desc: 'Kiwix offline Wikipedia reader for Android.', source: 'GitHub releases or Play Store', update: 'Semi-annually' },
+          ]
+        },
+        { name: 'Firmware', type: 'folder', icon: 'cpu',
+          desc: 'Meshtastic firmware binaries for different hardware platforms. Flash using the Meshtastic Flasher tool or esptool.',
+          size: '~15 MB',
+          children: [
+            { name: 'meshtastic_firmware_TTGO_TBeam.bin', type: 'file', icon: 'file', size: '1.5 MB', desc: 'Firmware for TTGO T-Beam v1.1 with GPS and LoRa.', source: 'meshtastic.org/downloads', update: 'With firmware releases' },
+            { name: 'meshtastic_firmware_Heltec_LoRa32.bin', type: 'file', icon: 'file', size: '1.5 MB', desc: 'Firmware for Heltec WiFi LoRa 32 V2/V3.', source: 'meshtastic.org/downloads', update: 'With firmware releases' },
+            { name: 'meshtastic_firmware_RAK4631.zip', type: 'file', icon: 'file', size: '2 MB', desc: 'Firmware package for RAK WisBlock (nRF52840 + SX1262).', source: 'meshtastic.org/downloads', update: 'With firmware releases' },
+          ]
+        },
+        { name: 'SOFTWARE_VERSIONS.txt', type: 'file', icon: 'file-text', size: '1 KB', desc: 'Version manifest listing every software package, its version number, download date, and SHA-256 checksum.', source: 'Maintained by kit custodian', update: 'Every update cycle' },
+      ]
+    },
+    { name: '04_MEDIA', type: 'folder', icon: 'video',
+      desc: 'Training videos, quick-reference cards, and workshop materials.',
+      size: '~2.5 GB', populate: 'Record or source training videos. Generate quick-cards from templates.',
+      children: [
+        { name: 'Training_Videos', type: 'folder', icon: 'play-circle',
+          desc: 'Pre-recorded training sessions. Use VLC or any video player. Recommended: watch as a group during prep meetings.',
+          size: '~2 GB',
+          children: [
+            { name: '01_Intro_to_Mesh_Networks.mp4', type: 'file', icon: 'file', size: '500 MB', desc: '30-minute overview of mesh networking concepts, why they matter, and how Meshtastic works.', source: 'Record locally or source from community', update: 'As content changes' },
+            { name: '02_Meshtastic_Setup.mp4', type: 'file', icon: 'file', size: '600 MB', desc: 'Step-by-step device setup: flashing firmware, configuring channels, range testing.', source: 'Record locally', update: 'With firmware updates' },
+            { name: '03_Radio_Basics.mp4', type: 'file', icon: 'file', size: '500 MB', desc: 'VHF/UHF radio basics: programming with CHIRP, radio etiquette, net control procedures.', source: 'Record locally', update: 'Annually' },
+            { name: '04_USB_Kit_Walkthrough.mp4', type: 'file', icon: 'file', size: '400 MB', desc: 'Complete walkthrough of this USB kit — what each folder contains and how to use it.', source: 'Record locally', update: 'Each release' },
+          ]
+        },
+        { name: 'Quick_Cards_PDF', type: 'folder', icon: 'layers',
+          desc: '12 laminate-ready quick-reference cards. Print double-sided on card stock and laminate for field use.',
+          size: '~60 MB',
+          children: [
+            { name: 'QuickCard_01_Radio_Net.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Radio net procedures — calling, responding, message priority levels.', source:'Generated', update:'Annually' },
+            { name: 'QuickCard_02_Frequencies.pdf', type:'file', icon:'file-text', size:'3 MB', desc:'Local frequency plan with repeater info, simplex channels, and Meshtastic frequencies.', source:'Local radio club / CHIRP export', update:'Semi-annually' },
+            { name: 'QuickCard_03_Meshtastic.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Meshtastic quick-start — pairing, sending messages, channel switching, range optimization tips.', source:'Generated', update:'With firmware' },
+            { name: 'QuickCard_04_SALUTE.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'SALUTE report format — Size, Activity, Location, Unit/Uniform, Time, Equipment. Standard situation reporting.', source:'Generated', update:'Rarely changes' },
+            { name: 'QuickCard_05_Visual_Signals.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Visual signal codes — flag signals, panel markers, light signals for when radio is unavailable.', source:'Generated', update:'Rarely changes' },
+            { name: 'QuickCard_06_Runner_Protocol.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'Physical message runner protocols — message format, authentication, route planning.', source:'Generated', update:'Annually' },
+            { name: 'QuickCard_07_Node_Health.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Meshtastic node health monitoring — battery levels, signal quality, packet loss diagnostics.', source:'Generated', update:'With firmware' },
+            { name: 'QuickCard_08_Power_Conservation.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'Power conservation guide — solar charging, battery management, device sleep schedules.', source:'Generated', update:'Annually' },
+            { name: 'QuickCard_09_Offline_Data.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Offline data management — using Kiwix, accessing maps, reference materials without internet.', source:'Generated', update:'Semi-annually' },
+            { name: 'QuickCard_10_Mutual_Aid.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Mutual aid coordination — resource tracking, needs assessment, distribution logistics.', source:'Generated', update:'Annually' },
+            { name: 'QuickCard_11_AAR_Template.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'After Action Review template — what was planned, what happened, what to improve.', source:'Generated', update:'Rarely changes' },
+            { name: 'QuickCard_12_GoBox.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Go-box assembly guide — portable radio/mesh station build list with power requirements.', source:'Generated', update:'Annually' },
+          ]
+        },
+        { name: 'Workshop_Slides', type: 'folder', icon: 'presentation',
+          desc: 'Slide decks for community training workshops. Use with any presentation software.',
+          size: '~150 MB',
+          children: [
+            { name: 'Session_1_Foundations.pptx', type:'file', icon:'file', size:'50 MB', desc:'Workshop 1: Why offline resilience matters, threat models, community organizing basics.', source:'Generated', update:'Annually' },
+            { name: 'Session_2_Mesh_Networks.pptx', type:'file', icon:'file', size:'50 MB', desc:'Workshop 2: Hands-on Meshtastic setup, node placement strategy, channel management.', source:'Generated', update:'With firmware' },
+            { name: 'Session_3_Organization.pptx', type:'file', icon:'file', size:'50 MB', desc:'Workshop 3: Community roles, communication plans, exercise scenarios, ongoing maintenance.', source:'Generated', update:'Annually' },
+          ]
+        },
+      ]
+    },
+    { name: '05_DATA', type: 'folder', icon: 'database',
+      desc: 'Community data files — contacts, node registry, frequencies. Sensitive files are encrypted.',
+      size: '~10 MB', populate: 'Fill in community-specific data. Encrypt sensitive files with 7-Zip (AES-256).',
+      children: [
+        { name: 'Community_Contacts_ENCRYPTED.7z', type:'file', icon:'lock', size:'500 KB', desc:'AES-256 encrypted archive containing community contact directory. Password distributed separately via secure channel.', source:'Community maintained', update:'Monthly' },
+        { name: 'Node_Registry.csv', type:'file', icon:'file-text', size:'50 KB', desc:'CSV registry of all Meshtastic nodes — node name, hardware, location, owner, channel assignments, last-seen date.', source:'Community maintained', update:'Monthly' },
+        { name: 'Frequency_List.csv', type:'file', icon:'file-text', size:'20 KB', desc:'Complete frequency list for local operations — repeaters, simplex, Meshtastic, FRS/GMRS, MURS channels with notes.', source:'CHIRP export + manual', update:'Semi-annually' },
+        { name: 'Resource_Directory.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Local resource directory — water sources, medical facilities, shelter locations, supply caches, skill inventories.', source:'Community maintained', update:'Quarterly' },
+        { name: 'USB_Kit_Changelog.txt', type:'file', icon:'file-text', size:'5 KB', desc:'Version history of this USB kit — what changed in each release.', source:'Kit custodian', update:'Each release' },
+      ]
+    },
+    { name: '06_TEMPLATES', type: 'folder', icon: 'clipboard',
+      desc: 'Printable blank forms and templates for field operations. Print multiple copies for your go-bag.',
+      size: '~30 MB', populate: 'Print and stock at least 20 copies of each form.',
+      children: [
+        { name: 'Message_Form.pdf', type:'file', icon:'file-text', size:'3 MB', desc:'Standard message form — sender, recipient, priority, DTG, message body, authentication.', source:'Generated', update:'Rarely changes' },
+        { name: 'Runner_Log_Sheet.pdf', type:'file', icon:'file-text', size:'3 MB', desc:'Physical runner dispatch log — time out, time in, route, message ID, runner name.', source:'Generated', update:'Rarely changes' },
+        { name: 'Node_Registry_Form.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'Blank node registration form for onboarding new Meshtastic nodes into the network.', source:'Generated', update:'Annually' },
+        { name: 'Incident_Log.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'Incident log sheet — chronological event recording for situational awareness.', source:'Generated', update:'Rarely changes' },
+        { name: 'AAR_Template.pdf', type:'file', icon:'file-text', size:'3 MB', desc:'After Action Review form — structured debrief template.', source:'Generated', update:'Rarely changes' },
+        { name: 'Net_Control_Script.pdf', type:'file', icon:'file-text', size:'5 MB', desc:'Net control operator script — opening the net, roll call, traffic handling, closing.', source:'Generated', update:'Annually' },
+        { name: 'Community_Roles_Directory.pdf', type:'file', icon:'file-text', size:'4 MB', desc:'Blank community roles directory — assign and track who fills each critical function.', source:'Generated', update:'Annually' },
+      ]
+    },
+    { name: '07_KIWIX_LIBRARY', type: 'folder', icon: 'library',
+      desc: 'ZIM files for the Kiwix offline reader. Open Kiwix, point it at this folder, and access full Wikipedia, travel guides, and medical references with no internet.',
+      size: '~24 GB', populate: 'Download ZIM files from library.kiwix.org. The full English Wikipedia is ~23 GB. Condensed versions are ~1.5 GB.',
+      children: [
+        { name: 'wikipedia_en_all_maxi_[date].zim', type:'file', icon:'file', size:'~23 GB', desc:'Complete English Wikipedia — every article with images. This is the single largest file on the USB kit.', source:'library.kiwix.org', update:'Monthly releases available' },
+        { name: 'wikivoyage_en_all_[date].zim', type:'file', icon:'file', size:'~700 MB', desc:'Wikivoyage — offline travel guide with practical information about destinations worldwide.', source:'library.kiwix.org', update:'Quarterly' },
+        { name: 'medwiki_en_[date].zim', type:'file', icon:'file', size:'~300 MB', desc:'Medical reference encyclopedia — first aid, common conditions, medication references.', source:'library.kiwix.org', update:'Semi-annually' },
+      ]
+    },
+  ]
+};
+
+var DOWNLOAD_DATA = [
+  { category: 'MESH NETWORKING', items: [
+    { name:'Meshtastic App (Android)', priority:'CRITICAL', desc:'Device control and messaging for Meshtastic LoRa nodes', platforms:['Android'], size:'~25 MB', url:'https://play.google.com/store/apps/details?id=com.geeksville.mesh' },
+    { name:'Meshtastic App (iOS)', priority:'CRITICAL', desc:'Device control and messaging for Meshtastic LoRa nodes', platforms:['iOS'], size:'~30 MB', url:'https://apps.apple.com/us/app/meshtastic/id1586432531' },
+    { name:'Meshtastic Web Flasher', priority:'CRITICAL', desc:'Browser-based firmware flasher — use BEFORE grid fails', platforms:['Web'], size:'Online only', url:'https://flasher.meshtastic.org' },
+    { name:'Meshtastic Firmware Releases', priority:'CRITICAL', desc:'Raw firmware .bin files for offline flashing', platforms:['All'], size:'~5 MB/file', url:'https://meshtastic.org/downloads' },
+    { name:'Briar (Android)', priority:'IMPORTANT', desc:'Encrypted P2P messaging over WiFi/Bluetooth/Tor — no server needed', platforms:['Android'], size:'~35 MB', url:'https://briarproject.org/download-briar/' },
+  ]},
+  { category: 'OFFLINE MAPS', items: [
+    { name:'OsmAnd (Android)', priority:'CRITICAL', desc:'Full offline navigation with OpenStreetMap — download regional maps', platforms:['Android'], size:'~200 MB + maps', url:'https://play.google.com/store/apps/details?id=net.osmand' },
+    { name:'OsmAnd (iOS)', priority:'CRITICAL', desc:'Full offline navigation with OpenStreetMap — download regional maps', platforms:['iOS'], size:'~200 MB + maps', url:'https://apps.apple.com/us/app/osmand-maps-travel-navigate/id934850257' },
+    { name:'Maps.me (Android/iOS)', priority:'RECOMMENDED', desc:'Lightweight offline maps — good backup to OsmAnd', platforms:['Android','iOS'], size:'~100 MB', url:'https://maps.me/' },
+  ]},
+  { category: 'OFFLINE REFERENCE', items: [
+    { name:'Kiwix (Windows)', priority:'CRITICAL', desc:'Offline Wikipedia and reference library reader — add ZIM files for content', platforms:['Windows'], size:'~120 MB', url:'https://www.kiwix.org/en/download/' },
+    { name:'Kiwix (Android)', priority:'CRITICAL', desc:'Offline Wikipedia on Android — pair with Wikipedia ZIM file', platforms:['Android'], size:'~25 MB', url:'https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile' },
+    { name:'Kiwix ZIM Library', priority:'CRITICAL', desc:'Browse and download ZIM files: Wikipedia, First Aid, Wikivoyage, and more', platforms:['Web'], size:'ZIMs: 1GB–90GB', url:'https://library.kiwix.org' },
+    { name:'Wikipedia ZIM (English, condensed)', priority:'IMPORTANT', desc:'Offline encyclopedia — search any topic without internet', platforms:['All (via Kiwix)'], size:'~23GB full / ~1.5GB mini', url:'https://library.kiwix.org/#lang=eng&category=wikipedia' },
+  ]},
+  { category: 'RADIO SOFTWARE', items: [
+    { name:'CHIRP (Windows/Mac/Linux)', priority:'CRITICAL', desc:'Program frequencies into Baofeng and other radios — do this NOW', platforms:['Windows','Mac','Linux'], size:'~35 MB', url:'https://chirpmyradio.com/projects/chirp/wiki/Download' },
+    { name:'Winlink Express', priority:'IMPORTANT', desc:'Email over radio — register your account BEFORE you need it', platforms:['Windows'], size:'~42 MB', url:'https://downloads.winlink.org/User%20Programs/' },
+    { name:'JS8Call', priority:'IMPORTANT', desc:'Keyboard-to-keyboard HF digital messaging — works at very low signal', platforms:['Windows','Mac','Linux'], size:'~120 MB', url:'https://js8call.com' },
+    { name:'WSJT-X', priority:'RECOMMENDED', desc:'Weak signal digital modes (FT8, FT4) for HF — great for monitoring', platforms:['Windows','Mac','Linux'], size:'~120 MB', url:'https://wsjt.sourceforge.io/wsjtx.html' },
+  ]},
+  { category: 'HAM RADIO LICENSING', items: [
+    { name:'HamStudy.org', priority:'CRITICAL', desc:'Free online Technician/General/Extra exam prep — study before grid fails', platforms:['Web'], size:'Free', url:'https://hamstudy.org' },
+    { name:'HamStudy App (Android)', priority:'RECOMMENDED', desc:'Offline exam prep app — works without internet after install', platforms:['Android'], size:'~27 MB', url:'https://play.google.com/store/apps/details?id=org.sconerad.hamstudy' },
+  ]},
+  { category: 'SECURITY AND ENCRYPTION', items: [
+    { name:'VeraCrypt', priority:'IMPORTANT', desc:'Encrypt your USB drive or sensitive data archives', platforms:['Windows','Mac','Linux'], size:'~35 MB', url:'https://www.veracrypt.fr/en/Downloads.html' },
+    { name:'7-Zip', priority:'IMPORTANT', desc:'Create AES-256 encrypted .7z archives for sensitive community data', platforms:['Windows'], size:'~2 MB', url:'https://www.7-zip.org/download.html' },
+  ]},
+  { category: 'CONTENT MANAGEMENT', items: [
+    { name:'VLC Media Player', priority:'RECOMMENDED', desc:'Play training videos offline — handles all formats', platforms:['Windows','Mac','Linux'], size:'~40 MB', url:'https://www.videolan.org/vlc/' },
+  ]},
+];
+
+// ===== KIT DOWNLOAD CARDS (TAB 5) =====
+var KIT_CARDS_DATA = [
+  {
+    key: 'manual', lsKey: 'kitUrl_manual', icon: '📘', title: 'FIELD MANUAL',
+    badgeText: 'CORE DOCUMENT', badgeClass: 'kit-badge-core',
+    desc: 'Complete 9-section reference manual covering mesh networks, radio comms, power resilience, community organization, and emergency drills. The backbone of the system.',
+    formats: ['PDF', 'DOCX'], size: '~2–5 MB'
+  },
+  {
+    key: 'quickcards', lsKey: 'kitUrl_quickcards', icon: '🃏', title: 'QUICK-CARDS (12 CARDS)',
+    badgeText: 'PRINT & LAMINATE', badgeClass: 'kit-badge-print',
+    desc: 'All 12 printable reference cards — radio net procedure, emergency frequencies, Meshtastic setup, SALUTE report, visual signals, runner protocol, and more. Cut, laminate, distribute.',
+    formats: ['PDF', 'DOCX'], size: '~1–3 MB'
+  },
+  {
+    key: 'curriculum', lsKey: 'kitUrl_curriculum', icon: '🎓', title: 'WORKSHOP CURRICULUM',
+    badgeText: 'FACILITATOR GUIDE', badgeClass: 'kit-badge-facilitator',
+    desc: 'Three-session community training program with full facilitator scripts, participant handouts, exercises, and a 30-60-90 day action plan. Everything needed to run the workshops.',
+    formats: ['PDF', 'DOCX'], size: '~1–3 MB'
+  },
+  {
+    key: 'hub', lsKey: 'kitUrl_hub', icon: '💾', title: 'THIS HUB (HTML APP)',
+    badgeText: 'OFFLINE APP', badgeClass: 'kit-badge-offline',
+    desc: 'This exact page as a standalone HTML file. Works with zero internet once downloaded. Drop it at the root of any USB drive as START_HERE.html. Share it. Copy it freely.',
+    formats: ['HTML'], size: '~500 KB'
+  },
+  {
+    key: 'bundle', lsKey: 'kitUrl_bundle', icon: '📦', title: 'FULL KIT BUNDLE (ZIP)',
+    badgeText: 'EVERYTHING', badgeClass: 'kit-badge-everything',
+    desc: 'All of the above in one ZIP archive, organized in the USB folder structure: 01_MANUALS / 02_MAPS / 03_SOFTWARE / 04_MEDIA / 05_DATA / 06_TEMPLATES / 07_KIWIX_LIBRARY. Unzip directly to a 32GB+ USB drive.',
+    formats: ['ZIP'], size: '~10–30 MB (documents only, not including large ZIM/map files)'
+  }
+];
+
+function resolveKitUrl(key) {
+  var lsVal = localStorage.getItem('kitUrl_' + key);
+  if (lsVal && lsVal.trim()) return lsVal.trim();
+  if (typeof KIT_URLS !== 'undefined' && KIT_URLS[key] && KIT_URLS[key].trim()) return KIT_URLS[key].trim();
+  return '';
+}
+
+function renderKitCards() {
+  var container = document.getElementById('kit-cards-container');
+  var html = '';
+  KIT_CARDS_DATA.forEach(function(card) {
+    var url = resolveKitUrl(card.key);
+    var hasUrl = url.length > 0;
+
+    html += '<div class="dl-card bg-mil-primary border border-mil-accent/40 p-5 flex flex-col">';
+    html += '<div class="flex items-start justify-between mb-3 gap-2">';
+    html += '<div class="flex items-center gap-2 min-w-0">';
+    html += '<span class="text-2xl shrink-0">' + card.icon + '</span>';
+    html += '<span class="text-mil-highlight text-sm font-semibold truncate">' + card.title + '</span>';
+    html += '</div>';
+    html += '<span class="' + card.badgeClass + ' text-xs px-3 py-0.5 rounded-full whitespace-nowrap shrink-0">' + card.badgeText + '</span>';
+    html += '</div>';
+
+    html += '<p class="text-xs text-mil-muted leading-relaxed mb-5 flex-1">' + card.desc + '</p>';
+
+    html += '<div class="flex items-center justify-between gap-3 mt-auto">';
+    html += '<div class="flex items-center gap-2 flex-wrap">';
+    card.formats.forEach(function(f) {
+      html += '<span class="format-badge">' + f + '</span>';
+    });
+    html += '<span class="text-xs text-mil-muted/60">' + card.size + '</span>';
+    html += '</div>';
+
+    if (hasUrl) {
+      html += '<a href="' + url + '" target="_blank" rel="noopener" class="kit-dl-btn-active flex items-center gap-1.5 text-xs px-4 py-2.5 transition-colors whitespace-nowrap" data-kit-key="' + card.key + '">';
+      html += '<i data-lucide="download" class="w-3.5 h-3.5"></i> DOWNLOAD</a>';
+    } else {
+      html += '<div class="kit-tooltip"><span class="kit-dl-btn-disabled flex items-center gap-1.5 text-xs px-4 py-2.5 whitespace-nowrap" data-kit-key="' + card.key + '">';
+      html += '<i data-lucide="x" class="w-3.5 h-3.5"></i> NOT CONFIGURED</span>';
+      html += '<span class="kit-tooltip-text">No download link set. See Custodian Setup below.</span></div>';
+    }
+
+    html += '</div>';
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons();
+  }
+}
+
+function initKitTab() {
+  renderKitCards();
+
+  document.querySelectorAll('#custodian-inputs input[data-kitkey]').forEach(function(input) {
+    var key = input.dataset.kitkey;
+    var url = resolveKitUrl(key);
+    if (url) input.value = url;
+  });
+
+  document.querySelectorAll('.collapsible-header').forEach(function(header) {
+    header.addEventListener('click', function() {
+      var body = header.nextElementSibling;
+      var chevron = header.querySelector('.collapsible-chevron');
+      body.classList.toggle('open');
+      if (body.classList.contains('open')) {
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    });
+  });
+
+  document.getElementById('custodian-save-btn').addEventListener('click', function() {
+    document.querySelectorAll('#custodian-inputs input[data-kitkey]').forEach(function(input) {
+      var key = input.dataset.kitkey;
+      var val = input.value.trim();
+      if (val) { localStorage.setItem('kitUrl_' + key, val); }
+      else { localStorage.removeItem('kitUrl_' + key); }
+    });
+    renderKitCards();
+    showToast('Links saved! Download buttons updated.');
+  });
+
+  document.getElementById('custodian-clear-btn').addEventListener('click', function() {
+    if (confirm('Are you sure you want to clear all configured download URLs? This cannot be undone.')) {
+      KIT_CARDS_DATA.forEach(function(card) { localStorage.removeItem(card.lsKey); });
+      document.querySelectorAll('#custodian-inputs input[data-kitkey]').forEach(function(input) { input.value = ''; });
+      renderKitCards();
+      showToast('All links cleared.');
+    }
+  });
+
+  document.getElementById('custodian-embed-btn').addEventListener('click', function() {
+    var snippet = '/* CUSTODIAN URLS — paste into your HTML before distributing */\n';
+    snippet += 'const KIT_URLS = {\n';
+    KIT_CARDS_DATA.forEach(function(card, idx) {
+      var url = resolveKitUrl(card.key) || '';
+      var comma = idx < KIT_CARDS_DATA.length - 1 ? ',' : '';
+      var padding = '  ' + (card.key + ':').padEnd(14, ' ');
+      snippet += padding + '"' + url + '"' + comma + '\n';
+    });
+    snippet += '};';
+    navigator.clipboard.writeText(snippet).then(function() {
+      showToast('Embed code copied — paste into your HTML source.');
+    });
+  });
+}
+
+// ===== TAB SWITCHING =====
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.add('hidden'); });
+  document.getElementById(tabId).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('tab-btn-active'); });
+  var activeBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+  if (activeBtn) activeBtn.classList.add('tab-btn-active');
+  document.getElementById('mobile-menu-m1').classList.add('hidden');
+}
+
+document.querySelectorAll('.tab-btn, .mobile-tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() { switchTab(btn.dataset.tab); });
+});
+
+document.getElementById('mobile-menu-btn-m1').addEventListener('click', function() {
+  document.getElementById('mobile-menu-m1').classList.remove('hidden');
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons();
+  }
+});
+document.getElementById('mobile-menu-close-m1').addEventListener('click', function() {
+  document.getElementById('mobile-menu-m1').classList.add('hidden');
+});
+
+// ===== CHECKLIST LOGIC =====
+var STORAGE_KEY = 'offlineResilience_checks';
+function loadChecks() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch(e) { return {}; }
+}
+function saveChecks(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+function updateProgress() {
+  var checks = loadChecks();
+  var all = document.querySelectorAll('.task-check');
+  var done = 0;
+  all.forEach(function(cb) { if (cb.checked) done++; });
+  var total = all.length;
+  var pct = total ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('tasks-done').textContent = done;
+  document.getElementById('tasks-total').textContent = total;
+  document.getElementById('prep-score').textContent = pct + '%';
+  document.getElementById('prep-pct-header').textContent = '\u25A0 ' + pct + '% READY';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  var color;
+  if (pct < 34) color = '#ef4444';
+  else if (pct < 67) color = '#f59e0b';
+  else color = '#10b981';
+
+  document.getElementById('prep-score').style.color = color;
+  document.getElementById('prep-pct-header').style.color = color;
+
+  var pill = document.getElementById('prep-pct-header');
+  pill.style.borderColor = color;
+
+  var dot = document.getElementById('status-dot-d1');
+  dot.style.background = color;
+  if (pct < 33) { dot.classList.add('blink-dot'); dot.style.display = ''; }
+  else { dot.classList.remove('blink-dot'); dot.style.display = 'none'; }
+
+  document.querySelectorAll('[data-category]').forEach(function(cat) {
+    var items = cat.querySelectorAll('.task-check');
+    var catDone = 0;
+    items.forEach(function(c) { if (c.checked) catDone++; });
+    cat.querySelector('.cat-count').textContent = catDone;
+  });
+}
+
+function initChecklist() {
+  var checks = loadChecks();
+  document.querySelectorAll('.check-item').forEach(function(item) {
+    var key = item.dataset.key;
+    var cb = item.querySelector('.task-check');
+    if (checks[key]) {
+      cb.checked = true;
+      item.classList.add('checked');
+      item.querySelector('.check-icon').style.opacity = '1';
+      item.querySelector('.check-bg').style.background = 'rgba(5,150,105,0.15)';
+      item.querySelector('.check-bg').style.borderColor = '#10b981';
+    }
+    cb.addEventListener('change', function() {
+      var data = loadChecks();
+      data[key] = cb.checked;
+      saveChecks(data);
+      if (cb.checked) {
+        item.classList.add('checked');
+        item.querySelector('.check-icon').style.opacity = '1';
+        item.querySelector('.check-bg').style.background = 'rgba(5,150,105,0.15)';
+        item.querySelector('.check-bg').style.borderColor = '#10b981';
+      } else {
+        item.classList.remove('checked');
+        item.querySelector('.check-icon').style.opacity = '0';
+        item.querySelector('.check-bg').style.background = '';
+        item.querySelector('.check-bg').style.borderColor = '';
+      }
+      updateProgress();
+    });
+  });
+  updateProgress();
+}
+
+// Category collapse/expand
+document.querySelectorAll('.category-header').forEach(function(header) {
+  header.addEventListener('click', function() {
+    var content = header.nextElementSibling;
+    var chevron = header.querySelector('.cat-chevron');
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      content.style.maxHeight = '0px';
+      chevron.style.transform = 'rotate(-90deg)';
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      chevron.style.transform = 'rotate(0deg)';
+    }
+  });
+  // Start expanded
+  var content = header.nextElementSibling;
+  content.style.maxHeight = content.scrollHeight + 'px';
+});
+
+// Reset all
+document.getElementById('reset-all-btn').addEventListener('click', function() {
+  if (confirm('Are you sure you want to reset ALL checklist progress? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.task-check').forEach(function(cb) {
+      cb.checked = false;
+      var item = cb.closest('.check-item');
+      item.classList.remove('checked');
+      item.querySelector('.check-icon').style.opacity = '0';
+      item.querySelector('.check-bg').style.background = '';
+      item.querySelector('.check-bg').style.borderColor = '';
+    });
+    updateProgress();
+  }
+});
+
+// Copy checklist summary
+document.getElementById('copy-checklist-btn').addEventListener('click', function() {
+  var text = 'OFFLINE RESILIENCE SYSTEM — REMAINING TASKS\n';
+  text += '=' .repeat(50) + '\n\n';
+  document.querySelectorAll('[data-category]').forEach(function(cat) {
+    var title = cat.querySelector('.cat-title').textContent.trim();
+    var unchecked = [];
+    cat.querySelectorAll('.check-item').forEach(function(item) {
+      if (!item.querySelector('.task-check').checked) {
+        var label = item.querySelector('.flex-1').textContent.trim();
+        unchecked.push('  \u25A1 ' + label);
+      }
+    });
+    if (unchecked.length) {
+      text += title + '\n';
+      text += unchecked.join('\n') + '\n\n';
+    }
+  });
+  if (text.trim().endsWith('===')) text += '\nAll tasks complete!';
+  navigator.clipboard.writeText(text).then(function() { showToast('Checklist copied to clipboard!'); });
+});
+
+function showToast(msg) {
+  var t = document.getElementById('copied-toast');
+  t.textContent = '\u2713 ' + msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+// ===== FILE TREE (TAB 2) =====
+function buildTree(node, depth, parentPath) {
+  var path = parentPath ? parentPath + '/' + node.name : node.name;
+  var html = '';
+  if (node.type === 'folder') {
+    var isRoot = depth === 0;
+    html += '<div class="tree-folder ' + (isRoot ? 'open' : '') + '" data-path="' + path + '">';
+    html += '<div class="tree-item flex items-center gap-1.5 px-3 py-2 text-xs ' + (isRoot ? 'text-mil-highlight font-bold' : 'text-mil-muted') + '" style="padding-left:' + (depth * 16 + 8) + 'px" data-path="' + path + '" data-type="folder">';
+    html += '<i data-lucide="chevron-right" class="w-3 h-3 text-mil-muted/60 shrink-0 tree-chevron transition-transform ' + (isRoot ? 'rotate-90' : '') + '"></i>';
+    html += '<i data-lucide="' + (node.icon || 'folder') + '" class="w-4 h-4 text-mil-amber shrink-0"></i>';
+    html += '<span class="truncate tree-label">' + node.name + '</span>';
+    html += '</div>';
+    html += '<div class="tree-children">';
+    if (node.children) {
+      node.children.forEach(function(child) { html += buildTree(child, depth + 1, path); });
+    }
+    html += '</div></div>';
+  } else {
+    html += '<div class="tree-item flex items-center gap-1.5 px-3 py-2 text-xs text-mil-muted" style="padding-left:' + (depth * 16 + 8) + 'px" data-path="' + path + '" data-type="file">';
+    html += '<span class="w-3 shrink-0"></span>';
+    html += '<i data-lucide="' + (node.icon || 'file') + '" class="w-4 h-4 text-mil-bright shrink-0"></i>';
+    html += '<span class="truncate tree-label">' + node.name + '</span>';
+    html += '</div>';
+  }
+  return html;
+}
+
+function findNode(data, path) {
+  var parts = path.split('/');
+  var current = data;
+  for (var i = 0; i < parts.length; i++) {
+    if (i === 0 && current.name === parts[0]) continue;
+    if (current.children) {
+      current = current.children.find(function(c) { return c.name === parts[i]; });
+      if (!current) return null;
+    } else return null;
+  }
+  return current;
+}
+
+function showDetail(node) {
+  var panel = document.getElementById('detail-content');
+  var iconColor = node.type === 'folder' ? 'text-mil-amber' : 'text-mil-bright';
+  var html = '<div class="flex items-center gap-4 mb-6">';
+  html += '<i data-lucide="' + (node.icon || (node.type === 'folder' ? 'folder' : 'file')) + '" class="w-8 h-8 ' + iconColor + ' shrink-0"></i>';
+  html += '<div><h2 class="font-mono text-mil-highlight text-base md:text-lg font-bold">' + node.name + '</h2>';
+  html += '<p class="text-mil-muted text-xs">' + (node.type === 'folder' ? 'Directory' : 'File') + (node.size ? ' — ' + node.size : '') + '</p></div></div>';
+
+  html += '<div class="space-y-5">';
+  html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">Description</h3><p class="text-sm text-mil-text leading-relaxed">' + (node.desc || 'No description available.') + '</p></div>';
+
+  if (node.type === 'folder') {
+    if (node.populate) {
+      html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">How to Populate</h3><p class="text-sm text-mil-text">' + node.populate + '</p></div>';
+    }
+    if (node.children) {
+      html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">Contents (' + node.children.length + ' items)</h3><ul class="text-sm text-mil-text space-y-1.5">';
+      node.children.forEach(function(c) {
+        var icon = c.type === 'folder' ? '📁' : '📄';
+        html += '<li>' + icon + ' <span class="font-mono">' + c.name + '</span>' + (c.size ? ' <span class="text-mil-muted text-xs">(' + c.size + ')</span>' : '') + '</li>';
+      });
+      html += '</ul></div>';
+    }
+  } else {
+    if (node.source) {
+      html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">Source</h3><p class="text-sm text-mil-text">' + node.source + '</p></div>';
+    }
+    if (node.update) {
+      html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">Update Frequency</h3><p class="text-sm text-mil-text">' + node.update + '</p></div>';
+    }
+  }
+  if (node.size) {
+    html += '<div><h3 class="text-mil-bright text-xs uppercase tracking-wider mb-2 font-semibold">Estimated Size</h3><p class="text-sm font-mono text-mil-highlight font-semibold">' + node.size + '</p></div>';
+  }
+  html += '</div>';
+
+  panel.innerHTML = html;
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons({ attrs: { class: '' }, nameAttr: 'data-lucide' });
+  }
+}
+
+function initFileTree() {
+  var container = document.getElementById('file-tree');
+  container.innerHTML = buildTree(FILE_TREE_DATA, 0, '');
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons();
+  }
+
+  container.addEventListener('click', function(e) {
+    var item = e.target.closest('.tree-item');
+    if (!item) return;
+    var path = item.dataset.path;
+    var type = item.dataset.type;
+
+    container.querySelectorAll('.tree-item').forEach(function(i) { i.classList.remove('active'); });
+    item.classList.add('active');
+
+    if (type === 'folder') {
+      var folder = item.closest('.tree-folder');
+      folder.classList.toggle('open');
+      var chevron = item.querySelector('.tree-chevron');
+      if (folder.classList.contains('open')) {
+        chevron.style.transform = 'rotate(90deg)';
+      } else {
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    var node = findNode(FILE_TREE_DATA, path);
+    if (node) showDetail(node);
+  });
+}
+
+// Tree search
+document.getElementById('tree-search-input').addEventListener('input', function(e) {
+  var q = e.target.value.toLowerCase().trim();
+  var items = document.querySelectorAll('#file-tree .tree-item');
+  if (!q) {
+    items.forEach(function(i) {
+      i.style.display = '';
+      var label = i.querySelector('.tree-label');
+      if (label) label.style.color = '';
+    });
+    return;
+  }
+  items.forEach(function(i) {
+    var label = i.querySelector('.tree-label');
+    if (!label) return;
+    var text = label.textContent.toLowerCase();
+    if (text.includes(q)) {
+      i.style.display = '';
+      label.style.color = '#f8fafc';
+      var parent = i.closest('.tree-folder');
+      while (parent) {
+        parent.classList.add('open');
+        var chev = parent.querySelector(':scope > .tree-item .tree-chevron');
+        if (chev) chev.style.transform = 'rotate(90deg)';
+        parent = parent.parentElement.closest('.tree-folder');
+      }
+    } else {
+      i.style.display = 'none';
+      label.style.color = '';
+    }
+  });
+});
+
+// ===== DOWNLOAD CARDS (TAB 3) =====
+function initDownloadCards() {
+  var container = document.getElementById('download-cards');
+  var html = '';
+  DOWNLOAD_DATA.forEach(function(cat) {
+    html += '<div class="mb-6">';
+    html += '<h3 class="section-heading flex items-center gap-2"><i data-lucide="radio" class="w-4 h-4 text-mil-bright"></i>' + cat.category + '</h3>';
+    html += '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">';
+    cat.items.forEach(function(item) {
+      var badgeClass = item.priority === 'CRITICAL' ? 'badge-critical' : item.priority === 'IMPORTANT' ? 'badge-important' : 'badge-recommended';
+      html += '<div class="dl-card bg-mil-primary border border-mil-accent/40 p-5 flex flex-col">';
+      html += '<div class="flex items-start justify-between mb-3 gap-2"><span class="text-mil-highlight text-sm font-semibold">' + item.name + '</span><span class="' + badgeClass + ' whitespace-nowrap">' + item.priority + '</span></div>';
+      html += '<p class="text-xs text-mil-muted mb-4 flex-1 leading-relaxed">' + item.desc + '</p>';
+      html += '<div class="flex flex-wrap gap-1.5 mb-4">' + item.platforms.map(function(p) { return '<span class="platform-badge">' + p + '</span>'; }).join('') + '</div>';
+      html += '<div class="text-xs text-mil-muted/60 mb-4">' + item.size + '</div>';
+      html += '<div class="flex gap-2 mt-auto">';
+      html += '<a href="' + item.url + '" target="_blank" rel="noopener" class="flex-1 flex items-center justify-center gap-1.5 bg-mil-bright text-mil-darkest text-xs font-semibold py-2.5 rounded-lg hover:bg-mil-success transition-colors"><i data-lucide="download" class="w-3.5 h-3.5"></i>DOWNLOAD</a>';
+      html += '<button class="copy-link-btn flex items-center justify-center gap-1 bg-transparent border border-mil-bright text-mil-bright text-xs px-3 py-2.5 rounded-lg hover:bg-mil-bright/10 transition-colors" data-url="' + item.url + '"><i data-lucide="clipboard-copy" class="w-3.5 h-3.5"></i></button>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+  if (typeof lucide !== "undefined" && typeof lucide.createIcons === "function") {
+    lucide.createIcons();
+  }
+
+  container.querySelectorAll('.copy-link-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      navigator.clipboard.writeText(btn.dataset.url).then(function() { showToast('Link copied!'); });
+    });
+  });
+}
+
+// ===== PRINT MANIFEST (TAB 4) =====
+function initManifest() {
+  var now = new Date();
+  document.getElementById('manifest-date').textContent = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  var tbody = document.getElementById('manifest-tbody');
+  var rows = '';
+  function addFiles(node, folder) {
+    if (node.type === 'file') {
+      var required = node.name.includes('README') || node.name.includes('START_HERE') ? 'Yes' : 'No';
+      rows += '<tr class="border-b border-mil-accent/15 hover:bg-white/[0.02]"><td class="p-3 border border-mil-accent/20 text-mil-muted">' + folder + '</td><td class="p-3 border border-mil-accent/20 text-mil-highlight font-mono text-xs">' + node.name + '</td><td class="p-3 border border-mil-accent/20 text-mil-muted hidden md:table-cell">' + ((node.desc || '').substring(0, 60)) + ((node.desc || '').length > 60 ? '...' : '') + '</td><td class="p-3 border border-mil-accent/20 text-center text-mil-muted">' + required + '</td><td class="p-3 border border-mil-accent/20 text-right text-mil-muted">' + (node.size || '—') + '</td></tr>';
+    }
+    if (node.children) {
+      node.children.forEach(function(c) { addFiles(c, node.type === 'folder' ? node.name : folder); });
+    }
+  }
+  addFiles(FILE_TREE_DATA, '/');
+  tbody.innerHTML = rows;
+
+  var distTbody = document.getElementById('dist-tbody');
+  var distRows = '';
+  for (var i = 1; i <= 10; i++) {
+    distRows += '<tr><td class="p-3 border border-mil-accent/20 text-center text-mil-muted h-8">' + i + '</td><td class="p-3 border border-mil-accent/20"></td><td class="p-3 border border-mil-accent/20"></td><td class="p-3 border border-mil-accent/20"></td></tr>';
+  }
+  distTbody.innerHTML = distRows;
+}
+
+document.getElementById('print-btn').addEventListener('click', function() { window.print(); });
+
+// ===== INIT =====
+initChecklist();
+initFileTree();
+initDownloadCards();
+initManifest();
+initKitTab();
+</script>
+</body>
+</html>

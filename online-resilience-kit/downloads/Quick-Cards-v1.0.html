@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Offline Network Resilience — Printable Quick-Cards</title>
+    <style>
+        :root { color-scheme: light only; }
+
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.4;
+            color: #000000;
+            background: #ffffff;
+            max-width: 816px;
+            margin: 0 auto;
+            padding: 72px;
+        }
+
+        h1 { font-size: 22pt; font-weight: bold; margin-top: 0; margin-bottom: 4pt; color: #1a1a1a; }
+        h2 { font-size: 13pt; font-weight: bold; margin-top: 10pt; margin-bottom: 4pt; color: #1a1a1a; }
+        h3 { font-size: 11pt; font-weight: bold; margin-top: 8pt; margin-bottom: 3pt; color: #1a1a1a; }
+        p { margin-top: 0; margin-bottom: 5pt; }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 6pt; margin-bottom: 6pt; }
+        th, td { border: 1px solid #000000; padding: 4px 6px; text-align: left; vertical-align: top; font-size: 9pt; }
+        th { font-weight: bold; background-color: #e8eef7; }
+
+        ul, ol { margin: 4pt 0; padding-left: 22px; }
+        li { margin-bottom: 2pt; font-size: 9.5pt; }
+
+        /* ── Title block ── */
+        .doc-title-block {
+            border-top: 4px solid #2b5797;
+            border-bottom: 2px solid #2b5797;
+            padding: 14pt 0 10pt 0;
+            margin-bottom: 18pt;
+        }
+        .doc-subtitle {
+            font-size: 12pt;
+            color: #444444;
+            margin-top: 4pt;
+            margin-bottom: 0;
+        }
+        .doc-design-note {
+            border: 1px solid #aaaaaa;
+            border-left: 3px solid #2b5797;
+            background-color: #f0f4fb;
+            padding: 8px 12px;
+            margin-bottom: 20pt;
+            font-size: 9pt;
+            color: #333333;
+        }
+        .doc-design-note-label {
+            font-weight: bold;
+            color: #2b5797;
+        }
+
+        /* ── Card layout ── */
+        .card-pair-label {
+            font-size: 10pt;
+            font-weight: bold;
+            color: #2b5797;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 24pt;
+            margin-bottom: 4pt;
+            border-bottom: 1px solid #2b5797;
+            padding-bottom: 2pt;
+        }
+        .card-row {
+            margin-top: 6pt;
+            margin-bottom: 6pt;
+        }
+        .card {
+            border: 2px dashed #555555;
+            padding: 10px 12px;
+            margin-bottom: 10pt;
+            background-color: #ffffff;
+            page-break-inside: avoid;
+        }
+        .card-number {
+            font-size: 7.5pt;
+            font-weight: bold;
+            color: #2b5797;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 2pt;
+        }
+        .card-face-label {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            float: right;
+            margin-top: 2pt;
+        }
+        .card-title {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            border-bottom: 1.5px solid #2b5797;
+            padding-bottom: 3pt;
+            margin-bottom: 6pt;
+            margin-top: 0;
+            clear: both;
+        }
+        .card p { font-size: 9.5pt; margin-bottom: 4pt; }
+        .card ul, .card ol { font-size: 9.5pt; margin: 3pt 0; padding-left: 20px; }
+        .card li { margin-bottom: 2pt; }
+        .card table { margin-top: 4pt; margin-bottom: 4pt; }
+        .card th, .card td { font-size: 8.5pt; padding: 3px 5px; }
+        .card th { background-color: #e8eef7; }
+        .card h3 { font-size: 10pt; font-weight: bold; margin-top: 6pt; margin-bottom: 3pt; color: #1a1a1a; }
+
+        .field-line {
+            border-bottom: 1px solid #555555;
+            display: inline-block;
+            width: 140px;
+            margin-bottom: 2pt;
+            vertical-align: bottom;
+        }
+        .field-line-long {
+            border-bottom: 1px solid #555555;
+            display: inline-block;
+            width: 220px;
+            margin-bottom: 2pt;
+            vertical-align: bottom;
+        }
+
+        .callout-warning {
+            border: 1px solid #cc0000;
+            border-left: 3px solid #cc0000;
+            background-color: #fce8e8;
+            padding: 5px 9px;
+            margin: 4pt 0;
+            font-size: 9pt;
+        }
+        .callout-tip {
+            border: 1px solid #2b5797;
+            border-left: 3px solid #2b5797;
+            background-color: #e8eef7;
+            padding: 5px 9px;
+            margin: 4pt 0;
+            font-size: 9pt;
+        }
+
+        .signal-table td:first-child { font-weight: bold; width: 28%; }
+
+        /* Checkbox style using table trick */
+        .check-item { font-size: 9.5pt; margin-bottom: 2pt; }
+
+        /* Color flag visual reference row */
+        .color-row td { font-size: 8.5pt; font-weight: bold; }
+        .swatch-green  { background-color: #c8efc8; }
+        .swatch-yellow { background-color: #fffacc; }
+        .swatch-red    { background-color: #f5c6c6; }
+        .swatch-orange { background-color: #ffddb5; }
+        .swatch-blue   { background-color: #c6d9f5; }
+        .swatch-black  { background-color: #cccccc; }
+        .swatch-white  { background-color: #f9f9f9; }
+
+        /* Footer */
+        .doc-footer {
+            border-top: 2px solid #2b5797;
+            margin-top: 30pt;
+            padding-top: 8pt;
+            text-align: center;
+            font-size: 8.5pt;
+            color: #555555;
+        }
+        .doc-footer strong { color: #1a1a1a; }
+
+        /* Print instructions panel */
+        .print-instructions {
+            border: 1px solid #aaaaaa;
+            background-color: #f5f5f5;
+            padding: 10px 14px;
+            margin-bottom: 20pt;
+            font-size: 9pt;
+        }
+        .print-instructions strong { font-size: 9.5pt; }
+
+        @media print {
+            body { padding: 0; max-width: none; }
+            .card { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body data-id="0" class="theme-professional">
+
+    <!-- ═══════════════════════════════════════════════════
+         TITLE BLOCK
+    ════════════════════════════════════════════════════ -->
+    <div data-id="1" class="doc-title-block">
+        <h1 data-id="2">OFFLINE NETWORK RESILIENCE</h1>
+        <h1 data-id="3" style="font-size:17pt; margin-top:0; margin-bottom:6pt;">PRINTABLE QUICK-CARDS</h1>
+        <p data-id="4" class="doc-subtitle"><strong data-id="5">Cut, Laminate, and Distribute. No Internet Required.</strong></p>
+        <p data-id="6" style="font-size:9pt; color:#666666; margin-top:6pt; margin-bottom:0;">Version 1.0 &nbsp;|&nbsp; 2026 &nbsp;|&nbsp; CC BY-SA 4.0 &nbsp;|&nbsp; 12 Cards Included</p>
+    </div>
+
+    <!-- Design Note -->
+    <div data-id="7" class="doc-design-note">
+        <span data-id="8" class="doc-design-note-label">DESIGN NOTE: </span>Each card is designed to print on a half-sheet (5.5&Prime; &times; 4.25&Prime;) or standard index card. Print double-sided, laminate, and distribute. Card borders are indicated by a dashed-line box on each card. Cut along the dashed border after printing.
+    </div>
+
+    <!-- Print Instructions -->
+    <div data-id="9" class="print-instructions">
+        <strong data-id="10">PRINTING INSTRUCTIONS</strong><br data-id="11">
+        1. Print this document double-sided on standard 8.5&Prime; &times; 11&Prime; paper (two cards per sheet).<br data-id="12">
+        2. Align front and back carefully before cutting along the dashed borders.<br data-id="13">
+        3. Laminate each card at 3–5 mil thickness for field durability.<br data-id="14">
+        4. Distribute to all team members. Store one set in every go-box.<br data-id="15">
+        <strong data-id="16">Tip:</strong> Print at 100% scale — do not scale to fit. Use portrait orientation.
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 1
+    ════════════════════════════════════════════════════ -->
+    <div data-id="17" class="card-pair-label">Quick-Card 1 — Radio Net Check-In Procedure</div>
+
+    <div data-id="18" class="card-row">
+        <!-- FRONT -->
+        <div data-id="19" class="card">
+            <div data-id="20" style="overflow:hidden;">
+                <span data-id="21" class="card-number">QUICK-CARD 1</span>
+                <span data-id="22" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="23" class="card-title">RADIO NET CHECK-IN</div>
+            <p data-id="24"><strong data-id="25">When net control calls: "[Your call sign], go ahead"</strong></p>
+            <p data-id="26"><strong data-id="27">YOUR RESPONSE:</strong></p>
+            <ol data-id="28">
+                <li data-id="29">State your <strong data-id="30">call sign</strong></li>
+                <li data-id="31">State your <strong data-id="32">location</strong> (grid square or neighborhood)</li>
+                <li data-id="33">State your <strong data-id="34">status:</strong> NORMAL &nbsp;/&nbsp; TRAFFIC &nbsp;/&nbsp; EMERGENCY</li>
+                <li data-id="35">Wait for <strong data-id="36">acknowledgment</strong></li>
+            </ol>
+            <div data-id="37" class="callout-warning">
+                <strong data-id="38">If EMERGENCY:</strong> Say <strong data-id="39">"BREAK BREAK BREAK"</strong> + your call sign + nature of emergency. Do not wait for net control to call you.
+            </div>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="40" class="card">
+            <div data-id="41" style="overflow:hidden;">
+                <span data-id="42" class="card-number">QUICK-CARD 1</span>
+                <span data-id="43" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="44" class="card-title">PHONETIC ALPHABET</div>
+            <table data-id="45">
+                <tr data-id="46">
+                    <td data-id="47">A = Alpha</td><td data-id="48">B = Bravo</td><td data-id="49">C = Charlie</td><td data-id="50">D = Delta</td>
+                </tr>
+                <tr data-id="51">
+                    <td data-id="52">E = Echo</td><td data-id="53">F = Foxtrot</td><td data-id="54">G = Golf</td><td data-id="55">H = Hotel</td>
+                </tr>
+                <tr data-id="56">
+                    <td data-id="57">I = India</td><td data-id="58">J = Juliet</td><td data-id="59">K = Kilo</td><td data-id="60">L = Lima</td>
+                </tr>
+                <tr data-id="61">
+                    <td data-id="62">M = Mike</td><td data-id="63">N = November</td><td data-id="64">O = Oscar</td><td data-id="65">P = Papa</td>
+                </tr>
+                <tr data-id="66">
+                    <td data-id="67">Q = Quebec</td><td data-id="68">R = Romeo</td><td data-id="69">S = Sierra</td><td data-id="70">T = Tango</td>
+                </tr>
+                <tr data-id="71">
+                    <td data-id="72">U = Uniform</td><td data-id="73">V = Victor</td><td data-id="74">W = Whiskey</td><td data-id="75">X = X-ray</td>
+                </tr>
+                <tr data-id="76">
+                    <td data-id="77">Y = Yankee</td><td data-id="78">Z = Zulu</td><td data-id="79" colspan="2">&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 2
+    ════════════════════════════════════════════════════ -->
+    <div data-id="80" class="card-pair-label">Quick-Card 2 — Emergency Frequency Reference</div>
+
+    <div data-id="81" class="card-row">
+        <!-- FRONT -->
+        <div data-id="82" class="card">
+            <div data-id="83" style="overflow:hidden;">
+                <span data-id="84" class="card-number">QUICK-CARD 2</span>
+                <span data-id="85" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="86" class="card-title">EMERGENCY FREQUENCIES — US</div>
+            <table data-id="87">
+                <tr data-id="88">
+                    <th data-id="89">Band</th>
+                    <th data-id="90">Frequency</th>
+                    <th data-id="91">Use</th>
+                </tr>
+                <tr data-id="92"><td data-id="93">NOAA Weather</td><td data-id="94">162.400–162.550 MHz</td><td data-id="95">Weather alerts</td></tr>
+                <tr data-id="96"><td data-id="97">2m Calling</td><td data-id="98">146.520 MHz</td><td data-id="99">Amateur simplex</td></tr>
+                <tr data-id="100"><td data-id="101">GMRS Ch 20</td><td data-id="102">462.675 MHz</td><td data-id="103">GMRS emergency</td></tr>
+                <tr data-id="104"><td data-id="105">FRS Ch 1</td><td data-id="106">462.5625 MHz</td><td data-id="107">FRS general</td></tr>
+                <tr data-id="108"><td data-id="109">CB Ch 9</td><td data-id="110">27.065 MHz</td><td data-id="111">CB emergency</td></tr>
+                <tr data-id="112"><td data-id="113">Marine 16</td><td data-id="114">156.800 MHz</td><td data-id="115">Maritime distress</td></tr>
+                <tr data-id="116"><td data-id="117">Aircraft Guard</td><td data-id="118">121.500 MHz</td><td data-id="119">Air emergency (RX only)</td></tr>
+                <tr data-id="120"><td data-id="121">Meshtastic (US)</td><td data-id="122">915 MHz LoRa</td><td data-id="123">Mesh data</td></tr>
+            </table>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="124" class="card">
+            <div data-id="125" style="overflow:hidden;">
+                <span data-id="126" class="card-number">QUICK-CARD 2</span>
+                <span data-id="127" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="128" class="card-title">LOCAL FREQUENCIES (FILL IN)</div>
+            <table data-id="129">
+                <tr data-id="130">
+                    <th data-id="131">Field</th>
+                    <th data-id="132">Value</th>
+                </tr>
+                <tr data-id="133"><td data-id="134">Repeater 1</td><td data-id="135">_____________ &nbsp; Tone: _______</td></tr>
+                <tr data-id="136"><td data-id="137">Repeater 2</td><td data-id="138">_____________ &nbsp; Tone: _______</td></tr>
+                <tr data-id="139"><td data-id="140">Simplex</td><td data-id="141">_________________________</td></tr>
+                <tr data-id="142"><td data-id="143">Net Time / Day</td><td data-id="144">_________________________</td></tr>
+                <tr data-id="145"><td data-id="146">Net Control</td><td data-id="147">_________________________</td></tr>
+                <tr data-id="148"><td data-id="149">Club / Group</td><td data-id="150">_________________________</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 3
+    ════════════════════════════════════════════════════ -->
+    <div data-id="151" class="card-pair-label">Quick-Card 3 — Meshtastic Quick Setup</div>
+
+    <div data-id="152" class="card-row">
+        <!-- FRONT -->
+        <div data-id="153" class="card">
+            <div data-id="154" style="overflow:hidden;">
+                <span data-id="155" class="card-number">QUICK-CARD 3</span>
+                <span data-id="156" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="157" class="card-title">MESHTASTIC SETUP IN 5 STEPS</div>
+            <ol data-id="158">
+                <li data-id="159">Download Meshtastic app (Android / iOS) or use <strong data-id="160">flasher.meshtastic.org</strong></li>
+                <li data-id="161">Flash firmware to device (TTGO T-Beam, Heltec, etc.)</li>
+                <li data-id="162">Open app &rarr; pair via Bluetooth</li>
+                <li data-id="163">Set: <strong data-id="164">Region = US</strong>, Channel = <strong data-id="165">LongFast</strong> (default)</li>
+                <li data-id="166">Set device name &rarr; <strong data-id="167">You're on the mesh!</strong></li>
+            </ol>
+            <h3 data-id="168">CHANNEL SECURITY</h3>
+            <ul data-id="169">
+                <li data-id="170"><strong data-id="171">Default:</strong> No encryption (public)</li>
+                <li data-id="172"><strong data-id="173">Add PSK:</strong> Settings &rarr; Channels &rarr; Add encryption key</li>
+                <li data-id="174">Share key <strong data-id="175">only</strong> with trusted members</li>
+            </ul>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="176" class="card">
+            <div data-id="177" style="overflow:hidden;">
+                <span data-id="178" class="card-number">QUICK-CARD 3</span>
+                <span data-id="179" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="180" class="card-title">MESHTASTIC TROUBLESHOOTING</div>
+            <table data-id="181">
+                <tr data-id="182"><th data-id="183">Problem</th><th data-id="184">Fix</th></tr>
+                <tr data-id="185"><td data-id="186">No connection?</td><td data-id="187">Restart device + app</td></tr>
+                <tr data-id="188"><td data-id="189">No messages received?</td><td data-id="190">Check region setting (must match)</td></tr>
+                <tr data-id="191"><td data-id="192">Poor range?</td><td data-id="193">Elevate antenna above obstacles</td></tr>
+                <tr data-id="194"><td data-id="195">Battery draining fast?</td><td data-id="196">Enable router role power settings</td></tr>
+                <tr data-id="197"><td data-id="198">Can't pair?</td><td data-id="199">Clear Bluetooth cache, re-pair</td></tr>
+            </table>
+            <p data-id="200" style="margin-top:5pt; font-size:9pt;">
+                <strong data-id="201">Default channel:</strong> LongFast &nbsp;&nbsp;
+                <strong data-id="202">Frequency (US):</strong> 906.875 MHz<br data-id="203">
+                <strong data-id="204">Max message size:</strong> 228 bytes
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 4
+    ════════════════════════════════════════════════════ -->
+    <div data-id="205" class="card-pair-label">Quick-Card 4 — SALUTE Report Format</div>
+
+    <div data-id="206" class="card-row">
+        <!-- FRONT -->
+        <div data-id="207" class="card">
+            <div data-id="208" style="overflow:hidden;">
+                <span data-id="209" class="card-number">QUICK-CARD 4</span>
+                <span data-id="210" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="211" class="card-title">SALUTE REPORT — EMERGENCY INFORMATION</div>
+            <p data-id="212" style="font-size:9pt;">Use this format when reporting an incident over radio or in writing.</p>
+            <table data-id="213">
+                <tr data-id="214"><th data-id="215" style="width:30%;">Element</th><th data-id="216">Question to Answer</th></tr>
+                <tr data-id="217"><td data-id="218"><strong data-id="219">S — SIZE</strong></td><td data-id="220">How many people / vehicles involved?</td></tr>
+                <tr data-id="221"><td data-id="222"><strong data-id="223">A — ACTIVITY</strong></td><td data-id="224">What is happening?</td></tr>
+                <tr data-id="225"><td data-id="226"><strong data-id="227">L — LOCATION</strong></td><td data-id="228">Where exactly? (address, grid, landmark)</td></tr>
+                <tr data-id="229"><td data-id="230"><strong data-id="231">U — UNIT/UNIFORM</strong></td><td data-id="232">Who are they? (identifying features)</td></tr>
+                <tr data-id="233"><td data-id="234"><strong data-id="235">T — TIME</strong></td><td data-id="236">When did you observe this?</td></tr>
+                <tr data-id="237"><td data-id="238"><strong data-id="239">E — EQUIPMENT</strong></td><td data-id="240">What resources / tools are present?</td></tr>
+            </table>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="241" class="card">
+            <div data-id="242" style="overflow:hidden;">
+                <span data-id="243" class="card-number">QUICK-CARD 4</span>
+                <span data-id="244" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="245" class="card-title">SAMPLE SALUTE REPORT</div>
+            <div data-id="246" class="callout-tip">
+                <strong data-id="247">S:</strong> Approximately 12 people<br data-id="248">
+                <strong data-id="249">A:</strong> Evacuating a flooded building<br data-id="250">
+                <strong data-id="251">L:</strong> Corner of Main St and Oak Ave<br data-id="252">
+                <strong data-id="253">U:</strong> Mix of civilians, 2 in firefighter gear<br data-id="254">
+                <strong data-id="255">T:</strong> Observed at 14:30 local<br data-id="256">
+                <strong data-id="257">E:</strong> One boat, several life vests, flashlights
+            </div>
+            <p data-id="258" style="font-size:9pt; margin-top:5pt;">Transmit clearly. <strong data-id="259">Pause between each element.</strong> Wait for acknowledgment before proceeding.</p>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 5
+    ════════════════════════════════════════════════════ -->
+    <div data-id="260" class="card-pair-label">Quick-Card 5 — Visual Signal Reference</div>
+
+    <div data-id="261" class="card-row">
+        <!-- FRONT -->
+        <div data-id="262" class="card">
+            <div data-id="263" style="overflow:hidden;">
+                <span data-id="264" class="card-number">QUICK-CARD 5</span>
+                <span data-id="265" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="266" class="card-title">COMMUNITY VISUAL SIGNALS</div>
+            <p data-id="267" style="font-size:9pt; margin-bottom:3pt;"><strong data-id="268">COLOR FLAGS / TAPE — WINDOWS OR FENCES:</strong></p>
+            <table data-id="269" class="color-row">
+                <tr data-id="270"><th data-id="271">Color</th><th data-id="272">Meaning</th></tr>
+                <tr data-id="273" class="swatch-green"><td data-id="274">GREEN</td><td data-id="275">All clear — we are OK</td></tr>
+                <tr data-id="276" class="swatch-yellow"><td data-id="277">YELLOW</td><td data-id="278">Caution — need information or check-in</td></tr>
+                <tr data-id="279" class="swatch-red"><td data-id="280">RED</td><td data-id="281">HELP NEEDED — emergency assistance required</td></tr>
+                <tr data-id="282" class="swatch-orange"><td data-id="283">ORANGE</td><td data-id="284">Medical need — injury or illness</td></tr>
+                <tr data-id="285" class="swatch-blue"><td data-id="286">BLUE</td><td data-id="287">Have resources to share (water, food, supplies)</td></tr>
+                <tr data-id="288" class="swatch-black"><td data-id="289">BLACK</td><td data-id="290">Do not enter — hazard present</td></tr>
+                <tr data-id="291" class="swatch-white"><td data-id="292">WHITE</td><td data-id="293">Evacuated — structure unoccupied</td></tr>
+            </table>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="294" class="card">
+            <div data-id="295" style="overflow:hidden;">
+                <span data-id="296" class="card-number">QUICK-CARD 5</span>
+                <span data-id="297" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="298" class="card-title">CHALK / DOOR &amp; LIGHT SIGNALS</div>
+            <h3 data-id="299">Search &amp; Rescue Door Markings</h3>
+            <table data-id="300" class="signal-table">
+                <tr data-id="301"><td data-id="302">X in box</td><td data-id="303">Structure has been searched</td></tr>
+                <tr data-id="304"><td data-id="305">Top quadrant</td><td data-id="306">Date and time of search</td></tr>
+                <tr data-id="307"><td data-id="308">Left quadrant</td><td data-id="309">Hazards present</td></tr>
+                <tr data-id="310"><td data-id="311">Right quadrant</td><td data-id="312">Number of survivors</td></tr>
+                <tr data-id="313"><td data-id="314">Bottom quadrant</td><td data-id="315">Number of deceased</td></tr>
+            </table>
+            <h3 data-id="316">Mirror / Light Signals</h3>
+            <table data-id="317" class="signal-table">
+                <tr data-id="318"><td data-id="319">3 flashes</td><td data-id="320">Distress signal</td></tr>
+                <tr data-id="321"><td data-id="322">Steady light</td><td data-id="323">All clear / presence signal</td></tr>
+                <tr data-id="324"><td data-id="325">Long–short alternating</td><td data-id="326">Need assistance</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 6
+    ════════════════════════════════════════════════════ -->
+    <div data-id="327" class="card-pair-label">Quick-Card 6 — Information Runner Protocol</div>
+
+    <div data-id="328" class="card-row">
+        <!-- FRONT -->
+        <div data-id="329" class="card">
+            <div data-id="330" style="overflow:hidden;">
+                <span data-id="331" class="card-number">QUICK-CARD 6</span>
+                <span data-id="332" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="333" class="card-title">INFORMATION RUNNER — FIELD PROTOCOL</div>
+            <h3 data-id="334">BEFORE DEPARTING</h3>
+            <p data-id="335" class="check-item">&#9633; Receive message <strong data-id="336">in writing</strong> (never rely on memory alone)</p>
+            <p data-id="337" class="check-item">&#9633; Confirm destination and <strong data-id="338">recipient name</strong></p>
+            <p data-id="339" class="check-item">&#9633; Note priority level: ROUTINE / URGENT / EMERGENCY</p>
+            <p data-id="340" class="check-item">&#9633; Log departure time and route</p>
+            <h3 data-id="341">IN TRANSIT</h3>
+            <p data-id="342" class="check-item">&#9633; Travel in pairs when possible</p>
+            <p data-id="343" class="check-item">&#9633; Use pre-planned routes only</p>
+            <p data-id="344" class="check-item">&#9633; Do not detour without authorization</p>
+            <p data-id="345" class="check-item">&#9633; If intercepted: <strong data-id="346">do not surrender message</strong> without confirmation code</p>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="347" class="card">
+            <div data-id="348" style="overflow:hidden;">
+                <span data-id="349" class="card-number">QUICK-CARD 6</span>
+                <span data-id="350" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="351" class="card-title">ON ARRIVAL &amp; MESSAGE FORMAT</div>
+            <h3 data-id="352">ON ARRIVAL</h3>
+            <p data-id="353" class="check-item">&#9633; Identify yourself and origin</p>
+            <p data-id="354" class="check-item">&#9633; Request confirmation code from recipient</p>
+            <p data-id="355" class="check-item">&#9633; Hand over message; receive <strong data-id="356">signed receipt</strong></p>
+            <p data-id="357" class="check-item">&#9633; Log arrival time; wait for reply if instructed</p>
+            <p data-id="358" class="check-item">&#9633; Log return departure</p>
+            <h3 data-id="359">MESSAGE FORMAT</h3>
+            <table data-id="360">
+                <tr data-id="361"><td data-id="362"><strong data-id="363">FROM:</strong> <span data-id="364" class="field-line">&nbsp;</span></td><td data-id="365"><strong data-id="366">TIME:</strong> <span data-id="367" class="field-line" style="width:70px;">&nbsp;</span></td></tr>
+                <tr data-id="368"><td data-id="369"><strong data-id="370">TO:</strong> <span data-id="371" class="field-line">&nbsp;</span></td><td data-id="372"><strong data-id="373">PRIORITY:</strong> <span data-id="374" class="field-line" style="width:60px;">&nbsp;</span></td></tr>
+                <tr data-id="375"><td data-id="376" colspan="2"><strong data-id="377">MESSAGE:</strong> <span data-id="378" class="field-line-long">&nbsp;</span></td></tr>
+                <tr data-id="379"><td data-id="380" colspan="2"><strong data-id="381">SIGNATURE:</strong> <span data-id="382" class="field-line">&nbsp;</span></td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 7
+    ════════════════════════════════════════════════════ -->
+    <div data-id="383" class="card-pair-label">Quick-Card 7 — Mesh Node Health Check</div>
+
+    <div data-id="384" class="card-row">
+        <!-- FRONT -->
+        <div data-id="385" class="card">
+            <div data-id="386" style="overflow:hidden;">
+                <span data-id="387" class="card-number">QUICK-CARD 7</span>
+                <span data-id="388" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="389" class="card-title">MESH NODE — DAILY / WEEKLY CHECK</div>
+            <h3 data-id="390">VISUAL CHECKS</h3>
+            <p data-id="391" class="check-item">&#9633; Antenna is secure and undamaged</p>
+            <p data-id="392" class="check-item">&#9633; Enclosure is sealed; no water intrusion</p>
+            <p data-id="393" class="check-item">&#9633; Solar panel is unobstructed and clean</p>
+            <p data-id="394" class="check-item">&#9633; No physical damage to cables</p>
+            <h3 data-id="395">ELECTRONIC CHECKS</h3>
+            <p data-id="396" class="check-item">&#9633; Device is powered on (indicator LED active)</p>
+            <p data-id="397" class="check-item">&#9633; Battery voltage: min <strong data-id="398">12.0V</strong> (lead-acid) / <strong data-id="399">3.0V/cell</strong> (LiFePO4)</p>
+            <p data-id="400" class="check-item">&#9633; Solar charging confirmed (midday check)</p>
+            <p data-id="401" class="check-item">&#9633; Node visible in Meshtastic network list</p>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="402" class="card">
+            <div data-id="403" style="overflow:hidden;">
+                <span data-id="404" class="card-number">QUICK-CARD 7</span>
+                <span data-id="405" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="406" class="card-title">TROUBLESHOOTING &amp; LOG FORMAT</div>
+            <table data-id="407">
+                <tr data-id="408"><th data-id="409">Problem</th><th data-id="410">Action</th></tr>
+                <tr data-id="411"><td data-id="412">Not visible on mesh?</td><td data-id="413">Check power, reboot, check antenna connection</td></tr>
+                <tr data-id="414"><td data-id="415">Short battery life?</td><td data-id="416">Check solar panel angle and cleanliness</td></tr>
+                <tr data-id="417"><td data-id="418">LED off?</td><td data-id="419">Check fuse, cable connections, battery voltage</td></tr>
+                <tr data-id="420"><td data-id="421">Enclosure wet inside?</td><td data-id="422">Check gasket seal; add desiccant pack</td></tr>
+            </table>
+            <h3 data-id="423">LOG ENTRY FORMAT</h3>
+            <table data-id="424">
+                <tr data-id="425"><td data-id="426"><strong data-id="427">Date:</strong> ____________</td><td data-id="428"><strong data-id="429">Checked by:</strong> ______________</td></tr>
+                <tr data-id="430"><td data-id="431"><strong data-id="432">Battery V:</strong> _______</td><td data-id="433"><strong data-id="434">Solar V:</strong> _______ &nbsp; <strong data-id="435">Status:</strong> _______</td></tr>
+                <tr data-id="436"><td data-id="437" colspan="2"><strong data-id="438">Notes:</strong> ________________________________________</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 8
+    ════════════════════════════════════════════════════ -->
+    <div data-id="439" class="card-pair-label">Quick-Card 8 — Power Conservation Guide</div>
+
+    <div data-id="440" class="card-row">
+        <!-- FRONT -->
+        <div data-id="441" class="card">
+            <div data-id="442" style="overflow:hidden;">
+                <span data-id="443" class="card-number">QUICK-CARD 8</span>
+                <span data-id="444" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="445" class="card-title">POWER CONSERVATION — EMERGENCY MODE</div>
+            <h3 data-id="446">PRIORITY ORDER (use only what's available)</h3>
+            <ol data-id="447">
+                <li data-id="448">Essential life-safety communications <strong data-id="449">(always on)</strong></li>
+                <li data-id="450">Net check-in radio <strong data-id="451">(scheduled times only)</strong></li>
+                <li data-id="452">Mesh node <strong data-id="453">(duty cycle: 50%)</strong></li>
+                <li data-id="454">Information gathering / monitoring</li>
+                <li data-id="455">Non-essential devices <strong data-id="456">(OFF)</strong></li>
+            </ol>
+            <h3 data-id="457">RADIO POWER SAVINGS</h3>
+            <ul data-id="458">
+                <li data-id="459">Transmit only when necessary</li>
+                <li data-id="460">Use <strong data-id="461">lowest power setting</strong> with reliable contact</li>
+                <li data-id="462">Monitor only between scheduled transmit times</li>
+                <li data-id="463">Share charging among group members</li>
+            </ul>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="464" class="card">
+            <div data-id="465" style="overflow:hidden;">
+                <span data-id="466" class="card-number">QUICK-CARD 8</span>
+                <span data-id="467" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="468" class="card-title">ESTIMATED BATTERY DRAW</div>
+            <table data-id="469">
+                <tr data-id="470"><th data-id="471">Device</th><th data-id="472">RX</th><th data-id="473">TX / Active</th></tr>
+                <tr data-id="474"><td data-id="475">Baofeng UV-5R</td><td data-id="476">~150 mA</td><td data-id="477">~1.6 A</td></tr>
+                <tr data-id="478"><td data-id="479">Meshtastic node</td><td data-id="480" colspan="2">~60–100 mA average</td></tr>
+                <tr data-id="481"><td data-id="482">Raspberry Pi 4</td><td data-id="483" colspan="2">~600 mA – 1.2 A</td></tr>
+                <tr data-id="484"><td data-id="485">LED lantern</td><td data-id="486" colspan="2">~50–200 mA</td></tr>
+                <tr data-id="487"><td data-id="488">Smartphone charging</td><td data-id="489" colspan="2">~500 mA – 2 A</td></tr>
+            </table>
+            <div data-id="490" class="callout-tip">
+                <strong data-id="491">RULE OF THUMB:</strong><br data-id="492">
+                Amp-Hours = (Device mA &divide; 1000) &times; Hours<br data-id="493">
+                <em data-id="494">Example: 100 mA &times; 24 h = <strong data-id="495">2.4 Ah</strong> per day per node</em>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 9
+    ════════════════════════════════════════════════════ -->
+    <div data-id="496" class="card-pair-label">Quick-Card 9 — Offline Data Access</div>
+
+    <div data-id="497" class="card-row">
+        <!-- FRONT -->
+        <div data-id="498" class="card">
+            <div data-id="499" style="overflow:hidden;">
+                <span data-id="500" class="card-number">QUICK-CARD 9</span>
+                <span data-id="501" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="502" class="card-title">ACCESSING OFFLINE RESOURCES</div>
+            <p data-id="503" style="font-size:9pt;"><strong data-id="504">ON YOUR USB KIT (insert USB drive):</strong></p>
+            <table data-id="505">
+                <tr data-id="506"><th data-id="507">Folder</th><th data-id="508">Contents</th></tr>
+                <tr data-id="509"><td data-id="510">MANUALS/</td><td data-id="511">Field manual, radio guides</td></tr>
+                <tr data-id="512"><td data-id="513">MAPS/</td><td data-id="514">Offline map files (OsmAnd / Maps.me)</td></tr>
+                <tr data-id="515"><td data-id="516">SOFTWARE/</td><td data-id="517">Meshtastic flasher, Briar APK, Kiwix</td></tr>
+                <tr data-id="518"><td data-id="519">MEDIA/</td><td data-id="520">Training videos, quick-card PDFs</td></tr>
+                <tr data-id="521"><td data-id="522">DATA/</td><td data-id="523">Contact directory, frequency lists</td></tr>
+                <tr data-id="524"><td data-id="525">TEMPLATES/</td><td data-id="526">Message forms, log sheets</td></tr>
+            </table>
+            <h3 data-id="527">OFFLINE WIKIPEDIA</h3>
+            <ol data-id="528">
+                <li data-id="529">Install Kiwix app (in SOFTWARE folder)</li>
+                <li data-id="530">Open Kiwix &rarr; Add library &rarr; Browse USB &rarr; open .zim file</li>
+                <li data-id="531">Full Wikipedia available offline</li>
+            </ol>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="532" class="card">
+            <div data-id="533" style="overflow:hidden;">
+                <span data-id="534" class="card-number">QUICK-CARD 9</span>
+                <span data-id="535" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="536" class="card-title">OFFLINE MAPS &amp; FIRMWARE FLASH</div>
+            <h3 data-id="537">OFFLINE MAPS — QUICK START</h3>
+            <table data-id="538">
+                <tr data-id="539"><th data-id="540">App</th><th data-id="541">Steps</th></tr>
+                <tr data-id="542"><td data-id="543"><strong data-id="544">OsmAnd</strong></td><td data-id="545">Files &rarr; Import &rarr; Select map file from USB</td></tr>
+                <tr data-id="546"><td data-id="547"><strong data-id="548">Maps.me</strong></td><td data-id="549">Menu &rarr; Download maps &rarr; My files &rarr; USB</td></tr>
+            </table>
+            <h3 data-id="550">MESHTASTIC FIRMWARE FLASH</h3>
+            <ol data-id="551">
+                <li data-id="552">Connect device via USB-C</li>
+                <li data-id="553">Open Meshtastic Flasher (in SOFTWARE folder)</li>
+                <li data-id="554">Select your <strong data-id="555">device model</strong></li>
+                <li data-id="556">Click <strong data-id="557">Flash</strong> — wait 2 minutes</li>
+                <li data-id="558">Pair via Bluetooth with Meshtastic app</li>
+            </ol>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 10
+    ════════════════════════════════════════════════════ -->
+    <div data-id="559" class="card-pair-label">Quick-Card 10 — Mutual Aid Principles</div>
+
+    <div data-id="560" class="card-row">
+        <!-- FRONT -->
+        <div data-id="561" class="card">
+            <div data-id="562" style="overflow:hidden;">
+                <span data-id="563" class="card-number">QUICK-CARD 10</span>
+                <span data-id="564" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="565" class="card-title">MUTUAL AID — CORE PRINCIPLES</div>
+            <table data-id="566">
+                <tr data-id="567"><th data-id="568">#</th><th data-id="569">Principle</th></tr>
+                <tr data-id="570"><td data-id="571">1</td><td data-id="572"><strong data-id="573">SOLIDARITY, NOT CHARITY</strong> — We help each other as equals</td></tr>
+                <tr data-id="574"><td data-id="575">2</td><td data-id="576"><strong data-id="577">NO GATEKEEPING</strong> — Access is not means-tested</td></tr>
+                <tr data-id="578"><td data-id="579">3</td><td data-id="580"><strong data-id="581">MOST VULNERABLE FIRST</strong> — Prioritize those with greatest need</td></tr>
+                <tr data-id="582"><td data-id="583">4</td><td data-id="584"><strong data-id="585">TRANSPARENT DISTRIBUTION</strong> — Account for all shared resources</td></tr>
+                <tr data-id="586"><td data-id="587">5</td><td data-id="588"><strong data-id="589">NO HIERARCHY IN CRISIS</strong> — Anyone can ask for and give help</td></tr>
+                <tr data-id="590"><td data-id="591">6</td><td data-id="592"><strong data-id="593">DOCUMENT EVERYTHING</strong> — Written records protect everyone</td></tr>
+                <tr data-id="594"><td data-id="595">7</td><td data-id="596"><strong data-id="597">SELF-CARE IS COMMUNITY CARE</strong> — Helpers must also rest</td></tr>
+            </table>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="598" class="card">
+            <div data-id="599" style="overflow:hidden;">
+                <span data-id="600" class="card-number">QUICK-CARD 10</span>
+                <span data-id="601" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="602" class="card-title">RESOURCE REQUEST PROCESS</div>
+            <ol data-id="603">
+                <li data-id="604">State the need <strong data-id="605">clearly and specifically</strong></li>
+                <li data-id="606">Verify with the requesting person / household</li>
+                <li data-id="607">Check available resources</li>
+                <li data-id="608">Fulfill from <strong data-id="609">nearest source</strong></li>
+                <li data-id="610">Document: what was given, to whom, when</li>
+                <li data-id="611">Replenish stock when possible</li>
+            </ol>
+            <div data-id="612" class="callout-warning">
+                <strong data-id="613">NEVER deny based on:</strong> identity, ability to pay, relationship to the group, or perceived "worthiness." Access is unconditional.
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 11
+    ════════════════════════════════════════════════════ -->
+    <div data-id="614" class="card-pair-label">Quick-Card 11 — After-Action Review (AAR)</div>
+
+    <div data-id="615" class="card-row">
+        <!-- FRONT -->
+        <div data-id="616" class="card">
+            <div data-id="617" style="overflow:hidden;">
+                <span data-id="618" class="card-number">QUICK-CARD 11</span>
+                <span data-id="619" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="620" class="card-title">AFTER-ACTION REVIEW — TEMPLATE</div>
+            <p data-id="621" style="font-size:9pt;">Conduct within <strong data-id="622">24 hours</strong> of any exercise or incident.</p>
+            <table data-id="623">
+                <tr data-id="624"><th data-id="625" style="width:38%;">Question</th><th data-id="626">Notes</th></tr>
+                <tr data-id="627">
+                    <td data-id="628"><strong data-id="629">WHAT WAS PLANNED?</strong><br data-id="630"><em data-id="631">(Intended outcome)</em></td>
+                    <td data-id="632"><span data-id="633" class="field-line-long">&nbsp;</span><br data-id="634"><span data-id="635" class="field-line-long">&nbsp;</span></td>
+                </tr>
+                <tr data-id="636">
+                    <td data-id="637"><strong data-id="638">WHAT HAPPENED?</strong><br data-id="639"><em data-id="640">(Factual description)</em></td>
+                    <td data-id="641"><span data-id="642" class="field-line-long">&nbsp;</span><br data-id="643"><span data-id="644" class="field-line-long">&nbsp;</span></td>
+                </tr>
+                <tr data-id="645">
+                    <td data-id="646"><strong data-id="647">WHAT WENT WELL?</strong></td>
+                    <td data-id="648">1. ________ 2. ________ 3. ________</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="649" class="card">
+            <div data-id="650" style="overflow:hidden;">
+                <span data-id="651" class="card-number">QUICK-CARD 11</span>
+                <span data-id="652" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="653" class="card-title">AAR — IMPROVEMENT &amp; ACTION ITEMS</div>
+            <p data-id="654" style="font-size:9pt;"><strong data-id="655">WHAT NEEDS IMPROVEMENT?</strong></p>
+            <p data-id="656" style="font-size:9pt;">1. _________________ &nbsp; 2. _________________ &nbsp; 3. _________________</p>
+            <h3 data-id="657">ACTION ITEMS</h3>
+            <table data-id="658">
+                <tr data-id="659"><th data-id="660">Item</th><th data-id="661">Owner</th><th data-id="662">Due Date</th></tr>
+                <tr data-id="663"><td data-id="664">&nbsp;</td><td data-id="665">&nbsp;</td><td data-id="666">&nbsp;</td></tr>
+                <tr data-id="667"><td data-id="668">&nbsp;</td><td data-id="669">&nbsp;</td><td data-id="670">&nbsp;</td></tr>
+                <tr data-id="671"><td data-id="672">&nbsp;</td><td data-id="673">&nbsp;</td><td data-id="674">&nbsp;</td></tr>
+            </table>
+            <table data-id="675" style="margin-top:4pt;">
+                <tr data-id="676"><td data-id="677"><strong data-id="678">WHO WAS PRESENT:</strong> __________________________</td></tr>
+                <tr data-id="679"><td data-id="680"><strong data-id="681">DATE:</strong> _____________ &nbsp; <strong data-id="682">FACILITATOR:</strong> _______________</td></tr>
+                <tr data-id="683"><td data-id="684"><strong data-id="685">NEXT REVIEW DATE:</strong> ____________________________</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         QUICK-CARD 12
+    ════════════════════════════════════════════════════ -->
+    <div data-id="686" class="card-pair-label">Quick-Card 12 — Go-Box Essentials</div>
+
+    <div data-id="687" class="card-row">
+        <!-- FRONT -->
+        <div data-id="688" class="card">
+            <div data-id="689" style="overflow:hidden;">
+                <span data-id="690" class="card-number">QUICK-CARD 12</span>
+                <span data-id="691" class="card-face-label">&#9654; FRONT</span>
+            </div>
+            <div data-id="692" class="card-title">GO-BOX — DEPLOY CHECKLIST</div>
+            <p data-id="693" class="check-item">&#9633; VHF/UHF radio + programmed frequencies</p>
+            <p data-id="694" class="check-item">&#9633; HF radio (if equipped) + antenna + tuner</p>
+            <p data-id="695" class="check-item">&#9633; Meshtastic device + charged battery</p>
+            <p data-id="696" class="check-item">&#9633; Antenna(s) + coax cables + adapters</p>
+            <p data-id="697" class="check-item">&#9633; Power: battery bank + solar panel + cables</p>
+            <p data-id="698" class="check-item">&#9633; USB kit (32 GB) + laptop / tablet</p>
+            <p data-id="699" class="check-item">&#9633; Logbook + pens + message forms</p>
+            <p data-id="700" class="check-item">&#9633; Quick-cards (this set, laminated)</p>
+            <p data-id="701" class="check-item">&#9633; License copy + FCC authorization</p>
+            <p data-id="702" class="check-item">&#9633; Headset / earphones for noise environments</p>
+        </div>
+
+        <!-- BACK -->
+        <div data-id="703" class="card">
+            <div data-id="704" style="overflow:hidden;">
+                <span data-id="705" class="card-number">QUICK-CARD 12</span>
+                <span data-id="706" class="card-face-label">&#9664; BACK</span>
+            </div>
+            <div data-id="707" class="card-title">SETUP &amp; TEARDOWN ORDER</div>
+            <h3 data-id="708">SETUP ORDER</h3>
+            <ol data-id="709">
+                <li data-id="710">Select <strong data-id="711">elevated, open</strong> location</li>
+                <li data-id="712">Set up <strong data-id="713">antenna first</strong> (before radio)</li>
+                <li data-id="714">Connect power source; verify voltage</li>
+                <li data-id="715">Power on radio — check frequency</li>
+                <li data-id="716">Monitor before transmitting</li>
+                <li data-id="717">Check in on local net or calling frequency</li>
+                <li data-id="718">Establish and maintain <strong data-id="719">communications log</strong></li>
+            </ol>
+            <h3 data-id="720">TEARDOWN</h3>
+            <p data-id="721" class="check-item">&#9633; Log final entry (time, reason for teardown)</p>
+            <p data-id="722" class="check-item">&#9633; Disconnect antenna <strong data-id="723">before</strong> moving radio</p>
+            <p data-id="724" class="check-item">&#9633; Secure all cables before transport</p>
+            <p data-id="725" class="check-item">&#9633; Verify USB kit is packed</p>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════
+         DOCUMENT FOOTER
+    ════════════════════════════════════════════════════ -->
+    <div data-id="726" class="doc-footer">
+        <p data-id="727">
+            <strong data-id="728">These quick-cards are part of the Offline Network Resilience System.</strong><br data-id="729">
+            Print. Laminate. Distribute freely.
+        </p>
+        <p data-id="730">Version 1.0 &nbsp;&mdash;&nbsp; 2026 &nbsp;&mdash;&nbsp; <strong data-id="731">CC BY-SA 4.0</strong> &nbsp;&mdash;&nbsp; 12 Cards Total</p>
+        <p data-id="732" style="font-size:7.5pt; color:#888888;">No internet required. No registration required. Share this document with anyone who needs it.</p>
+    </div>
+
+</body>
+</html>

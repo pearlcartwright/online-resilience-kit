@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Offline Network Resilience Field Manual</title>
+    <style>
+        :root { color-scheme: light only; }
+
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #000000;
+            background: #ffffff;
+            max-width: 816px;
+            margin: 0 auto;
+            padding: 72px;
+        }
+
+        h1 { font-family: Calibri, sans-serif; font-size: 22pt; font-weight: bold; margin-top: 24pt; margin-bottom: 6pt; color: #1a1a1a; line-height: 1.3; }
+        h2 { font-family: Calibri, sans-serif; font-size: 15pt; font-weight: bold; margin-top: 18pt; margin-bottom: 6pt; color: #1a1a1a; line-height: 1.3; }
+        h3 { font-family: Calibri, sans-serif; font-size: 12pt; font-weight: bold; margin-top: 12pt; margin-bottom: 4pt; color: #1a1a1a; line-height: 1.3; }
+        p { margin-top: 0; margin-bottom: 6pt; }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 12pt; }
+        th, td { border: 1px solid #000000; padding: 5px 7px; text-align: left; vertical-align: top; font-size: 10pt; }
+        th { font-weight: bold; background-color: #d9e1f2; }
+        tr:nth-child(even) td { background-color: #f5f7fc; }
+
+        ul, ol { margin-top: 4pt; margin-bottom: 6pt; padding-left: 36px; }
+        li { margin-bottom: 3pt; }
+
+        .cover-page {
+            text-align: center;
+            padding: 60pt 0 40pt 0;
+            border-bottom: 3px solid #1a1a1a;
+            margin-bottom: 36pt;
+        }
+        .cover-title {
+            font-family: Calibri, sans-serif;
+            font-size: 28pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            letter-spacing: 1pt;
+            margin-bottom: 10pt;
+            line-height: 1.2;
+        }
+        .cover-subtitle {
+            font-family: Calibri, sans-serif;
+            font-size: 15pt;
+            font-weight: bold;
+            color: #2b5797;
+            margin-bottom: 16pt;
+        }
+        .cover-rule {
+            border: none;
+            border-top: 2px solid #1a1a1a;
+            margin: 18pt auto;
+            width: 60%;
+        }
+        .cover-edition {
+            font-size: 12pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 8pt;
+        }
+        .cover-tagline {
+            font-size: 13pt;
+            font-style: italic;
+            color: #333333;
+            margin-bottom: 12pt;
+        }
+        .cover-note {
+            font-size: 9pt;
+            color: #555555;
+            border: 1px solid #aaaaaa;
+            display: inline-block;
+            padding: 6px 16px;
+            margin-top: 16pt;
+        }
+
+        .toc-section {
+            margin-bottom: 24pt;
+        }
+        .toc-main {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 2pt;
+        }
+        .toc-sub {
+            font-size: 10pt;
+            padding-left: 24px;
+            margin-bottom: 1pt;
+            color: #222222;
+        }
+        .toc-dots {
+            color: #888888;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 2px solid #1a1a1a;
+            margin: 28pt 0 14pt 0;
+        }
+        .section-label {
+            font-family: Calibri, sans-serif;
+            font-size: 9pt;
+            font-weight: bold;
+            letter-spacing: 2pt;
+            color: #2b5797;
+            text-transform: uppercase;
+            margin-bottom: 2pt;
+        }
+
+        .callout {
+            border: 1px solid #cccccc;
+            border-left: 4px solid #cccccc;
+            background-color: #f9f9f9;
+            padding: 10px 14px;
+            margin: 10pt 0;
+        }
+        .callout-label {
+            font-weight: bold;
+            margin-bottom: 3pt;
+            font-size: 10pt;
+        }
+        .callout-tip { border-left-color: #2b5797; background-color: #e8eef7; }
+        .callout-warning { border-left-color: #cc0000; background-color: #fce8e8; }
+        .callout-note { border-left-color: #555555; background-color: #f5f5f5; }
+        .callout-important { border-left-color: #cc7a00; background-color: #fff4e0; }
+
+        .page-break { page-break-after: always; }
+
+        .checklist-item { margin-bottom: 5pt; }
+        .checkbox { display: inline-block; width: 12pt; height: 12pt; border: 1px solid #000000; margin-right: 8px; vertical-align: middle; }
+
+        .fill-line {
+            border: none;
+            border-bottom: 1px solid #000000;
+            width: 100%;
+            display: inline-block;
+            height: 14pt;
+            margin-bottom: 6pt;
+        }
+
+        .appendix-header {
+            font-family: Calibri, sans-serif;
+            font-size: 16pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 4pt;
+            margin-top: 28pt;
+            margin-bottom: 10pt;
+        }
+
+        .end-notes {
+            border-top: 2px solid #1a1a1a;
+            margin-top: 36pt;
+            padding-top: 14pt;
+            text-align: center;
+        }
+
+        .phonetic-table td:first-child { font-weight: bold; width: 8%; }
+        .phonetic-table td:nth-child(2) { width: 18%; }
+
+        blockquote {
+            border-left: 3px solid #2b5797;
+            margin: 12pt 0;
+            padding: 6pt 14pt;
+            color: #333333;
+            font-style: italic;
+        }
+
+        .version-header { font-size: 9pt; color: #555555; text-align: right; margin-bottom: 4pt; }
+
+        @media print { body { padding: 0; max-width: none; } .callout { background: none; } }
+    </style>
+</head>
+<body data-id="0">
+
+<!-- ============================================================ -->
+<!-- COVER PAGE -->
+<!-- ============================================================ -->
+<div data-id="1" class="cover-page">
+    <div data-id="2" class="version-header">UNCLASSIFIED — FREE COMMUNITY USE — REPRODUCE FREELY</div>
+    <div data-id="3" class="cover-title">OFFLINE NETWORK RESILIENCE<br data-id="4">FIELD MANUAL</div>
+    <hr data-id="5" class="cover-rule">
+    <div data-id="6" class="cover-subtitle">Community Communications When the Grid Goes Down</div>
+    <hr data-id="7" class="cover-rule">
+    <div data-id="8" class="cover-edition">First Edition — 2026</div>
+    <div data-id="9" style="height: 18pt;"></div>
+    <div data-id="10" class="cover-tagline">"When infrastructure fails, community survives."</div>
+    <div data-id="11" style="height: 14pt;"></div>
+    <div data-id="12" class="cover-note">Designed for printing and USB distribution. No internet connection required.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TABLE OF CONTENTS -->
+<!-- ============================================================ -->
+<h1 data-id="13" style="letter-spacing:1pt;">TABLE OF CONTENTS</h1>
+
+<div data-id="14" class="toc-section">
+    <div data-id="15" class="toc-main">SECTION 1 — FOUNDATIONAL PRINCIPLES</div>
+    <div data-id="16" class="toc-sub">1.1 Why Offline Networks Matter</div>
+    <div data-id="17" class="toc-sub">1.2 The Three Pillars of Resilience</div>
+    <div data-id="18" class="toc-sub">1.3 Legal and Ethical Framework</div>
+    <div data-id="19" class="toc-sub">1.4 Threat Assessment Matrix</div>
+</div>
+
+<div data-id="20" class="toc-section">
+    <div data-id="21" class="toc-main">SECTION 2 — MESH NETWORKING SETUP</div>
+    <div data-id="22" class="toc-sub">2.1 What Is a Mesh Network?</div>
+    <div data-id="23" class="toc-sub">2.2 Recommended Software Platforms</div>
+    <div data-id="24" class="toc-sub">2.3 Hardware Requirements</div>
+    <div data-id="25" class="toc-sub">2.4 Network Topology Planning</div>
+    <div data-id="26" class="toc-sub">2.5 Step-by-Step Node Deployment</div>
+    <div data-id="27" class="toc-sub">2.6 Network Security Basics</div>
+</div>
+
+<div data-id="28" class="toc-section">
+    <div data-id="29" class="toc-main">SECTION 3 — RADIO COMMUNICATIONS</div>
+    <div data-id="30" class="toc-sub">3.1 Radio Frequency Overview</div>
+    <div data-id="31" class="toc-sub">3.2 License Classes and Requirements</div>
+    <div data-id="32" class="toc-sub">3.3 Recommended Radio Equipment</div>
+    <div data-id="33" class="toc-sub">3.4 Emergency Frequencies</div>
+    <div data-id="34" class="toc-sub">3.5 Operating Procedures</div>
+    <div data-id="35" class="toc-sub">3.6 Repeater Networks and Linking</div>
+    <div data-id="36" class="toc-sub">3.7 Digital Radio Modes</div>
+</div>
+
+<div data-id="37" class="toc-section">
+    <div data-id="38" class="toc-main">SECTION 4 — PHYSICAL INFORMATION DISTRIBUTION</div>
+    <div data-id="39" class="toc-sub">4.1 The Information Runner System</div>
+    <div data-id="40" class="toc-sub">4.2 Community Bulletin Board Network</div>
+    <div data-id="41" class="toc-sub">4.3 Printed Information Systems</div>
+    <div data-id="42" class="toc-sub">4.4 Dead Drop Locations</div>
+    <div data-id="43" class="toc-sub">4.5 Visual Signaling</div>
+</div>
+
+<div data-id="44" class="toc-section">
+    <div data-id="45" class="toc-main">SECTION 5 — POWER AND ENERGY RESILIENCE</div>
+    <div data-id="46" class="toc-sub">5.1 Power Hierarchy for Communications</div>
+    <div data-id="47" class="toc-sub">5.2 Solar Power Basics</div>
+    <div data-id="48" class="toc-sub">5.3 Battery Systems</div>
+    <div data-id="49" class="toc-sub">5.4 Generator Safety</div>
+    <div data-id="50" class="toc-sub">5.5 Human-Powered Options</div>
+    <div data-id="51" class="toc-sub">5.6 Power Conservation</div>
+</div>
+
+<div data-id="52" class="toc-section">
+    <div data-id="53" class="toc-main">SECTION 6 — DATA AND INFORMATION MANAGEMENT</div>
+    <div data-id="54" class="toc-sub">6.1 Offline Data Storage Strategy</div>
+    <div data-id="55" class="toc-sub">6.2 Recommended Offline Apps</div>
+    <div data-id="56" class="toc-sub">6.3 USB Kit Contents</div>
+    <div data-id="57" class="toc-sub">6.4 Data Security and Privacy</div>
+    <div data-id="58" class="toc-sub">6.5 Information Freshness</div>
+</div>
+
+<div data-id="59" class="toc-section">
+    <div data-id="60" class="toc-main">SECTION 7 — COMMUNITY ORGANIZATION</div>
+    <div data-id="61" class="toc-sub">7.1 Roles and Responsibilities</div>
+    <div data-id="62" class="toc-sub">7.2 The Neighborhood Cell Structure</div>
+    <div data-id="63" class="toc-sub">7.3 Communication Trees</div>
+    <div data-id="64" class="toc-sub">7.4 Decision-Making in Emergencies</div>
+    <div data-id="65" class="toc-sub">7.5 Mutual Aid Principles</div>
+    <div data-id="66" class="toc-sub">7.6 Integration with Official Emergency Management</div>
+</div>
+
+<div data-id="67" class="toc-section">
+    <div data-id="68" class="toc-main">SECTION 8 — DRILLS AND EXERCISES</div>
+    <div data-id="69" class="toc-sub">8.1 Why Regular Drills Matter</div>
+    <div data-id="70" class="toc-sub">8.2 Exercise Types</div>
+    <div data-id="71" class="toc-sub">8.3 Monthly Radio Net Procedure</div>
+    <div data-id="72" class="toc-sub">8.4 Mesh Network Stress Test</div>
+    <div data-id="73" class="toc-sub">8.5 After-Action Reviews</div>
+    <div data-id="74" class="toc-sub">8.6 Annual Full-System Exercise</div>
+</div>
+
+<div data-id="75" class="toc-section">
+    <div data-id="76" class="toc-main">SECTION 9 — QUICK REFERENCE AND RESOURCES</div>
+    <div data-id="77" class="toc-sub">9.1 Emergency Contact Directory (Fill-in Template)</div>
+    <div data-id="78" class="toc-sub">9.2 Node Registry Template</div>
+    <div data-id="79" class="toc-sub">9.3 Frequency Quick Reference</div>
+    <div data-id="80" class="toc-sub">9.4 Glossary of Terms</div>
+    <div data-id="81" class="toc-sub">9.5 Recommended Reading and Resources</div>
+    <div data-id="82" class="toc-sub">9.6 Version History and Update Log</div>
+</div>
+
+<div data-id="83" class="toc-section">
+    <div data-id="84" class="toc-main">APPENDICES</div>
+    <div data-id="85" class="toc-sub">Appendix A — NATO Phonetic Alphabet</div>
+    <div data-id="86" class="toc-sub">Appendix B — SALUTE Report Format</div>
+    <div data-id="87" class="toc-sub">Appendix C — Mesh Node Assembly Checklist</div>
+    <div data-id="88" class="toc-sub">Appendix D — Go-Box Build Guide</div>
+</div>
+
+<div data-id="89" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1 — FOUNDATIONAL PRINCIPLES -->
+<!-- ============================================================ -->
+<hr data-id="90" class="section-divider">
+<div data-id="91" class="section-label">Section 1</div>
+<h1 data-id="92">FOUNDATIONAL PRINCIPLES</h1>
+
+<h2 data-id="93">1.1 Why Offline Networks Matter</h2>
+
+<p data-id="94">Modern society has built its communications infrastructure on a foundation that is simultaneously powerful and fragile. The internet, cellular networks, and telephone systems all depend on centralized physical infrastructure — data centers, fiber optic cables, cellular towers, and power grids — that can fail suddenly and completely. When that infrastructure fails, communities that have done nothing to prepare are left silent.</p>
+
+<p data-id="95">The vulnerabilities are well-documented. A single large-scale power grid failure can simultaneously disable every internet router, cellular base station, and landline switching center across hundreds of square miles. Natural disasters sever fiber lines and topple towers. Cyberattacks on internet service providers (ISPs) can deny entire regions access to digital communications. In moments of mass emergency — exactly when communication matters most — conventional systems become overwhelmed or non-functional.</p>
+
+<p data-id="96"><strong data-id="97">The case for redundancy</strong> is simple: no critical system should have a single point of failure. Commercial aviation, nuclear power, and military communications all rely on layered, redundant systems for this reason. Community communications must adopt the same philosophy. A community that has invested in offline-capable mesh networks, licensed radio operators, and physical information distribution will be able to coordinate rescue, distribute resources, and maintain social cohesion when all other systems have gone dark.</p>
+
+<p data-id="98"><strong data-id="99">Layered communications</strong> means maintaining multiple independent pathways for information to travel. If the mesh network node is down, use radio. If radio is jammed or operators are unavailable, use physical runners. If runners cannot travel, use pre-positioned bulletin boards and printed directories. Each layer compensates for failures in the others.</p>
+
+<p data-id="100">The <strong data-id="101">"no single point of failure" principle</strong> demands that the community network be designed so that the loss of any one component — one node, one operator, one power source — does not silence the whole system. Distributed design, redundant nodes, trained operators, and pre-positioned materials all contribute to this goal.</p>
+
+<h2 data-id="102">1.2 The Three Pillars of Resilience</h2>
+
+<p data-id="103">This manual organizes community communications resilience around three complementary pillars. Together, they form a layered system that is far more robust than any single technology or approach.</p>
+
+<h3 data-id="104">Pillar 1 — Local Mesh Networks</h3>
+<p data-id="105">A <strong data-id="106">mesh network</strong> is a system of devices that communicate directly with each other without requiring a central server or internet connection. Each device in the mesh both sends and receives messages, and also <em data-id="107">relays</em> messages for other devices in the network. This means messages can travel across the network by hopping from node to node even when no direct line of sight or central infrastructure exists. Mesh networks based on LoRa (Long Range) radio technology, running software such as <strong data-id="108">Meshtastic</strong>, can cover kilometers per node and are resilient to individual node failures — if one node goes down, the network automatically routes around it.</p>
+
+<h3 data-id="109">Pillar 2 — Radio Communications</h3>
+<p data-id="110"><strong data-id="111">Radio</strong> is the oldest and most battle-tested emergency communications technology. It does not require the internet, cell towers, or any centralized infrastructure. Licensed amateur (ham) radio operators can communicate locally on VHF/UHF frequencies, regionally on HF (shortwave) frequencies, and even globally under the right conditions. Unlicensed services such as FRS (Family Radio Service) provide simple, accessible short-range communication for households without any training. Radio communication is immediate, real-time, and works as long as the transmitter has power.</p>
+
+<h3 data-id="112">Pillar 3 — Physical Information Distribution</h3>
+<p data-id="113">When electronics fail or power is unavailable, <strong data-id="114">physical information distribution</strong> becomes the backbone of community communication. This pillar encompasses trained information runners who carry written messages on foot or bicycle, community bulletin board networks at known fixed locations, pre-printed directories and reference materials, and dead drop locations for asynchronous message exchange. Physical distribution requires no technology, no power, and no infrastructure — only people, paper, and pre-agreed protocols.</p>
+
+<p data-id="115">These three pillars are not competitors; they are complements. Each fills gaps in the others. A community that has developed all three has true communications resilience.</p>
+
+<h2 data-id="116">1.3 Legal and Ethical Framework</h2>
+
+<h3 data-id="117">FCC Licensing</h3>
+<p data-id="118">Radio communications in the United States are regulated by the <strong data-id="119">Federal Communications Commission (FCC)</strong>. Different radio services have different licensing requirements:</p>
+<ul data-id="120">
+    <li data-id="121"><strong data-id="122">FRS (Family Radio Service):</strong> No license required. Low-power handheld radios. Fixed channels, limited range. Legal for all users.</li>
+    <li data-id="123"><strong data-id="124">GMRS (General Mobile Radio Service):</strong> Requires an FCC GMRS license ($35, 10-year term, no exam). Covers the licensee and immediate family. Higher power than FRS, repeater-capable.</li>
+    <li data-id="125"><strong data-id="126">Amateur (Ham) Radio:</strong> Requires passing an FCC-administered exam for a Technician, General, or Extra class license. No fee for the license itself (exam fee varies by VEC). Provides access to a wide range of frequencies and modes.</li>
+    <li data-id="127"><strong data-id="128">CB Radio:</strong> No license required. 40 channels in the 27 MHz band. Limited range and often congested.</li>
+</ul>
+<p data-id="129">Operating on licensed frequencies without proper authorization is a federal violation. Community members should obtain appropriate licenses before an emergency, not during one.</p>
+
+<h3 data-id="130">Legal Use of Mesh Networking Tools</h3>
+<p data-id="131">Software mesh networking tools such as Meshtastic operate on ISM (Industrial, Scientific, and Medical) bands — specifically 915 MHz in the United States — that are unlicensed for low-power use. These tools are legal to use without a radio license for standard messaging. Mesh networking software on smartphones using WiFi operates on licensed spectrum managed through device certification; no user license is required. Always verify that the hardware and frequency band you use comply with current FCC Part 15 rules.</p>
+
+<h3 data-id="132">Privacy Considerations</h3>
+<p data-id="133">Community mesh networks are shared infrastructure. All participants should understand that messages may be visible to other network participants unless encrypted. <strong data-id="134">Do not transmit sensitive personal information</strong> — medical details, financial information, home security status — over unencrypted channels. The network should have clear policies about data retention, who can access message logs, and how user information is protected.</p>
+
+<h3 data-id="135">Community Consent and Governance</h3>
+<p data-id="136">The community communications network is a shared resource and must be governed by the community it serves. No individual or organization should control the network unilaterally. Governance decisions — about channel encryption keys, node placement, access policies — should be made transparently, with community input, and documented in writing.</p>
+
+<h3 data-id="137">Mutual Aid Ethics</h3>
+<p data-id="138">The guiding ethical principle of this network is <strong data-id="139">mutual aid</strong>: the network exists to serve the whole community, not to benefit those who built it. In practice, this means: open access for all community members, no gatekeeping based on technical skill, prioritizing the most vulnerable (elderly, disabled, non-English-speaking residents) in communications and resource allocation, and transparent operation at all times.</p>
+
+<h2 data-id="140">1.4 Threat Assessment Matrix</h2>
+
+<table data-id="141">
+    <thead data-id="142">
+        <tr data-id="143">
+            <th data-id="144">Threat</th>
+            <th data-id="145">Likelihood</th>
+            <th data-id="146">Impact</th>
+            <th data-id="147">Primary Comms Failure</th>
+            <th data-id="148">Recommended Response</th>
+        </tr>
+    </thead>
+    <tbody data-id="149">
+        <tr data-id="150">
+            <td data-id="151"><strong data-id="152">Power Grid Failure</strong></td>
+            <td data-id="153">High</td>
+            <td data-id="154">Critical</td>
+            <td data-id="155">Internet, cell towers, landlines all fail within hours as backup generators exhaust fuel</td>
+            <td data-id="156">Activate mesh network; switch to battery/solar-powered radios; deploy runners; open bulletin boards</td>
+        </tr>
+        <tr data-id="157">
+            <td data-id="158"><strong data-id="159">Internet Backbone Disruption</strong></td>
+            <td data-id="160">Medium</td>
+            <td data-id="161">High</td>
+            <td data-id="162">Internet-dependent services (VOIP, streaming, apps) fail; cell may remain via SMS</td>
+            <td data-id="163">Activate local mesh network; use radio for coordination; switch to offline-stored data</td>
+        </tr>
+        <tr data-id="164">
+            <td data-id="165"><strong data-id="166">Natural Disaster (Tornado/Flood)</strong></td>
+            <td data-id="167">Medium–High</td>
+            <td data-id="168">Critical</td>
+            <td data-id="169">Physical infrastructure destroyed; roads blocked; cell towers damaged; power out</td>
+            <td data-id="170">All three pillars activated simultaneously; runners navigate on foot; radio for resource coordination</td>
+        </tr>
+        <tr data-id="171">
+            <td data-id="172"><strong data-id="173">Cyberattack on ISPs</strong></td>
+            <td data-id="174">Low–Medium</td>
+            <td data-id="175">High</td>
+            <td data-id="176">Internet severed at provider level; local WiFi may still function; cell may be unaffected</td>
+            <td data-id="177">Activate local mesh network immediately; maintain radio readiness; activate USB data kits</td>
+        </tr>
+        <tr data-id="178">
+            <td data-id="179"><strong data-id="180">Cell Tower Overload</strong></td>
+            <td data-id="181">High</td>
+            <td data-id="182">Moderate</td>
+            <td data-id="183">Voice calls fail; SMS may still work; data throughput collapses</td>
+            <td data-id="184">Avoid cellular for routine comms; use mesh network and radio; preserve cell for true emergencies</td>
+        </tr>
+        <tr data-id="185">
+            <td data-id="186"><strong data-id="187">Physical Infrastructure Damage</strong></td>
+            <td data-id="188">Medium</td>
+            <td data-id="189">High</td>
+            <td data-id="190">Fiber cuts, tower collapses sever specific areas; outage may be localized</td>
+            <td data-id="191">Route communications around damaged area via radio; alert mutual aid partners; document damage</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="192" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2 — MESH NETWORKING SETUP -->
+<!-- ============================================================ -->
+<hr data-id="193" class="section-divider">
+<div data-id="194" class="section-label">Section 2</div>
+<h1 data-id="195">MESH NETWORKING SETUP</h1>
+
+<h2 data-id="196">2.1 What Is a Mesh Network?</h2>
+
+<p data-id="197">In a conventional home network, all devices connect to a single router, which connects to the internet through your ISP. The router is the central hub. Remove it, and no device can communicate with any other. This is the fragile model that most people rely on every day.</p>
+
+<p data-id="198">A <strong data-id="199">mesh network</strong> works differently. In a mesh, every device can connect directly to every other device within radio range. There is no central router. When Device A wants to send a message to Device D, but they are out of direct range, Device B and Device C — which are in range of both — automatically relay the message. The network <strong data-id="200">self-heals</strong>: if Device C fails, the network finds another path. No single device is critical to the whole system.</p>
+
+<p data-id="201">For community emergency communications, the most practical mesh technology is <strong data-id="202">LoRa (Long Range)</strong> radio, running firmware such as Meshtastic. LoRa uses low-power radio signals in the 915 MHz band (US) to transmit text messages across distances of 1–10 km (urban to rural line-of-sight). Nodes require minimal power — a small solar panel and battery are sufficient for continuous operation. The hardware is inexpensive and widely available.</p>
+
+<p data-id="203">A mesh network is not a replacement for the internet. It carries text messages, GPS position data, and small data packets. It is a neighborhood-scale communication system that works entirely without external infrastructure.</p>
+
+<div data-id="204" class="callout callout-tip">
+    <div data-id="205" class="callout-label">KEY CONCEPT</div>
+    In a mesh network, every node is both a client (sending and receiving messages) and a router (relaying messages for other nodes). There is no center. This is what makes it resilient.
+</div>
+
+<h2 data-id="206">2.2 Recommended Software Platforms</h2>
+
+<table data-id="207">
+    <thead data-id="208">
+        <tr data-id="209">
+            <th data-id="210">Platform</th>
+            <th data-id="211">Type</th>
+            <th data-id="212">Range</th>
+            <th data-id="213">Setup Difficulty</th>
+            <th data-id="214">Cost</th>
+            <th data-id="215">Best Use Case</th>
+        </tr>
+    </thead>
+    <tbody data-id="216">
+        <tr data-id="217">
+            <td data-id="218"><strong data-id="219">Meshtastic (LoRa radio)</strong></td>
+            <td data-id="220">LoRa radio firmware + app</td>
+            <td data-id="221">1–10 km per hop</td>
+            <td data-id="222">Low–Medium</td>
+            <td data-id="223">$30–$60/node</td>
+            <td data-id="224">Primary community mesh backbone; text messaging, GPS position sharing</td>
+        </tr>
+        <tr data-id="225">
+            <td data-id="226"><strong data-id="227">goTenna Mesh</strong></td>
+            <td data-id="228">LoRa radio + smartphone</td>
+            <td data-id="229">1–6 km per hop</td>
+            <td data-id="230">Low</td>
+            <td data-id="231">$179/pair</td>
+            <td data-id="232">User-friendly option for non-technical participants; pairs with smartphone</td>
+        </tr>
+        <tr data-id="233">
+            <td data-id="234"><strong data-id="235">Briar</strong></td>
+            <td data-id="236">Android app (WiFi/Bluetooth)</td>
+            <td data-id="237">~100 m (Bluetooth), ~50 m (WiFi Direct)</td>
+            <td data-id="238">Very Low</td>
+            <td data-id="239">Free</td>
+            <td data-id="240">Short-range messaging between smartphones in same area; no hardware required</td>
+        </tr>
+        <tr data-id="241">
+            <td data-id="242"><strong data-id="243">Meshtastic + Raspberry Pi</strong></td>
+            <td data-id="244">Store-and-forward gateway node</td>
+            <td data-id="245">Extended (gateway function)</td>
+            <td data-id="246">Medium–High</td>
+            <td data-id="247">$80–$150/node</td>
+            <td data-id="248">Fixed community hub node with message storage, BBS function, gateway capability</td>
+        </tr>
+        <tr data-id="249">
+            <td data-id="250"><strong data-id="251">BATMAN-adv (Linux)</strong></td>
+            <td data-id="252">WiFi mesh protocol (kernel module)</td>
+            <td data-id="253">Up to ~300 m per hop (WiFi)</td>
+            <td data-id="254">High</td>
+            <td data-id="255">Hardware cost only</td>
+            <td data-id="256">High-bandwidth local mesh; requires Linux-capable hardware; suitable for fixed sites</td>
+        </tr>
+        <tr data-id="257">
+            <td data-id="258"><strong data-id="259">Reticulum Network Stack</strong></td>
+            <td data-id="260">Cryptographic networking layer</td>
+            <td data-id="261">Varies by transport layer</td>
+            <td data-id="262">High</td>
+            <td data-id="263">Free (open source)</td>
+            <td data-id="264">Secure, encrypted communications over any medium; advanced users; extensible platform</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="265" class="callout callout-note">
+    <div data-id="266" class="callout-label">RECOMMENDATION</div>
+    <strong data-id="267">Meshtastic on LoRa hardware is the recommended primary platform</strong> for most communities. It has the best balance of range, cost, ease of use, and active development. Use Briar as a supplementary short-range option for smartphone users.
+</div>
+
+<h2 data-id="268">2.3 Hardware Requirements</h2>
+
+<p data-id="269">A basic community mesh node requires the following components:</p>
+
+<ul data-id="270">
+    <li data-id="271"><strong data-id="272">LoRa radio module:</strong> A Meshtastic-compatible board such as the TTGO T-Beam v1.2 (with GPS) or Heltec LoRa 32 v3. These boards combine a microcontroller, LoRa radio module, and (in the case of the T-Beam) GPS receiver on a single circuit board.</li>
+    <li data-id="273"><strong data-id="274">Antenna:</strong> The stock whip antenna (included with most boards) is adequate for basic nodes. For improved range, a J-pole or slim-jim antenna made from 300-ohm twin-lead provides gain over the whip. For directional point-to-point links, a Yagi antenna provides significant gain but must be aimed precisely.</li>
+    <li data-id="275"><strong data-id="276">Single-Board Computer (gateway/hub nodes):</strong> A Raspberry Pi 4 or Zero 2W running Meshtastic firmware or a Python-based integration enables store-and-forward messaging, bulletin board service (BBS), and MQTT bridging for future internet integration.</li>
+    <li data-id="277"><strong data-id="278">Power system:</strong> A 20W–40W solar panel, a 12V LiFePO4 battery (20–40 Ah), and an MPPT charge controller. A properly sized system will run a LoRa node 24/7 even through several cloudy days.</li>
+    <li data-id="279"><strong data-id="280">Weatherproof enclosure:</strong> An IP65-rated outdoor electrical enclosure protects electronics from rain and humidity. Route antenna cable through a weatherproof SMA bulkhead connector.</li>
+</ul>
+
+<h3 data-id="281">Basic Node Parts List</h3>
+<table data-id="282">
+    <thead data-id="283">
+        <tr data-id="284">
+            <th data-id="285">Item</th>
+            <th data-id="286">Approximate Cost (USD)</th>
+            <th data-id="287">Purpose</th>
+        </tr>
+    </thead>
+    <tbody data-id="288">
+        <tr data-id="289">
+            <td data-id="290">TTGO T-Beam v1.2 (LoRa + GPS board)</td>
+            <td data-id="291">$35–$45</td>
+            <td data-id="292">Primary node radio/processor</td>
+        </tr>
+        <tr data-id="293">
+            <td data-id="294">915 MHz J-Pole or Slim-Jim Antenna</td>
+            <td data-id="295">$15–$30</td>
+            <td data-id="296">Improved omnidirectional range</td>
+        </tr>
+        <tr data-id="297">
+            <td data-id="298">SMA pigtail cable (coax, 1–3 ft)</td>
+            <td data-id="299">$8–$15</td>
+            <td data-id="300">Connects board to antenna</td>
+        </tr>
+        <tr data-id="301">
+            <td data-id="302">20W Solar Panel (12V)</td>
+            <td data-id="303">$25–$50</td>
+            <td data-id="304">Primary power generation</td>
+        </tr>
+        <tr data-id="305">
+            <td data-id="306">LiFePO4 Battery 12V 20Ah</td>
+            <td data-id="307">$60–$100</td>
+            <td data-id="308">Energy storage for nights/cloudy days</td>
+        </tr>
+        <tr data-id="309">
+            <td data-id="310">MPPT Charge Controller (10A)</td>
+            <td data-id="311">$20–$40</td>
+            <td data-id="312">Manages solar charging safely</td>
+        </tr>
+        <tr data-id="313">
+            <td data-id="314">5V USB Step-Down Converter</td>
+            <td data-id="315">$8–$15</td>
+            <td data-id="316">Powers board from 12V battery</td>
+        </tr>
+        <tr data-id="317">
+            <td data-id="318">IP65 Waterproof Enclosure</td>
+            <td data-id="319">$15–$30</td>
+            <td data-id="320">Weatherproof housing</td>
+        </tr>
+        <tr data-id="321">
+            <td data-id="322">SMA Bulkhead Connector + Cable Gland</td>
+            <td data-id="323">$8–$12</td>
+            <td data-id="324">Weatherproof antenna passthrough</td>
+        </tr>
+        <tr data-id="325">
+            <td data-id="326">Mounting hardware (mast clamp, U-bolts)</td>
+            <td data-id="327">$10–$20</td>
+            <td data-id="328">Secures enclosure and antenna</td>
+        </tr>
+        <tr data-id="329">
+            <td data-id="330"><strong data-id="331">TOTAL ESTIMATED COST</strong></td>
+            <td data-id="332"><strong data-id="333">$204–$357</strong></td>
+            <td data-id="334">Per fully solar-powered node</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 data-id="335">2.4 Network Topology Planning</h2>
+
+<p data-id="336">A <strong data-id="337">star topology</strong> places all nodes connected to one central hub. This is simple but creates a single point of failure: if the hub fails, the network collapses. A <strong data-id="338">chain topology</strong> links nodes in a line — useful for corridor coverage (a road or river valley) but vulnerable to any break in the chain. A <strong data-id="339">mesh topology</strong> connects nodes to multiple neighbors, creating multiple paths for messages to travel. The mesh is the recommended approach for community emergency communications.</p>
+
+<h3 data-id="340">Node Placement Strategy</h3>
+<ul data-id="341">
+    <li data-id="342"><strong data-id="343">Height is paramount:</strong> LoRa radio range is dramatically improved by elevation. Nodes mounted on rooftops, water towers, church steeples, or hills will cover far more area than ground-level nodes.</li>
+    <li data-id="344"><strong data-id="345">Line-of-sight:</strong> LoRa performs best with clear line-of-sight between nodes. Urban environments with dense buildings will reduce range to 1–3 km per hop; rural or elevated environments may achieve 10+ km.</li>
+    <li data-id="346"><strong data-id="347">Redundant coverage:</strong> Each area of the community should be reachable through at least two independent nodes. Plan node placement so no single node loss isolates any neighborhood.</li>
+    <li data-id="348"><strong data-id="349">Coverage radius planning:</strong> Assume 2–3 km radius per urban node and 5–10 km per elevated rural node for planning purposes. Test actual coverage after installation.</li>
+</ul>
+
+<h3 data-id="350">Channel Planning and Naming Conventions</h3>
+<ul data-id="351">
+    <li data-id="352">Use a single community channel with a pre-shared encryption key for all nodes.</li>
+    <li data-id="353">Consider a separate unencrypted "public" channel for newcomers to connect during emergencies.</li>
+    <li data-id="354">Name nodes clearly: [NEIGHBORHOOD]-[TYPE]-[NUMBER] (e.g., NORTHSIDE-ROOF-01, DOWNTOWN-GATEWAY-01).</li>
+    <li data-id="355">Document all node names, locations, and custodians in the Node Registry (Section 9.2).</li>
+</ul>
+
+<h2 data-id="356">2.5 Step-by-Step Node Deployment</h2>
+
+<ol data-id="357">
+    <li data-id="358"><strong data-id="359">Flash Meshtastic firmware to the board.</strong> Download the correct firmware file for your specific board model from the official Meshtastic website. Use the Meshtastic Web Flasher or ESPHome Flasher to write the firmware via USB. Verify the flash was successful by connecting to the device via the Meshtastic app.</li>
+    <li data-id="360"><strong data-id="361">Configure device name, region, and channel.</strong> Using the Meshtastic app (Android or iOS) via Bluetooth, set the device name per community naming convention, set the region to US, configure the community channel name, and enter the pre-shared encryption key (PSK) provided by the Network Coordinator.</li>
+    <li data-id="362"><strong data-id="363">Set GPS coordinates.</strong> If the board has a GPS module (T-Beam), allow it to acquire a satellite fix before mounting. If no GPS is equipped, manually enter the node's coordinates using the fixed position feature in the app settings.</li>
+    <li data-id="364"><strong data-id="365">Test radio-to-radio link before mounting.</strong> Bring the configured node within range of an existing network node. Send a test message from the new node and verify receipt on the network. Verify the new node appears in the device list on neighboring nodes.</li>
+    <li data-id="366"><strong data-id="367">Mount antenna at highest practical point.</strong> Install the antenna at the highest accessible point on the structure. Ensure the antenna is vertical (omnidirectional) unless using a directional Yagi. Secure all cable connections and weatherproof antenna connections with self-amalgamating tape.</li>
+    <li data-id="368"><strong data-id="369">Connect power source; verify solar charging.</strong> Connect the solar panel to the MPPT charge controller, the battery to the controller, and the step-down converter output to the board's USB port. Verify the charge controller shows a charging state and the board powers on. Check battery voltage.</li>
+    <li data-id="370"><strong data-id="371">Log node in the community node registry.</strong> Record the node ID, physical location, custodian name and contact, hardware model, installation date, and GPS coordinates in the Node Registry (Section 9.2). Distribute updated registry to all Network Coordinators.</li>
+    <li data-id="372"><strong data-id="373">Perform range test with a handheld unit.</strong> Walk the expected coverage area with a handheld Meshtastic device, sending messages at intervals. Note signal strength readings. Document coverage boundaries and any dead zones. Update the community coverage map.</li>
+</ol>
+
+<h2 data-id="374">2.6 Network Security Basics</h2>
+
+<p data-id="375"><strong data-id="376">Channel encryption:</strong> Meshtastic supports AES-256 encryption on a per-channel basis. Every community node and participant device must use the same pre-shared key (PSK) to participate in an encrypted channel. Generate a strong, random PSK (use the Meshtastic app's built-in key generator) and distribute it securely to all authorized participants in person or via encrypted message — never over unencrypted radio or the internet.</p>
+
+<p data-id="377"><strong data-id="378">Pre-shared key management:</strong> Treat the community PSK like a physical key to a building. Keep a written record of the PSK in a secure location (the Network Coordinator's go-box, a sealed envelope at the community emergency meeting point). Change the PSK if it is believed to have been compromised. Never transmit the PSK over the mesh network itself.</p>
+
+<p data-id="379"><strong data-id="380">Operational Security (OPSEC):</strong> Even with encryption, practice good OPSEC on the mesh network:</p>
+<ul data-id="381">
+    <li data-id="382">Do not transmit home addresses, medical conditions, financial information, or personal vulnerabilities.</li>
+    <li data-id="383">Do not discuss the precise locations of stored supplies or valuable equipment in detail.</li>
+    <li data-id="384">Be aware that metadata (who is transmitting, GPS position, time) may be visible to other network participants even on encrypted channels.</li>
+    <li data-id="385">Use first names or call signs rather than full identifying information in messages.</li>
+</ul>
+
+<p data-id="386"><strong data-id="387">Physical security of nodes:</strong> Fixed community nodes represent shared infrastructure and should be protected. Mount nodes out of easy reach where possible. Do not mark enclosures with conspicuous labeling. The Network Custodian responsible for each node should periodically verify the node has not been tampered with.</p>
+
+<div data-id="388" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3 — RADIO COMMUNICATIONS -->
+<!-- ============================================================ -->
+<hr data-id="389" class="section-divider">
+<div data-id="390" class="section-label">Section 3</div>
+<h1 data-id="391">RADIO COMMUNICATIONS</h1>
+
+<h2 data-id="392">3.1 Radio Frequency Overview</h2>
+
+<p data-id="393">Radio waves are part of the electromagnetic spectrum. Different frequency ranges have different propagation characteristics that make them suitable for different communication purposes. Understanding these basics allows the community communications team to select the right tool for the right situation.</p>
+
+<ul data-id="394">
+    <li data-id="395"><strong data-id="396">HF (High Frequency, 3–30 MHz):</strong> HF radio waves can travel thousands of miles by reflecting off the ionosphere — a layer of charged particles in the upper atmosphere. This makes HF the basis for long-distance and even intercontinental communications. Requires an Amateur General or Extra class license for most HF bands. Equipment is larger and more complex. Best for connecting with regional emergency nets, coordinating with distant mutual aid partners, or receiving news from outside an affected area.</li>
+    <li data-id="397"><strong data-id="398">VHF (Very High Frequency, 30–300 MHz):</strong> VHF propagates primarily by line-of-sight. Range is typically 5–50 km depending on antenna height and terrain. The 2-meter band (144–148 MHz) is the most popular amateur VHF band and the backbone of most local emergency communications. NOAA Weather Radio also broadcasts on VHF. Requires Technician class license or above for amateur use.</li>
+    <li data-id="399"><strong data-id="400">UHF (Ultra High Frequency, 300–3000 MHz):</strong> UHF offers better penetration through buildings than VHF, making it advantageous in dense urban environments. The 70-centimeter band (420–450 MHz) is popular for local amateur communications and linked repeater systems. FRS and GMRS radios operate in the UHF band (462–467 MHz).</li>
+</ul>
+
+<h2 data-id="401">3.2 License Classes and Requirements</h2>
+
+<table data-id="402">
+    <thead data-id="403">
+        <tr data-id="404">
+            <th data-id="405">License Type</th>
+            <th data-id="406">Frequency Access</th>
+            <th data-id="407">Range</th>
+            <th data-id="408">Exam Required</th>
+            <th data-id="409">Cost</th>
+            <th data-id="410">Best For</th>
+        </tr>
+    </thead>
+    <tbody data-id="411">
+        <tr data-id="412">
+            <td data-id="413"><strong data-id="414">FRS (no license)</strong></td>
+            <td data-id="415">462.5625–467.7125 MHz (22 channels)</td>
+            <td data-id="416">0.5–3 km</td>
+            <td data-id="417">None</td>
+            <td data-id="418">Free</td>
+            <td data-id="419">Household and neighborhood short-range communication</td>
+        </tr>
+        <tr data-id="420">
+            <td data-id="421"><strong data-id="422">GMRS (FCC license)</strong></td>
+            <td data-id="423">462–467 MHz; higher power; repeater use</td>
+            <td data-id="424">1–50 km (with repeater)</td>
+            <td data-id="425">None (fee only)</td>
+            <td data-id="426">$35 / 10 years</td>
+            <td data-id="427">Family and neighborhood networks; repeater-based community nets</td>
+        </tr>
+        <tr data-id="428">
+            <td data-id="429"><strong data-id="430">Amateur Technician</strong></td>
+            <td data-id="431">VHF/UHF amateur bands; some HF privileges</td>
+            <td data-id="432">Local to regional (via repeater)</td>
+            <td data-id="433">35-question exam</td>
+            <td data-id="434">~$15 exam fee</td>
+            <td data-id="435">Local emergency nets; APRS; mesh gateway operation</td>
+        </tr>
+        <tr data-id="436">
+            <td data-id="437"><strong data-id="438">Amateur General</strong></td>
+            <td data-id="439">All Technician + most HF bands</td>
+            <td data-id="440">Regional to international</td>
+            <td data-id="441">35-question exam (after Technician)</td>
+            <td data-id="442">~$15 exam fee</td>
+            <td data-id="443">HF emergency comms; Winlink; long-distance coordination</td>
+        </tr>
+        <tr data-id="444">
+            <td data-id="445"><strong data-id="446">Amateur Extra</strong></td>
+            <td data-id="447">All amateur bands, all privileges</td>
+            <td data-id="448">Global</td>
+            <td data-id="449">50-question exam (after General)</td>
+            <td data-id="450">~$15 exam fee</td>
+            <td data-id="451">Full emergency capability; serving as net control; EMCOMM leadership</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="452" class="callout callout-important">
+    <div data-id="453" class="callout-label">ACTION ITEM</div>
+    Every community emergency communications team should have a minimum of <strong data-id="454">three licensed Amateur Technician operators</strong> and at least one <strong data-id="455">Amateur General or Extra class operator</strong> for HF capability. Encourage all interested community members to study for and obtain their Technician license — it is achievable in one weekend of study.
+</div>
+
+<h2 data-id="456">3.3 Recommended Radio Equipment</h2>
+
+<h3 data-id="457">Tier 1 — Basic (Under $50)</h3>
+<p data-id="458">Entry-level equipment accessible to all households. Every household in the community network should have at minimum a Tier 1 option.</p>
+<ul data-id="459">
+    <li data-id="460"><strong data-id="461">Baofeng UV-5R or UV-82:</strong> Dual-band (VHF/UHF) handheld radio. Inexpensive and widely available. Requires programming (use CHIRP software). Note: transmitting on amateur frequencies requires a Technician license; the UV-5R is legal to use for receive-only or on FRS/GMRS channels within legal power limits.</li>
+    <li data-id="462"><strong data-id="463">FRS Bubble-Pack Radios:</strong> Simple 22-channel FRS radios (Motorola T100, Cobra FRS, etc.). No programming needed. Legal for all users. Good for household and neighbor-to-neighbor communication.</li>
+</ul>
+
+<h3 data-id="464">Tier 2 — Intermediate ($50–$300)</h3>
+<p data-id="465">Suitable for dedicated community radio operators and neighborhood node operators.</p>
+<ul data-id="466">
+    <li data-id="467"><strong data-id="468">Yaesu FT-60R:</strong> Rugged, reliable dual-band handheld. Excellent receiver sensitivity. Recommended for serious emergency communicators.</li>
+    <li data-id="469"><strong data-id="470">GMRS Mobile Radio (Midland MXT400 or similar):</strong> 40W GMRS mobile radio for vehicle or base station use. Extends range significantly. Requires GMRS license.</li>
+    <li data-id="471"><strong data-id="472">VHF/UHF Dual-Band Handheld with Programming Cable:</strong> Any quality dual-band handheld (Kenwood TH-D74A, Yaesu FT-3DR) with APRS and digital mode capability.</li>
+</ul>
+
+<h3 data-id="473">Tier 3 — Advanced ($300+)</h3>
+<p data-id="474">For community hub stations, go-boxes, and operators providing HF/regional coverage.</p>
+<ul data-id="475">
+    <li data-id="476"><strong data-id="477">Icom IC-7300:</strong> HF/50 MHz transceiver. Direct-sampling SDR architecture provides excellent performance. 100W output. Ideal for community HF base station. ~$1,000–$1,200.</li>
+    <li data-id="478"><strong data-id="479">Yaesu FT-991A:</strong> All-band, all-mode transceiver covering HF through 70 cm. Good choice for a single versatile community station. ~$900–$1,100.</li>
+    <li data-id="480"><strong data-id="481">RTL-SDR Receiver:</strong> A $25–$35 software-defined radio dongle for receiving a wide range of signals without transmitting. Excellent for monitoring weather, APRS, and other channels. No license required for receive-only.</li>
+    <li data-id="482"><strong data-id="483">Go-Box Kit:</strong> A complete, portable station in a weatherproof case (see Appendix D). Includes transceiver, power supply, antennas, cables, and operating supplies. Deployable in under 15 minutes.</li>
+</ul>
+
+<h2 data-id="484">3.4 Emergency Frequencies</h2>
+
+<table data-id="485">
+    <thead data-id="486">
+        <tr data-id="487">
+            <th data-id="488">Frequency</th>
+            <th data-id="489">Band</th>
+            <th data-id="490">Use</th>
+            <th data-id="491">License Required</th>
+            <th data-id="492">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="493">
+        <tr data-id="494">
+            <td data-id="495">162.400–162.550 MHz</td>
+            <td data-id="496">VHF</td>
+            <td data-id="497">NOAA Weather Radio — 7 channels, continuous broadcast</td>
+            <td data-id="498">None (receive only)</td>
+            <td data-id="499">All weather-capable radios should monitor this. Critical for storm warnings.</td>
+        </tr>
+        <tr data-id="500">
+            <td data-id="501">146.520 MHz</td>
+            <td data-id="502">2m VHF Amateur</td>
+            <td data-id="503">National 2-meter Simplex Calling Frequency</td>
+            <td data-id="504">Amateur Technician+</td>
+            <td data-id="505">Monitor this when activating. Make contact, then move to a working frequency.</td>
+        </tr>
+        <tr data-id="506">
+            <td data-id="507">462.675 MHz</td>
+            <td data-id="508">UHF GMRS</td>
+            <td data-id="509">GMRS Channel 20 — nationally recognized GMRS calling/emergency</td>
+            <td data-id="510">GMRS License</td>
+            <td data-id="511">Recommended for community GMRS nets. Monitor continuously during activations.</td>
+        </tr>
+        <tr data-id="512">
+            <td data-id="513">27.065 MHz</td>
+            <td data-id="514">HF CB</td>
+            <td data-id="515">CB Radio Channel 9 — national emergency/distress channel</td>
+            <td data-id="516">None</td>
+            <td data-id="517">Use only for genuine distress if no other means available.</td>
+        </tr>
+        <tr data-id="518">
+            <td data-id="519">462.5625 MHz</td>
+            <td data-id="520">UHF FRS/GMRS</td>
+            <td data-id="521">FRS Channel 1 — common starting point for FRS users</td>
+            <td data-id="522">None (FRS power)</td>
+            <td data-id="523">Useful for coordinating with households using basic bubble-pack radios.</td>
+        </tr>
+        <tr data-id="524">
+            <td data-id="525">144.390 MHz</td>
+            <td data-id="526">2m VHF Amateur</td>
+            <td data-id="527">APRS National Frequency (North America)</td>
+            <td data-id="528">Amateur Technician+</td>
+            <td data-id="529">Position and text messaging via APRS digipeaters. Monitor for position data.</td>
+        </tr>
+        <tr data-id="530">
+            <td data-id="531">Local Repeater: _________</td>
+            <td data-id="532">________</td>
+            <td data-id="533">Local community repeater — fill in with your community's assigned repeater</td>
+            <td data-id="534">Varies</td>
+            <td data-id="535">Primary repeater: _______ / Offset: _______ / Tone: _______</td>
+        </tr>
+        <tr data-id="536">
+            <td data-id="537">915 MHz (LoRa)</td>
+            <td data-id="538">UHF ISM</td>
+            <td data-id="539">Meshtastic default channel (US region)</td>
+            <td data-id="540">None (Part 15)</td>
+            <td data-id="541">Primary mesh network data channel. Text messages, GPS position, telemetry.</td>
+        </tr>
+        <tr data-id="542">
+            <td data-id="543">3.985 MHz / 7.285 MHz</td>
+            <td data-id="544">HF</td>
+            <td data-id="545">National Traffic System (NTS) net frequencies</td>
+            <td data-id="546">Amateur General+</td>
+            <td data-id="547">For formal message handling to/from outside the affected area.</td>
+        </tr>
+        <tr data-id="548">
+            <td data-id="549">14.300 MHz</td>
+            <td data-id="550">HF</td>
+            <td data-id="551">Maritime Mobile Service Network — worldwide emergency</td>
+            <td data-id="552">Amateur General+</td>
+            <td data-id="553">International emergency coordination; monitor if seeking outside help.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 data-id="554">3.5 Operating Procedures</h2>
+
+<h3 data-id="555">NATO Phonetic Alphabet</h3>
+<p data-id="556">Use the NATO Phonetic Alphabet (see Appendix A) to spell out names, call signs, and critical information clearly over radio. Always spell out call signs, addresses, and any ambiguous words phonetically.</p>
+
+<h3 data-id="557">Standard Radio Procedure</h3>
+<ol data-id="558">
+    <li data-id="559"><strong data-id="560">Listen before transmitting.</strong> Always listen for several seconds before pressing the transmit button (PTT — Push To Talk) to confirm the channel is clear.</li>
+    <li data-id="561"><strong data-id="562">Identify yourself.</strong> Begin every transmission with your call sign (or community identifier if unlicensed): "This is [CALL SIGN], at [LOCATION], with traffic for [RECIPIENT]."</li>
+    <li data-id="563"><strong data-id="564">Keep transmissions brief.</strong> Say what you need to say concisely. Long transmissions block the channel, drain your battery, and are harder to receive clearly.</li>
+    <li data-id="565"><strong data-id="566">Pause for replies.</strong> After transmitting, release PTT and wait for acknowledgment before sending more information.</li>
+    <li data-id="567"><strong data-id="568">Confirm receipt.</strong> When you receive a message, confirm with "COPY" or "ROGER" and your call sign. If you did not receive clearly, say "SAY AGAIN" or "SAY AGAIN ALL AFTER [last word heard]."</li>
+    <li data-id="569"><strong data-id="570">Sign off properly.</strong> End your transmission with your call sign: "This is [CALL SIGN], clear."</li>
+</ol>
+
+<h3 data-id="571">The SALUTE Report Format</h3>
+<p data-id="572">Use the SALUTE format to report emergency information clearly and completely (see Appendix B for full detail):</p>
+<ul data-id="573">
+    <li data-id="574"><strong data-id="575">S</strong> — Size: How many people / vehicles / items involved</li>
+    <li data-id="576"><strong data-id="577">A</strong> — Activity: What is happening</li>
+    <li data-id="578"><strong data-id="579">L</strong> — Location: Where (address, landmark, grid coordinates)</li>
+    <li data-id="580"><strong data-id="581">U</strong> — Unit/Uniform: Who is involved (civilians, responders, etc.)</li>
+    <li data-id="582"><strong data-id="583">T</strong> — Time: When was this observed</li>
+    <li data-id="584"><strong data-id="585">E</strong> — Equipment: What resources are present or needed</li>
+</ul>
+
+<h3 data-id="586">Net Control Procedures</h3>
+<p data-id="587">A <strong data-id="588">net</strong> is a scheduled, organized radio session. Net Control is the designated operator who manages the net. Net Control calls the net to order, takes check-ins from participants, manages traffic (messages to be passed), and closes the net. Detailed net control procedures and a sample script are provided in Section 8.3.</p>
+
+<h2 data-id="589">3.6 Repeater Networks and Linking</h2>
+
+<p data-id="590">A <strong data-id="591">repeater</strong> is an automated radio station, typically located at an elevated site, that receives signals on one frequency (the input) and simultaneously retransmits them at higher power on another frequency (the output). This dramatically extends the effective range of handheld and mobile radios. A community repeater can allow a handheld radio with a 1-mile ground-level range to communicate across 30+ miles.</p>
+
+<p data-id="592">Find local amateur repeaters using the RepeaterBook directory (available offline in USB kit). For GMRS repeaters, consult MyGMRS.com before the emergency and record frequency/tone information in Section 9.3.</p>
+
+<p data-id="593"><strong data-id="594">APRS (Automatic Packet Reporting System)</strong> is a digital system operating on 144.390 MHz that transmits GPS positions, weather data, and short messages. APRS digipeaters relay packets across a region. An APRS-capable radio (Kenwood TH-D74A, Yaesu FT3DR) or a smartphone with APRSDroid can participate when the internet is unavailable.</p>
+
+<h3 data-id="595">Local Repeater Directory (Fill In)</h3>
+<table data-id="596">
+    <thead data-id="597">
+        <tr data-id="598">
+            <th data-id="599">Repeater Name</th>
+            <th data-id="600">Output Freq.</th>
+            <th data-id="601">Input Freq./Offset</th>
+            <th data-id="602">CTCSS Tone</th>
+            <th data-id="603">Mode</th>
+            <th data-id="604">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="605">
+        <tr data-id="606"><td data-id="607">&nbsp;</td><td data-id="608">&nbsp;</td><td data-id="609">&nbsp;</td><td data-id="610">&nbsp;</td><td data-id="611">&nbsp;</td><td data-id="612">&nbsp;</td></tr>
+        <tr data-id="613"><td data-id="614">&nbsp;</td><td data-id="615">&nbsp;</td><td data-id="616">&nbsp;</td><td data-id="617">&nbsp;</td><td data-id="618">&nbsp;</td><td data-id="619">&nbsp;</td></tr>
+        <tr data-id="620"><td data-id="621">&nbsp;</td><td data-id="622">&nbsp;</td><td data-id="623">&nbsp;</td><td data-id="624">&nbsp;</td><td data-id="625">&nbsp;</td><td data-id="626">&nbsp;</td></tr>
+        <tr data-id="627"><td data-id="628">&nbsp;</td><td data-id="629">&nbsp;</td><td data-id="630">&nbsp;</td><td data-id="631">&nbsp;</td><td data-id="632">&nbsp;</td><td data-id="633">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="634">3.7 Digital Radio Modes</h2>
+
+<p data-id="635"><strong data-id="636">Digital voice modes</strong> offer improved audio quality and spectrum efficiency compared to analog FM:</p>
+<ul data-id="637">
+    <li data-id="638"><strong data-id="639">DMR (Digital Mobile Radio):</strong> Used by many GMRS and amateur repeater systems. Allows two simultaneous conversations on one channel via time-division. Requires a DMR-capable radio (Anytone, TYT, etc.).</li>
+    <li data-id="640"><strong data-id="641">D-STAR (Digital Smart Technologies for Amateur Radio):</strong> Icom's digital voice and data protocol. Supports data transmission alongside voice. Requires D-STAR capable radio and repeater.</li>
+    <li data-id="642"><strong data-id="643">System Fusion (Yaesu):</strong> Yaesu's C4FM digital mode. Automatic analog/digital switching. Wires-X linking system connects repeaters globally via internet (internet-dependent).</li>
+</ul>
+
+<p data-id="644"><strong data-id="645">Digital data modes</strong> allow transmission of text and files over radio frequencies:</p>
+<ul data-id="646">
+    <li data-id="647"><strong data-id="648">JS8Call:</strong> A weak-signal HF mode derived from FT8. Designed for messaging and store-and-forward networking over HF. Can relay messages through other stations. Excellent for community HF data networks.</li>
+    <li data-id="649"><strong data-id="650">Winlink:</strong> An email-over-radio system. Uses Pactor, VARA, or packet radio protocols to send and receive email without internet access. Widely used in emergency communications for formal message traffic and resource requests.</li>
+    <li data-id="651"><strong data-id="652">VARA:</strong> A high-performance HF digital mode used with Winlink. Requires a soundcard interface between radio and computer. Significantly higher throughput than older Pactor modes.</li>
+    <li data-id="653"><strong data-id="654">PSK31:</strong> A simple keyboard-to-keyboard HF digital mode. Very narrow bandwidth. Good for one-on-one HF text communication.</li>
+    <li data-id="655"><strong data-id="656">APRS:</strong> Packet-based position reporting and short messaging on 144.390 MHz. Self-sufficient digital network independent of internet.</li>
+</ul>
+
+<div data-id="657" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4 — PHYSICAL INFORMATION DISTRIBUTION -->
+<!-- ============================================================ -->
+<hr data-id="658" class="section-divider">
+<div data-id="659" class="section-label">Section 4</div>
+<h1 data-id="660">PHYSICAL INFORMATION DISTRIBUTION</h1>
+
+<h2 data-id="661">4.1 The Information Runner System</h2>
+
+<p data-id="662">The <strong data-id="663">Information Runner System</strong> is the community's last-resort communication backbone — and, paradoxically, one of its most reliable. It requires nothing more than willing people and paper. Runners are designated community members who physically carry written messages between nodes when all electronic communications have failed. This system has been used effectively in every major disaster where conventional communications failed, from post-hurricane neighborhoods to urban blackouts.</p>
+
+<h3 data-id="664">Runner Routes</h3>
+<p data-id="665">Pre-define runner routes that connect all neighborhood nodes, bulletin board locations, community hubs, and designated meeting points. Routes should be walked and mapped in advance. Routes should have alternatives in case of road blockage or hazard. Route maps are stored in the USB kit and as laminated printed cards carried by each runner.</p>
+
+<h3 data-id="666">Message Priority System</h3>
+<ul data-id="667">
+    <li data-id="668"><strong data-id="669">Priority 1 — URGENT:</strong> Immediate threat to life; medical emergency; fire; rescue needed. Runners drop all other traffic to deliver Priority 1 messages immediately.</li>
+    <li data-id="670"><strong data-id="671">Priority 2 — HIGH:</strong> Resource requests; welfare checks on vulnerable residents; critical supply needs.</li>
+    <li data-id="672"><strong data-id="673">Priority 3 — ROUTINE:</strong> Status updates; general information; community coordination messages.</li>
+</ul>
+
+<h3 data-id="674">Handoff Procedures</h3>
+<p data-id="675">Every message carried by a runner must include: date/time written, originating location, destination, priority level, message text, and sender's name. The runner logs the message on their Runner Log Sheet (template in USB kit). Upon delivery, the recipient signs and dates the log. The runner retains the log as a record. A copy of every message is retained at the originating location.</p>
+
+<h3 data-id="676">Runner Safety</h3>
+<p data-id="677">Runners should never travel alone at night or in hazardous conditions. Assign runners in pairs. Runners should carry a whistle, a flashlight, a copy of their route map, and a Meshtastic handheld radio if available. Runners are not required to cross actively dangerous areas — they should report the hazard instead.</p>
+
+<h2 data-id="678">4.2 Community Bulletin Board Network</h2>
+
+<p data-id="679">A network of physical bulletin boards at fixed, known locations provides a passive information distribution system that functions 24/7 without power or personnel. Community members check bulletin boards for updates during an emergency, just as one might check a town square notice board.</p>
+
+<h3 data-id="680">Location Selection</h3>
+<p data-id="681">Bulletin boards should be located at places where people naturally congregate or pass:</p>
+<ul data-id="682">
+    <li data-id="683">Community centers and recreation centers</li>
+    <li data-id="684">Public libraries</li>
+    <li data-id="685">Fire stations and police stations</li>
+    <li data-id="686">Churches, mosques, synagogues, and temples</li>
+    <li data-id="687">Schools (exterior facing, accessible when closed)</li>
+    <li data-id="688">Neighborhood association offices</li>
+    <li data-id="689">Laundromats, pharmacies, and other essential businesses</li>
+</ul>
+
+<h3 data-id="690">Standardized Board Format</h3>
+<p data-id="691">Each board should have designated zones: <strong data-id="692">EMERGENCY ALERTS</strong> (top, red border), <strong data-id="693">RESOURCE AVAILABILITY</strong> (left, green border), <strong data-id="694">NEEDS AND REQUESTS</strong> (right, yellow border), and <strong data-id="695">GENERAL INFORMATION</strong> (bottom, white). Use waterproof backing and a protective cover where possible. Include the date of last update prominently.</p>
+
+<h3 data-id="696">Posting Protocols</h3>
+<ul data-id="697">
+    <li data-id="698">Any community member may post to the NEEDS and GENERAL zones.</li>
+    <li data-id="699">The EMERGENCY ALERTS zone is managed by the community Network Coordinator or designated bulletin board custodian only.</li>
+    <li data-id="700">All posts must include: date, time, name of poster, and a contact method if possible.</li>
+    <li data-id="701">Outdated posts (older than 24 hours during an active emergency) should be moved or removed by the board custodian.</li>
+    <li data-id="702">Unverified information should be clearly marked "UNCONFIRMED — DO NOT ACT WITHOUT VERIFICATION."</li>
+</ul>
+
+<h2 data-id="703">4.3 Printed Information Systems</h2>
+
+<p data-id="704">The community must pre-position printed materials <em data-id="705">before</em> an emergency occurs. Printed materials serve communities when every screen is dark and every battery is dead. Priority printed materials include:</p>
+<ul data-id="706">
+    <li data-id="707"><strong data-id="708">Emergency Contact Directory:</strong> Names, addresses, call signs, and secondary contacts for all community roles. Updated regularly and distributed to all households.</li>
+    <li data-id="709"><strong data-id="710">Neighborhood Map with Node Locations:</strong> A printed map showing all mesh network nodes, bulletin board locations, community meeting points, and runner routes.</li>
+    <li data-id="711"><strong data-id="712">This Field Manual:</strong> Every household that participates in the network should have a printed copy. Print on both sides, saddle-staple, laminate the cover.</li>
+    <li data-id="713"><strong data-id="714">Quick-Cards:</strong> Laminated cards (3x5 inch) with critical reference information — emergency frequencies, phonetic alphabet, SALUTE format, signal codes. See Section 9 for reference tables suitable for quick-card printing.</li>
+    <li data-id="715"><strong data-id="716">Resource Lists:</strong> Pre-printed lists of community resources: where to find water, first aid, shelter, food, power for charging medical equipment.</li>
+</ul>
+
+<p data-id="717"><strong data-id="718">Print quality and weather resistance:</strong> Print on 24 lb or heavier paper. Laminate critical reference cards and cover pages. Store printed materials in zip-lock bags or waterproof document folders. Rotate printed materials on the same schedule as digital data updates (see Section 6.5).</p>
+
+<h2 data-id="719">4.4 Dead Drop Locations</h2>
+
+<p data-id="720">A <strong data-id="721">dead drop</strong> is a pre-agreed location where written messages can be left and collected without the sender and receiver needing to make direct contact. Dead drops allow asynchronous communication when direct contact is impossible, dangerous, or inadvisable. The concept is simple: I know where to leave a message for you; you know to check that location at agreed intervals.</p>
+
+<h3 data-id="722">Establishing Dead Drops</h3>
+<ul data-id="723">
+    <li data-id="724">Select locations that are fixed, durable, and unlikely to be disturbed: a specific flagstone, a hollow tree, behind a loose brick, inside a weatherproof container attached to an agreed structure.</li>
+    <li data-id="725">Each dead drop location should be known only to the parties who use it plus the Network Coordinator (in a sealed record).</li>
+    <li data-id="726">Assign each dead drop a code name (not a description of the location): e.g., "CEDAR," "KEYSTONE," "PILGRIM."</li>
+    <li data-id="727">Document all dead drop locations in the sealed Network Coordinator emergency records (not in any publicly distributed document).</li>
+</ul>
+
+<h3 data-id="728">Message Format and Authentication</h3>
+<p data-id="729">Messages left at dead drops should include: a pre-agreed header code confirming the sender, date and time, priority level, and message content. To authenticate messages, use a pre-agreed code word or phrase that is changed periodically. Messages without the correct authentication code should be treated as unverified.</p>
+
+<h3 data-id="730">Maintenance Schedule</h3>
+<p data-id="731">Dead drop locations should be checked weekly during normal operations (by the designated custodian) and every 6–12 hours during an active emergency. Check for weather damage, accessibility, and security at each visit.</p>
+
+<h2 data-id="732">4.5 Visual Signaling</h2>
+
+<p data-id="733">Visual signals provide instant status information across distances that would require a runner or radio in the absence of a direct view. Standardized visual signals allow community members to communicate basic status at a glance.</p>
+
+<h3 data-id="734">Color Flag / Tape System</h3>
+<table data-id="735">
+    <thead data-id="736">
+        <tr data-id="737">
+            <th data-id="738">Color</th>
+            <th data-id="739">Signal Meaning</th>
+            <th data-id="740">Application Method</th>
+        </tr>
+    </thead>
+    <tbody data-id="741">
+        <tr data-id="742">
+            <td data-id="743"><strong data-id="744">GREEN</strong></td>
+            <td data-id="745">All Clear / Occupants Safe / Resources Available</td>
+            <td data-id="746">Green flag, green tape, or green cloth on door/window/mailbox</td>
+        </tr>
+        <tr data-id="747">
+            <td data-id="748"><strong data-id="749">YELLOW</strong></td>
+            <td data-id="750">Caution / Assistance Needed But Not Urgent / Entry with Care</td>
+            <td data-id="751">Yellow flag or tape. May accompany a paper note with details.</td>
+        </tr>
+        <tr data-id="752">
+            <td data-id="753"><strong data-id="754">RED</strong></td>
+            <td data-id="755">Help Needed Urgently / Medical Emergency / Distress</td>
+            <td data-id="756">Red flag, red tape, red cloth — most visible location on structure</td>
+        </tr>
+        <tr data-id="757">
+            <td data-id="758"><strong data-id="759">BLACK</strong></td>
+            <td data-id="760">Do Not Enter / Structural Hazard / No Survivors</td>
+            <td data-id="761">Black tape in X pattern on door. Used by trained Search and Rescue only.</td>
+        </tr>
+        <tr data-id="762">
+            <td data-id="763"><strong data-id="764">BLUE</strong></td>
+            <td data-id="765">Medical Resources / First Aid Available Here</td>
+            <td data-id="766">Blue cross symbol on window or door</td>
+        </tr>
+        <tr data-id="767">
+            <td data-id="768"><strong data-id="769">WHITE</strong></td>
+            <td data-id="770">Information / Message Left Here / Check Bulletin Board</td>
+            <td data-id="771">White paper or cloth with arrow pointing to message location</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="772">Window Signs</h3>
+<p data-id="773">Pre-print window signs (8.5 x 11 inch, visible from the street) with the following messages. Laminate and store in each household emergency kit: "ALL SAFE — CHECK IN COMPLETE," "NEED WATER," "NEED MEDICAL HELP," "EVACUATED — CHECK [LOCATION]," "HAVE EXTRA FOOD/WATER TO SHARE."</p>
+
+<h3 data-id="774">Chalk Marking System</h3>
+<p data-id="775">During search and rescue operations, use standard SAR chalk markings: an X on a door indicates the structure has been searched. Numbers inside the X quadrants indicate: top = date/time of search, left = searching team ID, right = hazards found, bottom = number of survivors removed / bodies found. Only trained SAR personnel should make or interpret door markings.</p>
+
+<div data-id="776" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5 — POWER AND ENERGY RESILIENCE -->
+<!-- ============================================================ -->
+<hr data-id="777" class="section-divider">
+<div data-id="778" class="section-label">Section 5</div>
+<h1 data-id="779">POWER AND ENERGY RESILIENCE</h1>
+
+<h2 data-id="780">5.1 Power Hierarchy for Communications</h2>
+
+<p data-id="781">Communications equipment is only as reliable as its power source. A comprehensive power strategy uses multiple power sources in a defined priority order, transitioning smoothly from one to the next as each is depleted or becomes unavailable.</p>
+
+<ol data-id="782">
+    <li data-id="783"><strong data-id="784">AC Mains (Grid Power):</strong> Normal operating condition. All equipment runs on utility power. Maintain battery backups charged at all times.</li>
+    <li data-id="785"><strong data-id="786">Battery Backup (UPS):</strong> A UPS (Uninterruptible Power Supply) provides immediate, seamless transition when grid power fails. Size your UPS to power critical communications equipment (router, radios, charging stations) for a minimum of 4 hours. Larger battery banks can extend this to 24+ hours.</li>
+    <li data-id="787"><strong data-id="788">Generator:</strong> A generator can power equipment for as long as fuel lasts. Connect via a transfer switch — never directly to household wiring. Reserve generator use for critical equipment only to conserve fuel. See Section 5.4 for safety requirements.</li>
+    <li data-id="789"><strong data-id="790">Solar Power:</strong> Solar panels with a battery bank provide indefinite power in clear weather and extended operation through nights and cloudy periods with adequate battery sizing. The recommended primary power source for fixed mesh nodes and the go-box. See Section 5.2.</li>
+    <li data-id="791"><strong data-id="792">Human Power (Hand Crank):</strong> Last resort. Hand-crank generators and hand-crank radios provide minimal power for emergency communication when all other sources are exhausted. See Section 5.5.</li>
+</ol>
+
+<p data-id="793"><strong data-id="794">Sizing backup power:</strong> Determine the power consumption (in watts) of all critical communications equipment. Common loads: Meshtastic node (0.3–1W), handheld radio on receive (0.5W), handheld on transmit (2–5W), HF transceiver receive (50W), HF transceiver transmit (100–200W), laptop (30–60W). Total the loads and multiply by hours of operation to get watt-hours (Wh) required.</p>
+
+<h2 data-id="795">5.2 Solar Power Basics</h2>
+
+<p data-id="796"><strong data-id="797">Panel sizing:</strong> A solar panel's watt rating reflects its output under ideal (full sun, perpendicular angle) conditions. In practice, expect 4–5 "peak sun hours" per day in most US locations. A 40W panel produces approximately 160–200 Wh/day. A community mesh node drawing 1W continuously needs 24 Wh/day — a 20W panel is more than sufficient. A go-box with an HF radio operating 2 hours/day at receive may need 150+ Wh/day — a 60–100W panel array.</p>
+
+<p data-id="798"><strong data-id="799">Battery bank sizing:</strong> Size the battery bank to provide 2–3 days of operation without solar input (for cloudy weather autonomy). Multiply daily Wh consumption by 2–3, then divide by battery voltage and depth-of-discharge (50% for lead-acid, 80% for LiFePO4). Example: 100 Wh/day × 3 days ÷ 12V ÷ 0.8 = 31 Ah minimum LiFePO4 battery.</p>
+
+<p data-id="800"><strong data-id="801">Charge controllers:</strong> Always use a charge controller between the solar panel and battery. <strong data-id="802">PWM (Pulse Width Modulation)</strong> controllers are inexpensive and reliable for small, simple systems. <strong data-id="803">MPPT (Maximum Power Point Tracking)</strong> controllers are 15–30% more efficient and are recommended for systems larger than 100W or when panel and battery voltages differ.</p>
+
+<h3 data-id="804">Simple Sizing Worksheet</h3>
+<table data-id="805">
+    <thead data-id="806">
+        <tr data-id="807">
+            <th data-id="808">Parameter</th>
+            <th data-id="809">Value</th>
+            <th data-id="810">Units</th>
+        </tr>
+    </thead>
+    <tbody data-id="811">
+        <tr data-id="812"><td data-id="813">Total equipment power consumption</td><td data-id="814">&nbsp;</td><td data-id="815">Watts (W)</td></tr>
+        <tr data-id="816"><td data-id="817">Daily operating hours</td><td data-id="818">&nbsp;</td><td data-id="819">Hours/day</td></tr>
+        <tr data-id="820"><td data-id="821">Daily energy consumption (W × hours)</td><td data-id="822">&nbsp;</td><td data-id="823">Watt-hours (Wh/day)</td></tr>
+        <tr data-id="824"><td data-id="825">Desired autonomy without sun</td><td data-id="826">&nbsp;</td><td data-id="827">Days</td></tr>
+        <tr data-id="828"><td data-id="829">Total battery storage needed</td><td data-id="830">&nbsp;</td><td data-id="831">Wh</td></tr>
+        <tr data-id="832"><td data-id="833">Battery capacity at 12V (÷12, ÷0.8 for LiFePO4)</td><td data-id="834">&nbsp;</td><td data-id="835">Amp-hours (Ah)</td></tr>
+        <tr data-id="836"><td data-id="837">Peak sun hours per day (use 4 for conservative estimate)</td><td data-id="838">4</td><td data-id="839">Hours</td></tr>
+        <tr data-id="840"><td data-id="841">Minimum panel wattage needed (Wh/day ÷ 4)</td><td data-id="842">&nbsp;</td><td data-id="843">Watts (W)</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="844">5.3 Battery Systems</h2>
+
+<h3 data-id="845">Lead-Acid Batteries</h3>
+<p data-id="846">The oldest rechargeable battery technology. Available in flooded (maintenance-required), AGM, and gel versions. Advantages: inexpensive, widely available, well-understood. Disadvantages: heavy, must not be discharged below 50%, shorter lifespan (300–500 cycles), sensitive to temperature extremes. Store upright in a ventilated area (flooded cells off-gas hydrogen).</p>
+
+<h3 data-id="847">LiFePO4 (Lithium Iron Phosphate)</h3>
+<p data-id="848">The recommended battery chemistry for emergency communications. Advantages: very safe (no thermal runaway risk unlike other lithium chemistries), longer lifespan (2,000–5,000 cycles), can discharge to 80% depth without damage, much lighter than lead-acid, operates in wider temperature range. Disadvantages: higher initial cost (2–4× lead-acid per Wh). <strong data-id="849">Recommended for all new battery bank installations.</strong></p>
+
+<h3 data-id="850">Warning Signs of Failing Batteries</h3>
+<ul data-id="851">
+    <li data-id="852">Battery does not reach full charge voltage despite full charging period</li>
+    <li data-id="853">Voltage drops rapidly under light load</li>
+    <li data-id="854">Battery case is swollen, bulging, or leaking</li>
+    <li data-id="855">Battery becomes very hot during charging</li>
+    <li data-id="856">Unusual smell (sulfur from lead-acid, chemical smell from lithium)</li>
+</ul>
+
+<div data-id="857" class="callout callout-warning">
+    <div data-id="858" class="callout-label">WARNING</div>
+    Never connect different battery types (lead-acid and lithium) in the same bank. Never charge lithium batteries with a charger designed for lead-acid without confirming the charger supports LiFePO4 chemistry. Improper charging can cause fire or explosion.
+</div>
+
+<h2 data-id="859">5.4 Generator Safety</h2>
+
+<p data-id="860"><strong data-id="861">Carbon monoxide (CO) poisoning is the leading cause of death from generator use during disasters.</strong> CO is colorless, odorless, and lethal. Never operate a generator indoors, in a garage, in a basement, or near any open window or door. Operate generators at least 20 feet (6 meters) from any structure opening. Install battery-powered CO detectors in your home.</p>
+
+<p data-id="862"><strong data-id="863">Fuel storage:</strong> Gasoline degrades in as little as 30 days without a fuel stabilizer additive (use Sta-Bil or equivalent). Store gasoline in approved containers, in a cool, dry, ventilated area away from living spaces and ignition sources. Propane stores indefinitely and is the preferred fuel for long-term storage. Practice fuel rotation: use stored fuel regularly and replace it.</p>
+
+<p data-id="864"><strong data-id="865">Transfer switch:</strong> Never connect a generator directly to household wiring without a proper transfer switch. Back-feeding power into utility lines can electrocute utility workers restoring power. A manual transfer switch or interlock kit installed by a licensed electrician is essential for any generator connected to household circuits.</p>
+
+<p data-id="866"><strong data-id="867">Fuel rotation schedule:</strong> Gasoline — rotate every 3 months, treat with stabilizer. Propane — inspect tanks annually for rust and valve condition. Diesel — rotate every 12 months, treat with biocide additive to prevent algae growth.</p>
+
+<h2 data-id="868">5.5 Human-Powered Options</h2>
+
+<ul data-id="869">
+    <li data-id="870"><strong data-id="871">Hand-crank radios:</strong> Emergency radios (Midland ER310, Eton FRX5-BT, etc.) combine AM/FM/NOAA weather radio with a hand-crank generator and USB charging port. Adequate for monitoring; not sufficient for sustained transmitting.</li>
+    <li data-id="872"><strong data-id="873">Bicycle generators:</strong> A bicycle connected to a permanent magnet alternator via friction drive or hub attachment can generate 30–100W of continuous power with moderate pedaling effort. Sufficient to charge batteries, power a radio, or charge phones. Inexpensive DIY builds are possible with a car alternator and a bicycle frame.</li>
+    <li data-id="874"><strong data-id="875">Manual Morse code:</strong> A battery-powered or crystal-controlled Morse code transmitter requires only a small battery that can be hand-charged. Experienced CW (Morse code) operators can communicate over thousands of miles with minimal power — some QRP (low power) CW setups operate on milliwatts.</li>
+    <li data-id="876"><strong data-id="877">Solar chargers for smartphones:</strong> A 10W foldable solar panel can maintain a smartphone charge through daylight hours. Pair with a power bank (10,000+ mAh) to extend charging through the night. The phone is still useful for offline apps and as a Meshtastic Bluetooth terminal even without cellular service.</li>
+</ul>
+
+<h2 data-id="878">5.6 Power Conservation</h2>
+
+<p data-id="879">When power is limited, conservation allows communications to continue far longer. Apply these practices immediately when grid power fails:</p>
+<ul data-id="880">
+    <li data-id="881"><strong data-id="882">Duty cycle radios:</strong> Rather than transmitting continuously, establish scheduled "traffic windows" — specific times when the net is active. Between windows, radios stay on receive or are powered down.</li>
+    <li data-id="883"><strong data-id="884">Low-power modes for mesh nodes:</strong> Meshtastic nodes can be configured to increase their sleep interval, reducing power consumption from ~100mA to under 10mA during inter-message periods.</li>
+    <li data-id="885"><strong data-id="886">Screen brightness:</strong> Reduce display brightness on all devices to the minimum usable level. A phone screen is one of its highest power draws.</li>
+    <li data-id="887"><strong data-id="888">Prioritize power allocation:</strong> Establish a written power priority list. Suggested order: (1) mesh network nodes, (2) primary radio station receive, (3) lighting for coordination activities, (4) medical equipment, (5) radio transmit, (6) device charging.</li>
+    <li data-id="889"><strong data-id="890">LED lighting:</strong> Replace all temporary lighting with LED lanterns and flashlights. An LED lantern draws 1–3W versus 50–100W for an incandescent equivalent.</li>
+    <li data-id="891"><strong data-id="892">Consolidate charging:</strong> Designate a single community charging station rather than charging devices individually at multiple locations. This improves efficiency and allows better power management.</li>
+</ul>
+
+<div data-id="893" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6 — DATA AND INFORMATION MANAGEMENT -->
+<!-- ============================================================ -->
+<hr data-id="894" class="section-divider">
+<div data-id="895" class="section-label">Section 6</div>
+<h1 data-id="896">DATA AND INFORMATION MANAGEMENT</h1>
+
+<h2 data-id="897">6.1 Offline Data Storage Strategy</h2>
+
+<p data-id="898">The internet is not just a communications medium — it is the primary repository of information that modern people rely on every day. When it fails, access to medical references, maps, contact directories, technical manuals, and government resources disappears simultaneously with communications. Communities that have stored critical data locally — on USB drives, SD cards, and laptop hard drives — retain access to the information they need to function.</p>
+
+<p data-id="899"><strong data-id="900">The principle is simple: store it before you need it.</strong> Download offline maps, reference materials, community directories, and critical software <em data-id="901">during normal times</em>, update them regularly, and distribute them widely enough that the loss of any single storage device does not cause irreplaceable data loss.</p>
+
+<p data-id="902"><strong data-id="903">What to store:</strong></p>
+<ul data-id="904">
+    <li data-id="905"><strong data-id="906">Maps:</strong> OpenStreetMap offline data for your region and surrounding areas. Neighborhood-scale maps with node locations, runner routes, and community resources marked.</li>
+    <li data-id="907"><strong data-id="908">Medical references:</strong> Offline first aid guides, medication reference guides, and emergency medical procedures.</li>
+    <li data-id="909"><strong data-id="910">Community contact directories:</strong> Names, addresses, call signs, and emergency contacts for all community members and key roles.</li>
+    <li data-id="911"><strong data-id="912">Government resources:</strong> FEMA guides, local emergency management plans, utility company emergency procedures.</li>
+    <li data-id="913"><strong data-id="914">Technical documentation:</strong> This field manual, Meshtastic documentation, radio programming files, equipment manuals.</li>
+    <li data-id="915"><strong data-id="916">Offline encyclopedias:</strong> Wikipedia offline via Kiwix provides a comprehensive reference spanning medicine, history, science, and technical subjects — all without internet.</li>
+</ul>
+
+<h2 data-id="917">6.2 Recommended Offline Apps</h2>
+
+<table data-id="918">
+    <thead data-id="919">
+        <tr data-id="920">
+            <th data-id="921">App</th>
+            <th data-id="922">Platform</th>
+            <th data-id="923">Use</th>
+            <th data-id="924">Approximate Size</th>
+            <th data-id="925">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="926">
+        <tr data-id="927">
+            <td data-id="928"><strong data-id="929">Meshtastic</strong></td>
+            <td data-id="930">Android / iOS</td>
+            <td data-id="931">Mesh network client — text messaging, GPS, node management</td>
+            <td data-id="932">~30 MB</td>
+            <td data-id="933">Requires Meshtastic-compatible LoRa hardware via Bluetooth. Core app.</td>
+        </tr>
+        <tr data-id="934">
+            <td data-id="935"><strong data-id="936">Briar</strong></td>
+            <td data-id="937">Android</td>
+            <td data-id="938">Encrypted messaging via Bluetooth, WiFi Direct, or Tor</td>
+            <td data-id="939">~15 MB</td>
+            <td data-id="940">Works without internet. Contacts must be added in person via QR code first.</td>
+        </tr>
+        <tr data-id="941">
+            <td data-id="942"><strong data-id="943">Maps.me</strong></td>
+            <td data-id="944">Android / iOS</td>
+            <td data-id="945">Offline maps with navigation and search</td>
+            <td data-id="946">Varies by region (50–500 MB)</td>
+            <td data-id="947">Download region maps before emergency. Works without cell or WiFi.</td>
+        </tr>
+        <tr data-id="948">
+            <td data-id="949"><strong data-id="950">OsmAnd</strong></td>
+            <td data-id="951">Android / iOS</td>
+            <td data-id="952">Advanced offline mapping with topographic, hiking, and nautical layers</td>
+            <td data-id="953">Varies by region</td>
+            <td data-id="954">More features than Maps.me; steeper learning curve. Preferred for technical users.</td>
+        </tr>
+        <tr data-id="955">
+            <td data-id="956"><strong data-id="957">Kiwix</strong></td>
+            <td data-id="958">Android / iOS / Windows / Linux</td>
+            <td data-id="959">Offline Wikipedia and other reference content from ZIM files</td>
+            <td data-id="960">App ~15 MB; ZIM files up to 80+ GB</td>
+            <td data-id="961">Pre-download the English Wikipedia ZIM (~85 GB full, ~6 GB simplified). Store on USB.</td>
+        </tr>
+        <tr data-id="962">
+            <td data-id="963"><strong data-id="964">First Aid (American Red Cross)</strong></td>
+            <td data-id="965">Android / iOS</td>
+            <td data-id="966">Offline first aid procedures and emergency guidance</td>
+            <td data-id="967">~50 MB</td>
+            <td data-id="968">Download content while online for full offline access. Include with USB kit APKs.</td>
+        </tr>
+        <tr data-id="969">
+            <td data-id="970"><strong data-id="971">HAM Study</strong></td>
+            <td data-id="972">Android / iOS</td>
+            <td data-id="973">Amateur radio license exam preparation</td>
+            <td data-id="974">~20 MB</td>
+            <td data-id="975">Pre-emergency use for licensing. Offline capable once downloaded.</td>
+        </tr>
+        <tr data-id="976">
+            <td data-id="977"><strong data-id="978">APRSDroid</strong></td>
+            <td data-id="979">Android</td>
+            <td data-id="980">APRS client for Android via audio or TNC</td>
+            <td data-id="981">~10 MB</td>
+            <td data-id="982">Works offline for local APRS operation. Requires APRS-capable radio connection.</td>
+        </tr>
+        <tr data-id="983">
+            <td data-id="984"><strong data-id="985">CHIRP</strong></td>
+            <td data-id="986">Windows / Mac / Linux</td>
+            <td data-id="987">Radio programming software for Baofeng and many other radios</td>
+            <td data-id="988">~15 MB</td>
+            <td data-id="989">Pre-program all community radios with channels before emergency. Store CHIRP files on USB.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 data-id="990">6.3 USB Kit Contents</h2>
+
+<p data-id="991">The <strong data-id="992">Community USB Kit</strong> is a standardized USB flash drive (minimum 32 GB) containing all data, software, documentation, and resources needed for community emergency communications. Multiple copies should be distributed to the Network Coordinator, each Node Custodian, radio operators, and the community supply cache. Update all kits simultaneously on the scheduled update day.</p>
+
+<h3 data-id="993">Folder 1 — MANUALS</h3>
+<ul data-id="994">
+    <li data-id="995">This field manual (PDF, current edition)</li>
+    <li data-id="996">Amateur radio license study guides (Technician, General)</li>
+    <li data-id="997">Meshtastic official documentation and user guide</li>
+    <li data-id="998">ARRL Emergency Communications Handbook (if authorized)</li>
+    <li data-id="999">Equipment-specific manuals for all community radios and hardware</li>
+    <li data-id="1000">FEMA IS-100, IS-200, IS-700 course materials</li>
+</ul>
+
+<h3 data-id="1001">Folder 2 — MAPS</h3>
+<ul data-id="1002">
+    <li data-id="1003">Offline map tiles for the full region (OsmAnd or Maps.me export)</li>
+    <li data-id="1004">Neighborhood PDF maps with node locations, runner routes, bulletin boards, and community resources</li>
+    <li data-id="1005">Regional topographic maps (USGS 7.5-minute series)</li>
+    <li data-id="1006">Building floor plans for key community structures (community center, library, etc.)</li>
+</ul>
+
+<h3 data-id="1007">Folder 3 — SOFTWARE</h3>
+<ul data-id="1008">
+    <li data-id="1009">Meshtastic firmware files (all supported board variants)</li>
+    <li data-id="1010">Meshtastic Web Flasher (offline capable version)</li>
+    <li data-id="1011">Briar APK (Android installer)</li>
+    <li data-id="1012">Kiwix app (Windows, Android, Linux installers)</li>
+    <li data-id="1013">Wikipedia ZIM file (simplified English, minimum)</li>
+    <li data-id="1014">CHIRP radio programming software and pre-configured channel files</li>
+    <li data-id="1015">VeraCrypt (for encrypted storage)</li>
+    <li data-id="1016">7-Zip (for archive management)</li>
+</ul>
+
+<h3 data-id="1017">Folder 4 — MEDIA</h3>
+<ul data-id="1018">
+    <li data-id="1019">Training videos (MP4 format, no internet required): Meshtastic setup, radio programming, solar power basics</li>
+    <li data-id="1020">Quick-card PDFs (emergency frequencies, phonetic alphabet, SALUTE format, signal codes)</li>
+    <li data-id="1021">Workshop slide decks from community training sessions</li>
+</ul>
+
+<h3 data-id="1022">Folder 5 — DATA</h3>
+<ul data-id="1023">
+    <li data-id="1024">Community contact directory (VeraCrypt encrypted container — password managed by Network Coordinator)</li>
+    <li data-id="1025">Community resource lists (food, water, medical, power)</li>
+    <li data-id="1026">Emergency frequency list (current, with local repeater information)</li>
+    <li data-id="1027">Local APRS digipeater list</li>
+    <li data-id="1028">Radio channel programming files (.img or .csv format)</li>
+</ul>
+
+<h3 data-id="1029">Folder 6 — TEMPLATES</h3>
+<ul data-id="1030">
+    <li data-id="1031">Message forms (runner system, formal radio traffic)</li>
+    <li data-id="1032">Runner Log Sheets</li>
+    <li data-id="1033">Node Registry forms</li>
+    <li data-id="1034">Incident Log templates</li>
+    <li data-id="1035">After-Action Review templates</li>
+    <li data-id="1036">Exercise planning templates</li>
+</ul>
+
+<h2 data-id="1037">6.4 Data Security and Privacy</h2>
+
+<p data-id="1038"><strong data-id="1039">Encryption for USB drives:</strong> The community contact directory and any sensitive personal information on USB kits must be encrypted. Use <strong data-id="1040">VeraCrypt</strong> to create an encrypted container on each USB drive. VeraCrypt is free, open-source, and well-audited. The password for the encrypted container must be memorized by the Network Coordinator and shared with one designated backup — not written on or near the USB drive.</p>
+
+<p data-id="1041"><strong data-id="1042">Archive encryption:</strong> For individual encrypted files or folders, 7-Zip's built-in AES-256 encryption is adequate. Use long, complex passwords (20+ characters).</p>
+
+<p data-id="1043"><strong data-id="1044">Password management without internet:</strong> Keep a written record of critical passwords in a sealed, signed envelope stored in a secure, known location (a safe, a fireproof box). The envelope should be dated and updated whenever passwords change. Access should require two people — no single person should be the sole keeper of critical passwords.</p>
+
+<p data-id="1045"><strong data-id="1046">What NOT to store on community USBs:</strong> Social Security numbers, financial account information, full medical records, detailed personal security information (alarm codes, safe combinations), information about domestic violence situations, and any information that could endanger individuals if the USB is lost or stolen.</p>
+
+<h2 data-id="1047">6.5 Information Freshness</h2>
+
+<p data-id="1048">Offline data has a shelf life. Contact directories change. Software is updated. Maps improve. Procedures evolve. A structured update schedule ensures that community data remains current and reliable.</p>
+
+<ul data-id="1049">
+    <li data-id="1050"><strong data-id="1051">Update schedule:</strong> The first Sunday of each month is the designated Community Data Update Day. The Supply Custodian coordinates updates to all USB kits, printed materials, and bulletin board directories.</li>
+    <li data-id="1052"><strong data-id="1053">Version numbering:</strong> Each edition of community documents uses the format YYYY.MM (e.g., 2026.05 for May 2026). Never distribute a document without a version number and date.</li>
+    <li data-id="1054"><strong data-id="1055">Change logs:</strong> Each updated document includes a change log listing what was added, changed, or removed since the previous version. The USB kit includes a CHANGELOG.txt at the root level listing all updates to all files in the kit.</li>
+    <li data-id="1056"><strong data-id="1057">Responsibility:</strong> The Training Coordinator is responsible for updating documentation. The Supply Custodian is responsible for physical distribution. The Network Coordinator signs off on all changes to sensitive data (contact directory, encryption keys).</li>
+</ul>
+
+<div data-id="1058" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7 — COMMUNITY ORGANIZATION -->
+<!-- ============================================================ -->
+<hr data-id="1059" class="section-divider">
+<div data-id="1060" class="section-label">Section 7</div>
+<h1 data-id="1061">COMMUNITY ORGANIZATION</h1>
+
+<h2 data-id="1062">7.1 Roles and Responsibilities</h2>
+
+<p data-id="1063">A resilient community communications network requires defined roles with clear responsibilities. These roles are designed to distribute authority and responsibility so that no single person's absence makes the system fail.</p>
+
+<table data-id="1064">
+    <thead data-id="1065">
+        <tr data-id="1066">
+            <th data-id="1067">Role</th>
+            <th data-id="1068">Primary Responsibilities</th>
+            <th data-id="1069">Minimum Skills Required</th>
+            <th data-id="1070">Backup Required?</th>
+        </tr>
+    </thead>
+    <tbody data-id="1071">
+        <tr data-id="1072">
+            <td data-id="1073"><strong data-id="1074">Network Coordinator</strong></td>
+            <td data-id="1075">Overall system oversight; encryption key management; inter-agency liaison; activation authority; governance leadership</td>
+            <td data-id="1076">Amateur Technician license minimum; familiarity with all systems; community trust</td>
+            <td data-id="1077">Yes — designate a Deputy Coordinator</td>
+        </tr>
+        <tr data-id="1078">
+            <td data-id="1079"><strong data-id="1080">Node Custodians</strong></td>
+            <td data-id="1081">Maintain specific assigned mesh nodes; regular inspection; battery and solar check; report issues; ensure firmware is current</td>
+            <td data-id="1082">Comfortable with basic electronics; Meshtastic app familiarity; reliable access to their node</td>
+            <td data-id="1083">Yes — each node has a primary and backup custodian</td>
+        </tr>
+        <tr data-id="1084">
+            <td data-id="1085"><strong data-id="1086">Radio Operators</strong></td>
+            <td data-id="1087">Staff community radio nets; handle formal message traffic; maintain go-box; train others in radio procedures</td>
+            <td data-id="1088">Amateur Technician license required; General preferred for HF capability</td>
+            <td data-id="1089">Yes — minimum 3 operators trained for all shifts</td>
+        </tr>
+        <tr data-id="1090">
+            <td data-id="1091"><strong data-id="1092">Information Runners</strong></td>
+            <td data-id="1093">Physically carry written messages between nodes; maintain route familiarity; carry runner log sheets; report hazards</td>
+            <td data-id="1094">Physical fitness; familiarity with runner routes; reliability</td>
+            <td data-id="1095">Yes — each route has primary and backup runners</td>
+        </tr>
+        <tr data-id="1096">
+            <td data-id="1097"><strong data-id="1098">Supply Custodian</strong></td>
+            <td data-id="1099">Maintains USB kits and printed materials; coordinates monthly updates; manages physical supply cache; tracks equipment inventory</td>
+            <td data-id="1100">Organizational skills; basic computer literacy; reliable storage access</td>
+            <td data-id="1101">Yes — backup Supply Custodian knows cache location and combination</td>
+        </tr>
+        <tr data-id="1102">
+            <td data-id="1103"><strong data-id="1104">Training Coordinator</strong></td>
+            <td data-id="1105">Plans and executes drills and exercises; maintains documentation; onboards new participants; updates manuals and training materials</td>
+            <td data-id="1106">Familiarity with all community systems; teaching ability; organizational skills</td>
+            <td data-id="1107">Yes — Assistant Training Coordinator</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="1108" class="callout callout-tip">
+    <div data-id="1109" class="callout-label">PRINCIPLE</div>
+    No single role should be a single point of failure. Every role listed above requires a designated backup. When the primary is unavailable, the backup activates without hesitation. Document both primary and backup contact information in the Emergency Contact Directory (Section 9.1).
+</div>
+
+<h2 data-id="1110">7.2 The Neighborhood Cell Structure</h2>
+
+<p data-id="1111">A flat, undifferentiated community network becomes unmanageable at scale. The <strong data-id="1112">Neighborhood Cell Structure</strong> organizes the community into manageable geographic units that maintain coordination while preserving decentralization and resilience.</p>
+
+<p data-id="1113"><strong data-id="1114">Cell:</strong> The smallest unit. Approximately 10–20 households in immediate geographic proximity (a block or small street). Each cell has a <strong data-id="1115">Block Captain</strong> — a community member who knows their neighbors, maintains contact information, and serves as the first point of contact for the cell. The Block Captain is responsible for ensuring every household in the cell has a printed emergency directory, knows the nearest bulletin board, and understands the basic color-flag system.</p>
+
+<p data-id="1116"><strong data-id="1117">Cluster:</strong> A group of 3–5 cells forms a cluster. Each cluster has at least one mesh network node and at least one licensed radio operator. A <strong data-id="1118">Cluster Coordinator</strong> (typically one of the Block Captains) coordinates between cells and communicates with the broader community network. Clusters cover approximately 50–100 households.</p>
+
+<p data-id="1119"><strong data-id="1120">Community Network:</strong> Multiple clusters connect to the broader community network via the mesh, radio nets, and the runner system. The Network Coordinator interfaces with the community network, other neighborhoods, and official emergency management.</p>
+
+<p data-id="1121"><strong data-id="1122">Benefits of the cell structure:</strong></p>
+<ul data-id="1123">
+    <li data-id="1124">Each cell is small enough to manage face-to-face, without any technology</li>
+    <li data-id="1125">Loss of any single cell or cluster does not disable the broader network</li>
+    <li data-id="1126">Responsibilities are distributed — no central leader is a single point of failure</li>
+    <li data-id="1127">The cell structure scales naturally as more households join</li>
+</ul>
+
+<h2 data-id="1128">7.3 Communication Trees</h2>
+
+<p data-id="1129">A <strong data-id="1130">communication tree</strong> (also called a phone tree or radio tree) is a structured system for rapidly distributing a message to all community members. Rather than one person contacting everyone (which is slow and fails if that person is unavailable), each person in the tree contacts 3–5 others, who each contact 3–5 more. A well-built tree can reach 100 people in 4–5 iterations.</p>
+
+<h3 data-id="1131">Building the Tree</h3>
+<ol data-id="1132">
+    <li data-id="1133">The Network Coordinator contacts the 5 Cluster Coordinators.</li>
+    <li data-id="1134">Each Cluster Coordinator contacts the 3–5 Block Captains in their cluster.</li>
+    <li data-id="1135">Each Block Captain contacts the 5–10 household contacts in their cell.</li>
+    <li data-id="1136">Each household contact attempts to contact immediate neighbors without contacts.</li>
+</ol>
+
+<h3 data-id="1137">Testing the Tree</h3>
+<p data-id="1138">Test the communication tree at least quarterly. Send a test message (identified as a test) and track: how long it took to reach all participants, which branches failed or were slow, which contacts could not be reached. Document results and update the tree structure to fix weaknesses found in testing.</p>
+
+<div data-id="1139" class="callout callout-note">
+    <div data-id="1140" class="callout-label">TEMPLATE NOTE</div>
+    A printable Communication Tree template is included in Folder 6 of the USB kit. Fill in contact names and primary/secondary contact methods (radio call sign preferred; telephone secondary) for each position in the tree.
+</div>
+
+<h2 data-id="1141">7.4 Decision-Making in Emergencies</h2>
+
+<p data-id="1142">Emergencies are not the time for extended deliberation. The community network requires pre-agreed decision-making protocols that allow rapid, authoritative action without requiring consensus — while still remaining accountable to the community.</p>
+
+<p data-id="1143"><strong data-id="1144">Pre-agreed activation protocols:</strong> Define trigger conditions that automatically activate specific responses. Example: If grid power has been out for more than 2 hours AND the Network Coordinator or Deputy Coordinator cannot be reached by radio within 30 minutes, the senior available Radio Operator activates the radio net and notifies all Cluster Coordinators. No additional authorization is required.</p>
+
+<p data-id="1145"><strong data-id="1146">Designated decision-makers:</strong> For each category of decision, define who is authorized to decide:</p>
+<ul data-id="1147">
+    <li data-id="1148">Mesh network activation: Network Coordinator or Deputy</li>
+    <li data-id="1149">Radio net activation: Network Coordinator, Deputy, or senior Radio Operator</li>
+    <li data-id="1150">Resource allocation from community cache: Network Coordinator with concurrence of one Cluster Coordinator</li>
+    <li data-id="1151">Contact with official emergency management: Network Coordinator only, or Deputy if Coordinator is unreachable</li>
+</ul>
+
+<p data-id="1152"><strong data-id="1153">Documentation:</strong> Every significant decision made during an emergency must be logged with the time, decision-maker, decision made, and rationale. Use the Incident Log template from the USB kit. This record is essential for After-Action Review and community accountability.</p>
+
+<p data-id="1154"><strong data-id="1155">Handling disagreements:</strong> During an active emergency, defer to the pre-agreed decision-maker and document the disagreement. Post-emergency, bring unresolved disagreements to the full governance process for discussion and protocol adjustment. Never allow disagreements to paralyze response during an active emergency.</p>
+
+<h2 data-id="1156">7.5 Mutual Aid Principles</h2>
+
+<p data-id="1157"><strong data-id="1158">Mutual aid</strong> is a framework of reciprocal community support based on solidarity rather than charity. In a mutual aid framework, community members support each other not as donors and recipients, but as equals who recognize that today's resource provider may be tomorrow's person in need.</p>
+
+<p data-id="1159">Core principles for application to community communications:</p>
+<ul data-id="1160">
+    <li data-id="1161"><strong data-id="1162">Solidarity, not charity:</strong> This network belongs to the whole community, not to those who built it. Technical expertise does not confer authority over community resources.</li>
+    <li data-id="1163"><strong data-id="1164">No gatekeeping:</strong> No community member is excluded from using the communications network based on technical skill, language, income, housing status, or any other factor.</li>
+    <li data-id="1165"><strong data-id="1166">Serve the most vulnerable first:</strong> When allocating limited resources — power for charging, runner service, radio time for welfare checks — prioritize: people with medical dependencies, elderly residents who cannot physically travel, residents with disabilities, households with young children, and non-English-speaking residents who may not receive public announcements.</li>
+    <li data-id="1167"><strong data-id="1168">Transparent resource distribution:</strong> All community resource decisions (who receives what, when, and how much) are documented and made available to the community. No closed-door resource allocation.</li>
+    <li data-id="1169"><strong data-id="1170">No means test:</strong> Do not require community members to prove need before providing access to communications resources. Accept people at their word and verify after the fact when necessary.</li>
+</ul>
+
+<h2 data-id="1171">7.6 Integration with Official Emergency Management</h2>
+
+<p data-id="1172">Community communications networks function alongside — not in opposition to — official emergency management systems. Understanding the official systems and establishing relationships with official agencies before a disaster significantly improves both community and official response effectiveness.</p>
+
+<ul data-id="1173">
+    <li data-id="1174"><strong data-id="1175">CERT (Community Emergency Response Teams):</strong> FEMA-sponsored volunteer training program. CERT-trained community members can assist professional responders and serve as a trained volunteer workforce. Many communities have existing CERT teams — connect with yours and ensure your communications team integrates with their operations plan.</li>
+    <li data-id="1176"><strong data-id="1177">Local Emergency Management Agency:</strong> Your county or city emergency management agency coordinates official disaster response. Establish a relationship before an emergency. Provide them with your network's contact information and capabilities. Ask about their communications plan and how community networks can support it.</li>
+    <li data-id="1178"><strong data-id="1179">ARES/RACES (Amateur Radio Emergency Service / Radio Amateur Civil Emergency Service):</strong> ARES is the ARRL's emergency communications volunteer program. RACES is the FCC-authorized emergency radio service for civil defense. Encourage your licensed amateur operators to affiliate with local ARES and RACES groups. These organizations provide training, coordination, and official recognition for amateur radio emergency communications.</li>
+    <li data-id="1180"><strong data-id="1181">American Red Cross:</strong> The Red Cross coordinates shelter, mass feeding, and disaster relief operations. Establish communication links with your local chapter's emergency communications plan.</li>
+</ul>
+
+<p data-id="1182"><strong data-id="1183">When to defer to official systems:</strong> When official emergency services are active and operational, defer to their command structure for public safety decisions. The community network's role is to support and supplement official response — providing neighborhood-level situational awareness, welfare checks on residents, and resource distribution information that official systems often lack the capacity to gather. Never interfere with official radio frequencies or communications channels.</p>
+
+<div data-id="1184" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 8 — DRILLS AND EXERCISES -->
+<!-- ============================================================ -->
+<hr data-id="1185" class="section-divider">
+<div data-id="1186" class="section-label">Section 8</div>
+<h1 data-id="1187">DRILLS AND EXERCISES</h1>
+
+<h2 data-id="1188">8.1 Why Regular Drills Matter</h2>
+
+<p data-id="1189">Skills that are not practiced degrade. A radio operator who passed their license exam three years ago and has not transmitted since will struggle to run a net under pressure. A community that deployed its mesh network once at a picnic and never tested it in a simulated emergency will find critical failures when a real emergency occurs. Drills exist to surface these failures in a controlled environment — when failure is an opportunity to learn rather than a threat to lives.</p>
+
+<p data-id="1190">Beyond technical skill maintenance, regular drills build three things that cannot be acquired any other way: <strong data-id="1191">muscle memory</strong> (procedures executed without conscious effort), <strong data-id="1192">trust</strong> (community members who have worked together under simulated stress know they can rely on each other under real stress), and <strong data-id="1193">confidence</strong> (participants who have successfully executed their roles in exercises approach real emergencies with confidence rather than panic).</p>
+
+<p data-id="1194">The single most common failure mode in community emergency preparedness is this: the group builds a system, declares it ready, and never tests it. When a real emergency arrives, the batteries are dead, the firmware is outdated, nobody remembers the encryption key, and the network coordinator has moved away. <strong data-id="1195">Test everything. Test it regularly. Fix what fails.</strong></p>
+
+<h2 data-id="1196">8.2 Exercise Types</h2>
+
+<table data-id="1197">
+    <thead data-id="1198">
+        <tr data-id="1199">
+            <th data-id="1200">Exercise Type</th>
+            <th data-id="1201">Duration</th>
+            <th data-id="1202">Participants</th>
+            <th data-id="1203">What It Tests</th>
+            <th data-id="1204">Recommended Frequency</th>
+        </tr>
+    </thead>
+    <tbody data-id="1205">
+        <tr data-id="1206">
+            <td data-id="1207"><strong data-id="1208">Communications Check (Radio Net)</strong></td>
+            <td data-id="1209">15–30 minutes</td>
+            <td data-id="1210">Radio operators and check-in participants</td>
+            <td data-id="1211">Radio operation, call signs, net control procedure, equipment function</td>
+            <td data-id="1212">Weekly or monthly</td>
+        </tr>
+        <tr data-id="1213">
+            <td data-id="1214"><strong data-id="1215">Tabletop Exercise</strong></td>
+            <td data-id="1216">2–4 hours</td>
+            <td data-id="1217">All role holders; leadership</td>
+            <td data-id="1218">Decision-making, protocols, inter-role coordination, scenario knowledge</td>
+            <td data-id="1219">Monthly</td>
+        </tr>
+        <tr data-id="1220">
+            <td data-id="1221"><strong data-id="1222">Partial Activation</strong></td>
+            <td data-id="1223">Half-day (4–6 hours)</td>
+            <td data-id="1224">Specific subsystem (mesh only, or radio only)</td>
+            <td data-id="1225">Full deployment and operation of one system pillar; equipment readiness; role fulfillment</td>
+            <td data-id="1226">Quarterly</td>
+        </tr>
+        <tr data-id="1227">
+            <td data-id="1228"><strong data-id="1229">Full Activation</strong></td>
+            <td data-id="1230">Full day (8–12 hours)</td>
+            <td data-id="1231">All participants; whole community invited</td>
+            <td data-id="1232">All three pillars simultaneously; community integration; inter-cluster coordination; realistic scenarios</td>
+            <td data-id="1233">Annually</td>
+        </tr>
+        <tr data-id="1234">
+            <td data-id="1235"><strong data-id="1236">Surprise Drill</strong></td>
+            <td data-id="1237">Variable (1–4 hours)</td>
+            <td data-id="1238">On-call role holders (no advance notice)</td>
+            <td data-id="1239">Real-world readiness; response without preparation; equipment actually ready status</td>
+            <td data-id="1240">Ad hoc, 1–2 times per year</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 data-id="1241">8.3 Monthly Radio Net Procedure</h2>
+
+<p data-id="1242">The monthly (or weekly) radio net is the foundation of ongoing operator readiness. It verifies that equipment works, operators remember procedure, and the community has a regular point of contact to share updates.</p>
+
+<h3 data-id="1243">Sample Net Control Script</h3>
+
+<div data-id="1244" class="callout callout-note">
+    <div data-id="1245" class="callout-label">NET CONTROL SCRIPT — [COMMUNITY NAME] EMERGENCY COMMUNICATIONS NET</div>
+    <p data-id="1246"><em data-id="1247">Net Control reads the following, substituting bracketed information:</em></p>
+    <p data-id="1248">"This is [CALL SIGN], [CALL SIGN], [CALL SIGN]. I am opening the [COMMUNITY NAME] Emergency Communications Net for [DATE]. This is a [scheduled / unscheduled] net. All stations please stand by."</p>
+    <p data-id="1249">[Pause 10 seconds]</p>
+    <p data-id="1250">"Stations with priority traffic, please identify now."</p>
+    <p data-id="1251">[Handle any priority traffic before continuing.]</p>
+    <p data-id="1252">"The [COMMUNITY NAME] net is now open for check-ins. Please identify with your call sign and location. All stations, check in now."</p>
+    <p data-id="1253">[Record all check-ins on the Net Log Sheet.]</p>
+    <p data-id="1254">"[NUMBER] stations have checked in. Is there any traffic for the net?"</p>
+    <p data-id="1255">[Handle traffic in order of priority. Pass each piece of traffic, confirm receipt.]</p>
+    <p data-id="1256">"Any announcements for the net?"</p>
+    <p data-id="1257">[Allow brief announcements.]</p>
+    <p data-id="1258">"This concludes the [COMMUNITY NAME] Emergency Communications Net. [NUMBER] stations checked in. [NUMBER] pieces of traffic handled. This is [CALL SIGN] closing the net at [TIME]. Good [morning/afternoon/evening] all."</p>
+</div>
+
+<h3 data-id="1259">Check-In Procedure for Participants</h3>
+<ol data-id="1260">
+    <li data-id="1261">Listen to ensure the net is in check-in phase before transmitting.</li>
+    <li data-id="1262">When Net Control opens check-ins, transmit your call sign and location: "[CALL SIGN], [LOCATION], [any traffic]."</li>
+    <li data-id="1263">Wait for Net Control to acknowledge you.</li>
+    <li data-id="1264">If you have traffic (a message to pass), indicate this during check-in: "[CALL SIGN], [LOCATION], one piece of traffic for [recipient]."</li>
+</ol>
+
+<h2 data-id="1265">8.4 Mesh Network Stress Test</h2>
+
+<p data-id="1266">The mesh network stress test verifies that the network performs as expected under realistic conditions, including node failures.</p>
+
+<h3 data-id="1267">Stress Test Procedure</h3>
+<ol data-id="1268">
+    <li data-id="1269"><strong data-id="1270">Baseline test:</strong> With all nodes active, send a message from the most distant node to the hub node. Confirm delivery time and route. Record baseline RSSI (signal strength) values between all node pairs.</li>
+    <li data-id="1271"><strong data-id="1272">Single-node failure simulation:</strong> Power down one non-hub node. Confirm that messages from beyond the removed node still reach the hub via alternative routes. Measure delivery time impact.</li>
+    <li data-id="1273"><strong data-id="1274">Multi-node failure simulation:</strong> Remove two or more nodes simultaneously. Identify which combinations cause network partitioning (isolation). Use results to identify coverage gaps requiring additional nodes.</li>
+    <li data-id="1275"><strong data-id="1276">Load test:</strong> Have all community Meshtastic handhelds send simultaneous messages. Observe channel congestion. Identify the maximum number of simultaneous users before message delivery degrades unacceptably.</li>
+    <li data-id="1277"><strong data-id="1278">Non-technical user test:</strong> Ask community members who are not part of the technical team to use the Meshtastic app on their smartphones to send a message and confirm receipt. Identify usability barriers. Simplify if needed.</li>
+    <li data-id="1279"><strong data-id="1280">Coverage walk:</strong> Walk the community coverage area with a handheld Meshtastic device, sending messages at 100-meter intervals. Map signal quality to identify dead zones. Update the coverage map.</li>
+</ol>
+
+<h2 data-id="1281">8.5 After-Action Reviews</h2>
+
+<p data-id="1282">Every exercise — and every real activation — should be followed by a structured After-Action Review (AAR) within 48 hours while memories are fresh. The AAR is not a blame session; it is a learning process. All participants should feel safe to identify failures honestly, knowing the goal is improvement, not accountability.</p>
+
+<h3 data-id="1283">AAR Template</h3>
+<table data-id="1284">
+    <thead data-id="1285">
+        <tr data-id="1286">
+            <th data-id="1287">Section</th>
+            <th data-id="1288">Questions to Address</th>
+            <th data-id="1289">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="1290">
+        <tr data-id="1291">
+            <td data-id="1292"><strong data-id="1293">What Was Planned</strong></td>
+            <td data-id="1294">What were the exercise objectives? What was supposed to happen?</td>
+            <td data-id="1295">&nbsp;</td>
+        </tr>
+        <tr data-id="1296">
+            <td data-id="1297"><strong data-id="1298">What Happened</strong></td>
+            <td data-id="1299">What actually occurred? Where did the exercise deviate from the plan?</td>
+            <td data-id="1300">&nbsp;</td>
+        </tr>
+        <tr data-id="1301">
+            <td data-id="1302"><strong data-id="1303">What Went Well</strong></td>
+            <td data-id="1304">Which systems, procedures, and individuals performed as expected or better?</td>
+            <td data-id="1305">&nbsp;</td>
+        </tr>
+        <tr data-id="1306">
+            <td data-id="1307"><strong data-id="1308">What Needs Improvement</strong></td>
+            <td data-id="1309">Where did the system fail or underperform? What surprised you? What was hard?</td>
+            <td data-id="1310">&nbsp;</td>
+        </tr>
+        <tr data-id="1311">
+            <td data-id="1312"><strong data-id="1313">Action Items</strong></td>
+            <td data-id="1314">What specific changes will be made? Who is responsible? By what date?</td>
+            <td data-id="1315">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="1316">Action Item Tracking</h3>
+<table data-id="1317">
+    <thead data-id="1318">
+        <tr data-id="1319">
+            <th data-id="1320">#</th>
+            <th data-id="1321">Action Item</th>
+            <th data-id="1322">Owner</th>
+            <th data-id="1323">Due Date</th>
+            <th data-id="1324">Status</th>
+        </tr>
+    </thead>
+    <tbody data-id="1325">
+        <tr data-id="1326"><td data-id="1327">1</td><td data-id="1328">&nbsp;</td><td data-id="1329">&nbsp;</td><td data-id="1330">&nbsp;</td><td data-id="1331">&nbsp;</td></tr>
+        <tr data-id="1332"><td data-id="1333">2</td><td data-id="1334">&nbsp;</td><td data-id="1335">&nbsp;</td><td data-id="1336">&nbsp;</td><td data-id="1337">&nbsp;</td></tr>
+        <tr data-id="1338"><td data-id="1339">3</td><td data-id="1340">&nbsp;</td><td data-id="1341">&nbsp;</td><td data-id="1342">&nbsp;</td><td data-id="1343">&nbsp;</td></tr>
+        <tr data-id="1344"><td data-id="1345">4</td><td data-id="1346">&nbsp;</td><td data-id="1347">&nbsp;</td><td data-id="1348">&nbsp;</td><td data-id="1349">&nbsp;</td></tr>
+        <tr data-id="1350"><td data-id="1351">5</td><td data-id="1352">&nbsp;</td><td data-id="1353">&nbsp;</td><td data-id="1354">&nbsp;</td><td data-id="1355">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="1356">8.6 Annual Full-System Exercise</h2>
+
+<p data-id="1357">Once per year, the community should conduct a full-day exercise that activates all three communications pillars simultaneously, involves as much of the community as possible, and uses realistic scenarios to test the complete system.</p>
+
+<h3 data-id="1358">Exercise Planning Timeline</h3>
+<ul data-id="1359">
+    <li data-id="1360"><strong data-id="1361">8 weeks before:</strong> Select date; assign exercise planning team; develop scenario</li>
+    <li data-id="1362"><strong data-id="1363">6 weeks before:</strong> Distribute participant notices; recruit evaluators; finalize scenario</li>
+    <li data-id="1364"><strong data-id="1365">4 weeks before:</strong> Conduct pre-exercise briefing for all role holders; verify equipment status</li>
+    <li data-id="1366"><strong data-id="1367">2 weeks before:</strong> Tabletop run-through of scenario; confirm logistics; prepare inject schedule</li>
+    <li data-id="1368"><strong data-id="1369">Exercise Day:</strong> Brief all participants; run the exercise; evaluators observe and document</li>
+    <li data-id="1370"><strong data-id="1371">Within 48 hours:</strong> Conduct AAR; document findings; assign action items</li>
+</ul>
+
+<h3 data-id="1372">Sample Exercise Scenario Injects (Schedule)</h3>
+<table data-id="1373">
+    <thead data-id="1374">
+        <tr data-id="1375">
+            <th data-id="1376">Time</th>
+            <th data-id="1377">Inject</th>
+            <th data-id="1378">Systems Tested</th>
+        </tr>
+    </thead>
+    <tbody data-id="1379">
+        <tr data-id="1380">
+            <td data-id="1381">0800</td>
+            <td data-id="1382">EXERCISE BEGIN: Simulated power grid failure. All grid power declared unavailable.</td>
+            <td data-id="1383">Battery backup, solar activation, equipment transition</td>
+        </tr>
+        <tr data-id="1384">
+            <td data-id="1385">0815</td>
+            <td data-id="1386">Network Coordinator "unavailable" — Deputy Coordinator must take over activation</td>
+            <td data-id="1387">Backup roles, activation protocols</td>
+        </tr>
+        <tr data-id="1388">
+            <td data-id="1389">0830</td>
+            <td data-id="1390">Radio net opened; all clusters check in; welfare check of vulnerable residents begins</td>
+            <td data-id="1391">Radio net, communication tree, cell structure</td>
+        </tr>
+        <tr data-id="1392">
+            <td data-id="1393">0900</td>
+            <td data-id="1394">Inject: Node NORTHSIDE-ROOF-01 has failed. Coverage gap in Northside cluster.</td>
+            <td data-id="1395">Mesh resilience, alternative routing, runner deployment</td>
+        </tr>
+        <tr data-id="1396">
+            <td data-id="1397">1000</td>
+            <td data-id="1398">Inject: Report of household needing medical supplies — resource allocation required</td>
+            <td data-id="1399">Mutual aid protocols, runner system, decision-making</td>
+        </tr>
+        <tr data-id="1400">
+            <td data-id="1401">1100</td>
+            <td data-id="1402">Inject: Unverified report of road closure on main runner route</td>
+            <td data-id="1403">Information verification, alternate routes, bulletin board update</td>
+        </tr>
+        <tr data-id="1404">
+            <td data-id="1405">1200</td>
+            <td data-id="1406">Lunch break / resource consolidation exercise</td>
+            <td data-id="1407">Power conservation, supply management</td>
+        </tr>
+        <tr data-id="1408">
+            <td data-id="1409">1300</td>
+            <td data-id="1410">Official Emergency Management contact — coordinate resource request</td>
+            <td data-id="1411">Inter-agency communication protocols, HF radio if available</td>
+        </tr>
+        <tr data-id="1412">
+            <td data-id="1413">1400</td>
+            <td data-id="1414">Inject: Community member challenges resource allocation decision — governance test</td>
+            <td data-id="1415">Decision-making protocols, documentation, community governance</td>
+        </tr>
+        <tr data-id="1416">
+            <td data-id="1417">1500</td>
+            <td data-id="1418">EXERCISE END. Stand-down. All systems secure.</td>
+            <td data-id="1419">Full system</td>
+        </tr>
+        <tr data-id="1420">
+            <td data-id="1421">1530</td>
+            <td data-id="1422">After-Action Review begins</td>
+            <td data-id="1423">All</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="1424" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- SECTION 9 — QUICK REFERENCE AND RESOURCES -->
+<!-- ============================================================ -->
+<hr data-id="1425" class="section-divider">
+<div data-id="1426" class="section-label">Section 9</div>
+<h1 data-id="1427">QUICK REFERENCE AND RESOURCES</h1>
+
+<h2 data-id="1428">9.1 Emergency Contact Directory (Fill-in Template)</h2>
+
+<table data-id="1429">
+    <thead data-id="1430">
+        <tr data-id="1431">
+            <th data-id="1432">Role</th>
+            <th data-id="1433">Name</th>
+            <th data-id="1434">Call Sign</th>
+            <th data-id="1435">Primary Contact</th>
+            <th data-id="1436">Secondary Contact</th>
+            <th data-id="1437">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="1438">
+        <tr data-id="1439"><td data-id="1440"><strong data-id="1441">Network Coordinator</strong></td><td data-id="1442">&nbsp;</td><td data-id="1443">&nbsp;</td><td data-id="1444">&nbsp;</td><td data-id="1445">&nbsp;</td><td data-id="1446">&nbsp;</td></tr>
+        <tr data-id="1447"><td data-id="1448"><strong data-id="1449">Deputy Coordinator</strong></td><td data-id="1450">&nbsp;</td><td data-id="1451">&nbsp;</td><td data-id="1452">&nbsp;</td><td data-id="1453">&nbsp;</td><td data-id="1454">&nbsp;</td></tr>
+        <tr data-id="1455"><td data-id="1456"><strong data-id="1457">Node Custodian 1</strong></td><td data-id="1458">&nbsp;</td><td data-id="1459">&nbsp;</td><td data-id="1460">&nbsp;</td><td data-id="1461">&nbsp;</td><td data-id="1462">Node: ________</td></tr>
+        <tr data-id="1463"><td data-id="1464"><strong data-id="1465">Node Custodian 2</strong></td><td data-id="1466">&nbsp;</td><td data-id="1467">&nbsp;</td><td data-id="1468">&nbsp;</td><td data-id="1469">&nbsp;</td><td data-id="1470">Node: ________</td></tr>
+        <tr data-id="1471"><td data-id="1472"><strong data-id="1473">Node Custodian 3</strong></td><td data-id="1474">&nbsp;</td><td data-id="1475">&nbsp;</td><td data-id="1476">&nbsp;</td><td data-id="1477">&nbsp;</td><td data-id="1478">Node: ________</td></tr>
+        <tr data-id="1479"><td data-id="1480"><strong data-id="1481">Node Custodian 4</strong></td><td data-id="1482">&nbsp;</td><td data-id="1483">&nbsp;</td><td data-id="1484">&nbsp;</td><td data-id="1485">&nbsp;</td><td data-id="1486">Node: ________</td></tr>
+        <tr data-id="1487"><td data-id="1488"><strong data-id="1489">Node Custodian 5</strong></td><td data-id="1490">&nbsp;</td><td data-id="1491">&nbsp;</td><td data-id="1492">&nbsp;</td><td data-id="1493">&nbsp;</td><td data-id="1494">Node: ________</td></tr>
+        <tr data-id="1495"><td data-id="1496"><strong data-id="1497">Radio Operator 1</strong></td><td data-id="1498">&nbsp;</td><td data-id="1499">&nbsp;</td><td data-id="1500">&nbsp;</td><td data-id="1501">&nbsp;</td><td data-id="1502">&nbsp;</td></tr>
+        <tr data-id="1503"><td data-id="1504"><strong data-id="1505">Radio Operator 2</strong></td><td data-id="1506">&nbsp;</td><td data-id="1507">&nbsp;</td><td data-id="1508">&nbsp;</td><td data-id="1509">&nbsp;</td><td data-id="1510">&nbsp;</td></tr>
+        <tr data-id="1511"><td data-id="1512"><strong data-id="1513">Radio Operator 3</strong></td><td data-id="1514">&nbsp;</td><td data-id="1515">&nbsp;</td><td data-id="1516">&nbsp;</td><td data-id="1517">&nbsp;</td><td data-id="1518">&nbsp;</td></tr>
+        <tr data-id="1519"><td data-id="1520"><strong data-id="1521">Radio Operator 4</strong></td><td data-id="1522">&nbsp;</td><td data-id="1523">&nbsp;</td><td data-id="1524">&nbsp;</td><td data-id="1525">&nbsp;</td><td data-id="1526">&nbsp;</td></tr>
+        <tr data-id="1527"><td data-id="1528"><strong data-id="1529">Radio Operator 5</strong></td><td data-id="1530">&nbsp;</td><td data-id="1531">&nbsp;</td><td data-id="1532">&nbsp;</td><td data-id="1533">&nbsp;</td><td data-id="1534">&nbsp;</td></tr>
+        <tr data-id="1535"><td data-id="1536"><strong data-id="1537">Information Runner 1</strong></td><td data-id="1538">&nbsp;</td><td data-id="1539">&nbsp;</td><td data-id="1540">&nbsp;</td><td data-id="1541">&nbsp;</td><td data-id="1542">Route: ________</td></tr>
+        <tr data-id="1543"><td data-id="1544"><strong data-id="1545">Information Runner 2</strong></td><td data-id="1546">&nbsp;</td><td data-id="1547">&nbsp;</td><td data-id="1548">&nbsp;</td><td data-id="1549">&nbsp;</td><td data-id="1550">Route: ________</td></tr>
+        <tr data-id="1551"><td data-id="1552"><strong data-id="1553">Information Runner 3</strong></td><td data-id="1554">&nbsp;</td><td data-id="1555">&nbsp;</td><td data-id="1556">&nbsp;</td><td data-id="1557">&nbsp;</td><td data-id="1558">Route: ________</td></tr>
+        <tr data-id="1559"><td data-id="1560"><strong data-id="1561">Information Runner 4</strong></td><td data-id="1562">&nbsp;</td><td data-id="1563">&nbsp;</td><td data-id="1564">&nbsp;</td><td data-id="1565">&nbsp;</td><td data-id="1566">Route: ________</td></tr>
+        <tr data-id="1567"><td data-id="1568"><strong data-id="1569">Information Runner 5</strong></td><td data-id="1570">&nbsp;</td><td data-id="1571">&nbsp;</td><td data-id="1572">&nbsp;</td><td data-id="1573">&nbsp;</td><td data-id="1574">Route: ________</td></tr>
+        <tr data-id="1575"><td data-id="1576"><strong data-id="1577">Supply Custodian</strong></td><td data-id="1578">&nbsp;</td><td data-id="1579">&nbsp;</td><td data-id="1580">&nbsp;</td><td data-id="1581">&nbsp;</td><td data-id="1582">&nbsp;</td></tr>
+        <tr data-id="1583"><td data-id="1584"><strong data-id="1585">Training Coordinator</strong></td><td data-id="1586">&nbsp;</td><td data-id="1587">&nbsp;</td><td data-id="1588">&nbsp;</td><td data-id="1589">&nbsp;</td><td data-id="1590">&nbsp;</td></tr>
+        <tr data-id="1591"><td data-id="1592"><strong data-id="1593">Local Emergency Mgmt</strong></td><td data-id="1594">&nbsp;</td><td data-id="1595">&nbsp;</td><td data-id="1596">&nbsp;</td><td data-id="1597">&nbsp;</td><td data-id="1598">&nbsp;</td></tr>
+        <tr data-id="1599"><td data-id="1600"><strong data-id="1601">Local Amateur Radio Club</strong></td><td data-id="1602">&nbsp;</td><td data-id="1603">&nbsp;</td><td data-id="1604">&nbsp;</td><td data-id="1605">&nbsp;</td><td data-id="1606">&nbsp;</td></tr>
+        <tr data-id="1607"><td data-id="1608"><strong data-id="1609">Local ARES/RACES EC</strong></td><td data-id="1610">&nbsp;</td><td data-id="1611">&nbsp;</td><td data-id="1612">&nbsp;</td><td data-id="1613">&nbsp;</td><td data-id="1614">&nbsp;</td></tr>
+        <tr data-id="1615"><td data-id="1616"><strong data-id="1617">CERT Team Leader</strong></td><td data-id="1618">&nbsp;</td><td data-id="1619">&nbsp;</td><td data-id="1620">&nbsp;</td><td data-id="1621">&nbsp;</td><td data-id="1622">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="1623">9.2 Node Registry Template</h2>
+
+<table data-id="1624">
+    <thead data-id="1625">
+        <tr data-id="1626">
+            <th data-id="1627">Node ID</th>
+            <th data-id="1628">Physical Location</th>
+            <th data-id="1629">Custodian</th>
+            <th data-id="1630">Hardware</th>
+            <th data-id="1631">Installed Date</th>
+            <th data-id="1632">Last Check</th>
+            <th data-id="1633">Status</th>
+        </tr>
+    </thead>
+    <tbody data-id="1634">
+        <tr data-id="1635"><td data-id="1636">&nbsp;</td><td data-id="1637">&nbsp;</td><td data-id="1638">&nbsp;</td><td data-id="1639">&nbsp;</td><td data-id="1640">&nbsp;</td><td data-id="1641">&nbsp;</td><td data-id="1642">&nbsp;</td></tr>
+        <tr data-id="1643"><td data-id="1644">&nbsp;</td><td data-id="1645">&nbsp;</td><td data-id="1646">&nbsp;</td><td data-id="1647">&nbsp;</td><td data-id="1648">&nbsp;</td><td data-id="1649">&nbsp;</td><td data-id="1650">&nbsp;</td></tr>
+        <tr data-id="1651"><td data-id="1652">&nbsp;</td><td data-id="1653">&nbsp;</td><td data-id="1654">&nbsp;</td><td data-id="1655">&nbsp;</td><td data-id="1656">&nbsp;</td><td data-id="1657">&nbsp;</td><td data-id="1658">&nbsp;</td></tr>
+        <tr data-id="1659"><td data-id="1660">&nbsp;</td><td data-id="1661">&nbsp;</td><td data-id="1662">&nbsp;</td><td data-id="1663">&nbsp;</td><td data-id="1664">&nbsp;</td><td data-id="1665">&nbsp;</td><td data-id="1666">&nbsp;</td></tr>
+        <tr data-id="1667"><td data-id="1668">&nbsp;</td><td data-id="1669">&nbsp;</td><td data-id="1670">&nbsp;</td><td data-id="1671">&nbsp;</td><td data-id="1672">&nbsp;</td><td data-id="1673">&nbsp;</td><td data-id="1674">&nbsp;</td></tr>
+        <tr data-id="1675"><td data-id="1676">&nbsp;</td><td data-id="1677">&nbsp;</td><td data-id="1678">&nbsp;</td><td data-id="1679">&nbsp;</td><td data-id="1680">&nbsp;</td><td data-id="1681">&nbsp;</td><td data-id="1682">&nbsp;</td></tr>
+        <tr data-id="1683"><td data-id="1684">&nbsp;</td><td data-id="1685">&nbsp;</td><td data-id="1686">&nbsp;</td><td data-id="1687">&nbsp;</td><td data-id="1688">&nbsp;</td><td data-id="1689">&nbsp;</td><td data-id="1690">&nbsp;</td></tr>
+        <tr data-id="1691"><td data-id="1692">&nbsp;</td><td data-id="1693">&nbsp;</td><td data-id="1694">&nbsp;</td><td data-id="1695">&nbsp;</td><td data-id="1696">&nbsp;</td><td data-id="1697">&nbsp;</td><td data-id="1698">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="1699">9.3 Frequency Quick Reference</h2>
+
+<table data-id="1700">
+    <thead data-id="1701">
+        <tr data-id="1702">
+            <th data-id="1703">Frequency</th>
+            <th data-id="1704">Service</th>
+            <th data-id="1705">Purpose</th>
+            <th data-id="1706">License</th>
+        </tr>
+    </thead>
+    <tbody data-id="1707">
+        <tr data-id="1708"><td data-id="1709">162.400–162.550 MHz</td><td data-id="1710">NOAA Weather Radio</td><td data-id="1711">Weather alerts — monitor continuously</td><td data-id="1712">None (RX)</td></tr>
+        <tr data-id="1713"><td data-id="1714">146.520 MHz</td><td data-id="1715">2m Amateur</td><td data-id="1716">National calling frequency — make contact, then QSY</td><td data-id="1717">Technician+</td></tr>
+        <tr data-id="1718"><td data-id="1719">146.580 MHz</td><td data-id="1720">2m Amateur</td><td data-id="1721">National simplex emergency (backup)</td><td data-id="1722">Technician+</td></tr>
+        <tr data-id="1723"><td data-id="1724">462.675 MHz</td><td data-id="1725">GMRS Ch. 20</td><td data-id="1726">GMRS calling/emergency</td><td data-id="1727">GMRS</td></tr>
+        <tr data-id="1728"><td data-id="1729">462.5625 MHz</td><td data-id="1730">FRS/GMRS Ch. 1</td><td data-id="1731">FRS short-range coordination</td><td data-id="1732">None (FRS power)</td></tr>
+        <tr data-id="1733"><td data-id="1734">27.065 MHz (Ch. 9)</td><td data-id="1735">CB Radio</td><td data-id="1736">CB emergency/distress channel</td><td data-id="1737">None</td></tr>
+        <tr data-id="1738"><td data-id="1739">144.390 MHz</td><td data-id="1740">2m APRS</td><td data-id="1741">APRS position and messaging</td><td data-id="1742">Technician+</td></tr>
+        <tr data-id="1743"><td data-id="1744">915 MHz</td><td data-id="1745">LoRa ISM / Meshtastic</td><td data-id="1746">Community mesh network primary</td><td data-id="1747">None (Part 15)</td></tr>
+        <tr data-id="1748"><td data-id="1749">3.985 MHz</td><td data-id="1750">80m HF Amateur</td><td data-id="1751">NTS traffic net (evening)</td><td data-id="1752">General+</td></tr>
+        <tr data-id="1753"><td data-id="1754">7.285 MHz</td><td data-id="1755">40m HF Amateur</td><td data-id="1756">NTS traffic net (daytime)</td><td data-id="1757">General+</td></tr>
+        <tr data-id="1758"><td data-id="1759">14.300 MHz</td><td data-id="1760">20m HF Amateur</td><td data-id="1761">Maritime Mobile — worldwide emergency</td><td data-id="1762">General+</td></tr>
+        <tr data-id="1763"><td data-id="1764">7.177 MHz</td><td data-id="1765">40m HF Amateur</td><td data-id="1766">Winlink/Vara HF (varies by region)</td><td data-id="1767">General+</td></tr>
+        <tr data-id="1768"><td data-id="1769"><em data-id="1770">Local Repeater:</em> _______</td><td data-id="1771">&nbsp;</td><td data-id="1772">Primary community repeater</td><td data-id="1773">&nbsp;</td></tr>
+        <tr data-id="1774"><td data-id="1775"><em data-id="1776">Backup Repeater:</em> _______</td><td data-id="1777">&nbsp;</td><td data-id="1778">Backup community repeater</td><td data-id="1779">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<h2 data-id="1780">9.4 Glossary of Terms</h2>
+
+<p data-id="1781"><strong data-id="1782">APRS</strong> — Automatic Packet Reporting System. A digital protocol operating on 144.390 MHz (North America) that transmits position, weather, and messaging data via packet radio. Does not require internet access.</p>
+
+<p data-id="1783"><strong data-id="1784">BATMAN-adv</strong> — Better Approach To Mobile Adhoc Networking — advanced. A Linux kernel module that enables WiFi mesh networking at layer 2 of the network stack. Used in community WiFi mesh projects.</p>
+
+<p data-id="1785"><strong data-id="1786">Briar</strong> — An open-source Android messaging app that communicates via Bluetooth, WiFi Direct, or the Tor network without requiring internet access. Contacts must be added in person by scanning a QR code.</p>
+
+<p data-id="1787"><strong data-id="1788">Call Sign</strong> — An FCC-assigned alphanumeric identifier (e.g., W8XYZ) used to identify a licensed radio station or operator. Must be stated at the beginning and end of each transmission.</p>
+
+<p data-id="1789"><strong data-id="1790">Channel</strong> — In radio: a specific frequency or frequency pair designated for a particular use. In Meshtastic: a named communication channel with an associated pre-shared encryption key.</p>
+
+<p data-id="1791"><strong data-id="1792">Dead Drop</strong> — A pre-agreed physical location where messages can be left and retrieved without direct contact between sender and recipient. Enables asynchronous physical communication.</p>
+
+<p data-id="1793"><strong data-id="1794">DMR</strong> — Digital Mobile Radio. An ETSI digital voice and data radio standard widely used in commercial, GMRS, and amateur radio applications. Supports two simultaneous time-division channels on one frequency.</p>
+
+<p data-id="1795"><strong data-id="1796">EMCOMM</strong> — Emergency Communications. The discipline and practice of maintaining radio communications capability for use during disasters and emergencies. Associated with ARES, RACES, and CERT programs.</p>
+
+<p data-id="1797"><strong data-id="1798">FCC</strong> — Federal Communications Commission. The US federal agency that regulates radio communications, issues licenses, and enforces the Communications Act.</p>
+
+<p data-id="1799"><strong data-id="1800">FRS</strong> — Family Radio Service. An unlicensed UHF radio service operating on 22 channels between 462 and 467 MHz. Limited to 2W on most channels. Widely available in consumer electronics stores.</p>
+
+<p data-id="1801"><strong data-id="1802">GMRS</strong> — General Mobile Radio Service. A licensed UHF radio service (FCC license, $35, no exam) with higher power limits than FRS and access to repeater operation. The GMRS license covers the licensee and immediate family members.</p>
+
+<p data-id="1803"><strong data-id="1804">Go-Box</strong> — A portable, self-contained emergency communications station assembled in a weatherproof case. Contains a transceiver, power supply, antenna, cables, and operating supplies. Can be deployed and operational in under 15 minutes. See Appendix D.</p>
+
+<p data-id="1805"><strong data-id="1806">HF</strong> — High Frequency. The radio frequency range of 3–30 MHz. HF signals can travel thousands of miles by reflecting off the ionosphere. Requires Amateur General or Extra class license for most HF amateur bands.</p>
+
+<p data-id="1807"><strong data-id="1808">J-Pole</strong> — A half-wave antenna fed by a quarter-wave matching stub. Provides modest gain over a simple ground-plane antenna with no ground radials required. Well-suited for VHF and UHF mesh/radio node installations.</p>
+
+<p data-id="1809"><strong data-id="1810">JS8Call</strong> — A weak-signal messaging application for HF radio derived from WSJT-X/FT8. Enables keyboard-to-keyboard messaging, relaying, and store-and-forward networking over HF frequencies.</p>
+
+<p data-id="1811"><strong data-id="1812">Kiwix</strong> — An open-source offline content reader available for Android, iOS, Windows, Mac, and Linux. Reads ZIM format files. Used to access Wikipedia and other reference content without internet access.</p>
+
+<p data-id="1813"><strong data-id="1814">LoRa</strong> — Long Range. A spread-spectrum radio modulation technique optimized for long-range, low-power, low-data-rate communication. Used as the underlying radio technology in Meshtastic nodes. Typical range: 1–10+ km per hop.</p>
+
+<p data-id="1815"><strong data-id="1816">Meshtastic</strong> — An open-source firmware and application ecosystem that implements a mesh network over LoRa radio hardware. Provides text messaging, GPS position sharing, and store-and-forward capability without internet access.</p>
+
+<p data-id="1817"><strong data-id="1818">Mesh Network</strong> — A network topology in which every node connects to multiple other nodes, creating multiple paths for data to travel. The network self-heals around failed nodes by routing through alternative paths.</p>
+
+<p data-id="1819"><strong data-id="1820">Net Control</strong> — The designated operator who manages a radio net. Net Control calls the net to order, takes check-ins, manages traffic, and closes the net. Net Control is not a permanent authority role — it rotates among trained operators.</p>
+
+<p data-id="1821"><strong data-id="1822">Node</strong> — In a mesh network: a single device that participates in the mesh as both a client and a relay. In community context: a fixed, solar-powered Meshtastic device mounted at an elevated location to extend network coverage.</p>
+
+<p data-id="1823"><strong data-id="1824">OPSEC</strong> — Operational Security. The practice of protecting sensitive information from disclosure to unauthorized parties. In community communications: avoid transmitting personal details, locations of supplies, or security-sensitive information over unencrypted or public channels.</p>
+
+<p data-id="1825"><strong data-id="1826">Phonetic Alphabet</strong> — A system of words representing letters of the alphabet used to spell out words clearly over radio. See Appendix A for the NATO standard alphabet used in emergency communications.</p>
+
+<p data-id="1827"><strong data-id="1828">PSK31</strong> — Phase Shift Keying 31 baud. A narrow-bandwidth HF digital keyboard-to-keyboard communication mode. Operates in very limited spectrum and is useful for direct one-on-one HF text communication.</p>
+
+<p data-id="1829"><strong data-id="1830">QRM</strong> — Amateur radio shorthand for interference from other radio signals. Q-codes (Q-signals) are a standardized system of abbreviations used in radio communication.</p>
+
+<p data-id="1831"><strong data-id="1832">QSO</strong> — Amateur radio shorthand for a radio contact or conversation between two stations.</p>
+
+<p data-id="1833"><strong data-id="1834">Raspberry Pi</strong> — A low-cost, credit-card-sized Linux computer widely used in electronics projects. In community mesh networks: used as a gateway/hub node, running Meshtastic Python integration, store-and-forward messaging server, or BATMAN-adv mesh router.</p>
+
+<p data-id="1835"><strong data-id="1836">Repeater</strong> — An automated radio station that receives signals on one frequency (input) and simultaneously retransmits them at higher power on another frequency (output). Greatly extends the range of portable and mobile radio equipment.</p>
+
+<p data-id="1837"><strong data-id="1838">Reticulum</strong> — An open-source cryptographic networking stack designed to operate over low-bandwidth radio links, serial connections, and other constrained media. Provides strong encryption and resilient routing. Used with Nomad Network and LXMF applications.</p>
+
+<p data-id="1839"><strong data-id="1840">SALUTE</strong> — A military-derived format for reporting emergency information. Stands for: Size, Activity, Location, Unit/Uniform, Time, Equipment. See Appendix B.</p>
+
+<p data-id="1841"><strong data-id="1842">SDR</strong> — Software Defined Radio. A radio receiver (and sometimes transmitter) in which the radio hardware is simplified and most signal processing is done in software. The RTL-SDR dongle ($25–$35) is a popular receive-only SDR for monitoring a wide range of signals.</p>
+
+<p data-id="1843"><strong data-id="1844">Simplex</strong> — Radio communication on a single frequency, used for both transmitting and receiving. Unlike repeater operation (duplex), simplex is direct station-to-station. The national 2-meter simplex calling frequency is 146.520 MHz.</p>
+
+<p data-id="1845"><strong data-id="1846">Solar Charge Controller</strong> — A device that regulates the voltage and current flowing from a solar panel to a battery, preventing overcharging and battery damage. Two types: PWM (simpler, less efficient) and MPPT (more efficient, recommended for larger systems).</p>
+
+<p data-id="1847"><strong data-id="1848">Store-and-Forward</strong> — A messaging pattern in which a message is stored at an intermediate node when the destination is not reachable, and forwarded when a connection is established. Used in Meshtastic and Winlink to compensate for intermittent connectivity.</p>
+
+<p data-id="1849"><strong data-id="1850">UHF</strong> — Ultra High Frequency. The radio frequency range of 300–3,000 MHz. UHF signals travel by line-of-sight but penetrate buildings better than VHF. FRS, GMRS, and the 70-centimeter amateur band are in the UHF range.</p>
+
+<p data-id="1851"><strong data-id="1852">USB Kit</strong> — The Community USB Kit: a standardized USB flash drive (32 GB minimum) containing all community communications documentation, software, maps, and reference data. Distributed to all key role holders and updated monthly.</p>
+
+<p data-id="1853"><strong data-id="1854">VHF</strong> — Very High Frequency. The radio frequency range of 30–300 MHz. VHF signals travel primarily by line-of-sight, with range enhanced by antenna height. NOAA Weather Radio, 2-meter amateur band, and FM broadcast radio are in the VHF range.</p>
+
+<p data-id="1855"><strong data-id="1856">Winlink</strong> — A global radio email system that allows sending and receiving email over HF, VHF, and UHF radio links without internet access. Uses Pactor, VARA, ARDOP, or packet protocols. Widely used by emergency communicators for formal message traffic.</p>
+
+<p data-id="1857"><strong data-id="1858">Yagi</strong> — A directional antenna consisting of a driven element and multiple parasitic elements (directors and reflectors) along a boom. Provides significant gain in one direction. Used for point-to-point links between mesh nodes or for working distant repeaters.</p>
+
+<p data-id="1859"><strong data-id="1860">ZIM File</strong> — The file format used by the Kiwix offline reader. Wikipedia and other large reference sites are available as ZIM files for download and offline use. The English Wikipedia ZIM file is approximately 85 GB (full) or 6 GB (simplified).</p>
+
+<h2 data-id="1861">9.5 Recommended Reading and Resources</h2>
+
+<table data-id="1862">
+    <thead data-id="1863">
+        <tr data-id="1864">
+            <th data-id="1865">Resource</th>
+            <th data-id="1866">Type</th>
+            <th data-id="1867">Offline Available?</th>
+            <th data-id="1868">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="1869">
+        <tr data-id="1870">
+            <td data-id="1871"><strong data-id="1872">ARRL Handbook for Radio Communications</strong></td>
+            <td data-id="1873">Reference book</td>
+            <td data-id="1874">Yes (print or PDF)</td>
+            <td data-id="1875">The definitive amateur radio technical reference. Updated annually. Covers all modes, antennas, propagation, and emergency operations.</td>
+        </tr>
+        <tr data-id="1876">
+            <td data-id="1877"><strong data-id="1878">ARRL Emergency Communications Handbook</strong></td>
+            <td data-id="1879">Reference book</td>
+            <td data-id="1880">Yes (print or PDF)</td>
+            <td data-id="1881">EMCOMM-specific guidance for amateur radio operators. Net operations, ICS integration, message handling.</td>
+        </tr>
+        <tr data-id="1882">
+            <td data-id="1883"><strong data-id="1884">Meshtastic Documentation</strong></td>
+            <td data-id="1885">Online documentation / PDF</td>
+            <td data-id="1886">Yes (PDF download)</td>
+            <td data-id="1887">Official Meshtastic project documentation. Device configuration, firmware, Python API. Include in USB kit.</td>
+        </tr>
+        <tr data-id="1888">
+            <td data-id="1889"><strong data-id="1890">FEMA IS-100, IS-200, IS-700</strong></td>
+            <td data-id="1891">Online course / PDF</td>
+            <td data-id="1892">Yes (PDF print)</td>
+            <td data-id="1893">Free FEMA independent study courses on ICS, NIMS, and emergency management. Foundational for working with official systems.</td>
+        </tr>
+        <tr data-id="1894">
+            <td data-id="1895"><strong data-id="1896">RepeaterBook</strong></td>
+            <td data-id="1897">Online directory / CSV export</td>
+            <td data-id="1898">Yes (CSV download)</td>
+            <td data-id="1899">Comprehensive repeater directory. Download CSV for your region and store in USB kit DATA folder.</td>
+        </tr>
+        <tr data-id="1900">
+            <td data-id="1901"><strong data-id="1902">Winlink.org Documentation</strong></td>
+            <td data-id="1903">Online / PDF</td>
+            <td data-id="1904">Yes (PDF)</td>
+            <td data-id="1905">Comprehensive guides for Winlink email-over-radio. Include VARA HF/FM guides.</td>
+        </tr>
+        <tr data-id="1906">
+            <td data-id="1907"><strong data-id="1908">Wikipedia (Offline via Kiwix)</strong></td>
+            <td data-id="1909">Encyclopedia / ZIM file</td>
+            <td data-id="1910">Yes</td>
+            <td data-id="1911">Offline access to Wikipedia's entire content base. Invaluable for medical, technical, and reference use during extended outages.</td>
+        </tr>
+        <tr data-id="1912">
+            <td data-id="1913"><strong data-id="1914">JS8Call Documentation</strong></td>
+            <td data-id="1915">Online / PDF</td>
+            <td data-id="1916">Yes (PDF)</td>
+            <td data-id="1917">Documentation for JS8Call HF weak-signal messaging. Operating guide and API reference.</td>
+        </tr>
+        <tr data-id="1918">
+            <td data-id="1919"><strong data-id="1920">The Art of Community by Jono Bacon</strong></td>
+            <td data-id="1921">Book</td>
+            <td data-id="1922">Yes (free PDF)</td>
+            <td data-id="1923">Practical community building guidance applicable to organizing a volunteer communications network. Free download from author.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 data-id="1924">9.6 Version History and Update Log</h2>
+
+<table data-id="1925">
+    <thead data-id="1926">
+        <tr data-id="1927">
+            <th data-id="1928">Version</th>
+            <th data-id="1929">Date</th>
+            <th data-id="1930">Changes</th>
+            <th data-id="1931">Updated By</th>
+        </tr>
+    </thead>
+    <tbody data-id="1932">
+        <tr data-id="1933">
+            <td data-id="1934">1.0</td>
+            <td data-id="1935">2026</td>
+            <td data-id="1936">Initial release — First Edition. All 9 sections and 4 appendices.</td>
+            <td data-id="1937">Community Network Team</td>
+        </tr>
+        <tr data-id="1938"><td data-id="1939">&nbsp;</td><td data-id="1940">&nbsp;</td><td data-id="1941">&nbsp;</td><td data-id="1942">&nbsp;</td></tr>
+        <tr data-id="1943"><td data-id="1944">&nbsp;</td><td data-id="1945">&nbsp;</td><td data-id="1946">&nbsp;</td><td data-id="1947">&nbsp;</td></tr>
+        <tr data-id="1948"><td data-id="1949">&nbsp;</td><td data-id="1950">&nbsp;</td><td data-id="1951">&nbsp;</td><td data-id="1952">&nbsp;</td></tr>
+        <tr data-id="1953"><td data-id="1954">&nbsp;</td><td data-id="1955">&nbsp;</td><td data-id="1956">&nbsp;</td><td data-id="1957">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<div data-id="1958" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A — NATO PHONETIC ALPHABET -->
+<!-- ============================================================ -->
+<div data-id="1959" class="appendix-header">APPENDIX A — NATO PHONETIC ALPHABET</div>
+<p data-id="1960">Use the NATO Phonetic Alphabet to spell letters clearly over radio when there is any chance of misunderstanding. Always use this alphabet for call signs, addresses, and critical identifiers.</p>
+
+<table data-id="1961" class="phonetic-table">
+    <thead data-id="1962">
+        <tr data-id="1963">
+            <th data-id="1964">Letter</th>
+            <th data-id="1965">Word</th>
+            <th data-id="1966">Pronunciation</th>
+            <th data-id="1967">Letter</th>
+            <th data-id="1968">Word</th>
+            <th data-id="1969">Pronunciation</th>
+        </tr>
+    </thead>
+    <tbody data-id="1970">
+        <tr data-id="1971">
+            <td data-id="1972"><strong data-id="1973">A</strong></td><td data-id="1974">Alfa</td><td data-id="1975">AL-fah</td>
+            <td data-id="1976"><strong data-id="1977">N</strong></td><td data-id="1978">November</td><td data-id="1979">no-VEM-ber</td>
+        </tr>
+        <tr data-id="1980">
+            <td data-id="1981"><strong data-id="1982">B</strong></td><td data-id="1983">Bravo</td><td data-id="1984">BRAH-voh</td>
+            <td data-id="1985"><strong data-id="1986">O</strong></td><td data-id="1987">Oscar</td><td data-id="1988">OSS-cah</td>
+        </tr>
+        <tr data-id="1989">
+            <td data-id="1990"><strong data-id="1991">C</strong></td><td data-id="1992">Charlie</td><td data-id="1993">CHAR-lee</td>
+            <td data-id="1994"><strong data-id="1995">P</strong></td><td data-id="1996">Papa</td><td data-id="1997">pah-PAH</td>
+        </tr>
+        <tr data-id="1998">
+            <td data-id="1999"><strong data-id="2000">D</strong></td><td data-id="2001">Delta</td><td data-id="2002">DELL-tah</td>
+            <td data-id="2003"><strong data-id="2004">Q</strong></td><td data-id="2005">Quebec</td><td data-id="2006">keh-BECK</td>
+        </tr>
+        <tr data-id="2007">
+            <td data-id="2008"><strong data-id="2009">E</strong></td><td data-id="2010">Echo</td><td data-id="2011">ECK-oh</td>
+            <td data-id="2012"><strong data-id="2013">R</strong></td><td data-id="2014">Romeo</td><td data-id="2015">ROW-me-oh</td>
+        </tr>
+        <tr data-id="2016">
+            <td data-id="2017"><strong data-id="2018">F</strong></td><td data-id="2019">Foxtrot</td><td data-id="2020">FOKS-trot</td>
+            <td data-id="2021"><strong data-id="2022">S</strong></td><td data-id="2023">Sierra</td><td data-id="2024">see-AIR-rah</td>
+        </tr>
+        <tr data-id="2025">
+            <td data-id="2026"><strong data-id="2027">G</strong></td><td data-id="2028">Golf</td><td data-id="2029">GOLF</td>
+            <td data-id="2030"><strong data-id="2031">T</strong></td><td data-id="2032">Tango</td><td data-id="2033">TANG-go</td>
+        </tr>
+        <tr data-id="2034">
+            <td data-id="2035"><strong data-id="2036">H</strong></td><td data-id="2037">Hotel</td><td data-id="2038">hoh-TELL</td>
+            <td data-id="2039"><strong data-id="2040">U</strong></td><td data-id="2041">Uniform</td><td data-id="2042">YOU-nee-form</td>
+        </tr>
+        <tr data-id="2043">
+            <td data-id="2044"><strong data-id="2045">I</strong></td><td data-id="2046">India</td><td data-id="2047">IN-dee-ah</td>
+            <td data-id="2048"><strong data-id="2049">V</strong></td><td data-id="2050">Victor</td><td data-id="2051">VIK-tah</td>
+        </tr>
+        <tr data-id="2052">
+            <td data-id="2053"><strong data-id="2054">J</strong></td><td data-id="2055">Juliett</td><td data-id="2056">JEW-lee-ett</td>
+            <td data-id="2057"><strong data-id="2058">W</strong></td><td data-id="2059">Whiskey</td><td data-id="2060">WISS-key</td>
+        </tr>
+        <tr data-id="2061">
+            <td data-id="2062"><strong data-id="2063">K</strong></td><td data-id="2064">Kilo</td><td data-id="2065">KEY-loh</td>
+            <td data-id="2066"><strong data-id="2067">X</strong></td><td data-id="2068">X-ray</td><td data-id="2069">ECKS-ray</td>
+        </tr>
+        <tr data-id="2070">
+            <td data-id="2071"><strong data-id="2072">L</strong></td><td data-id="2073">Lima</td><td data-id="2074">LEE-mah</td>
+            <td data-id="2075"><strong data-id="2076">Y</strong></td><td data-id="2077">Yankee</td><td data-id="2078">YANG-key</td>
+        </tr>
+        <tr data-id="2079">
+            <td data-id="2080"><strong data-id="2081">M</strong></td><td data-id="2082">Mike</td><td data-id="2083">MIKE</td>
+            <td data-id="2084"><strong data-id="2085">Z</strong></td><td data-id="2086">Zulu</td><td data-id="2087">ZOO-loo</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="2088">Numeric Pronunciations</h3>
+<table data-id="2089">
+    <thead data-id="2090">
+        <tr data-id="2091"><th data-id="2092">Digit</th><th data-id="2093">Pronunciation</th><th data-id="2094">Digit</th><th data-id="2095">Pronunciation</th></tr>
+    </thead>
+    <tbody data-id="2096">
+        <tr data-id="2097"><td data-id="2098"><strong data-id="2099">0</strong></td><td data-id="2100">ZEE-ro</td><td data-id="2101"><strong data-id="2102">5</strong></td><td data-id="2103">FIF-tuh</td></tr>
+        <tr data-id="2104"><td data-id="2105"><strong data-id="2106">1</strong></td><td data-id="2107">WUN</td><td data-id="2108"><strong data-id="2109">6</strong></td><td data-id="2110">SIX</td></tr>
+        <tr data-id="2111"><td data-id="2112"><strong data-id="2113">2</strong></td><td data-id="2114">TOO</td><td data-id="2115"><strong data-id="2116">7</strong></td><td data-id="2117">SEV-en</td></tr>
+        <tr data-id="2118"><td data-id="2119"><strong data-id="2120">3</strong></td><td data-id="2121">TREE</td><td data-id="2122"><strong data-id="2123">8</strong></td><td data-id="2124">AIT</td></tr>
+        <tr data-id="2125"><td data-id="2126"><strong data-id="2127">4</strong></td><td data-id="2128">FOW-er</td><td data-id="2129"><strong data-id="2130">9</strong></td><td data-id="2131">NIN-er</td></tr>
+    </tbody>
+</table>
+
+<div data-id="2132" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- APPENDIX B — SALUTE REPORT FORMAT -->
+<!-- ============================================================ -->
+<div data-id="2133" class="appendix-header">APPENDIX B — SALUTE REPORT FORMAT</div>
+
+<p data-id="2134">The SALUTE format is a structured method for reporting emergency observations clearly and completely over radio. Using SALUTE ensures the receiver gets all critical information without needing to ask follow-up questions. Memorize this format — in a high-stress situation, having a checklist prevents critical information from being omitted.</p>
+
+<table data-id="2135">
+    <thead data-id="2136">
+        <tr data-id="2137">
+            <th data-id="2138">Letter</th>
+            <th data-id="2139">Element</th>
+            <th data-id="2140">What to Report</th>
+            <th data-id="2141">Example</th>
+        </tr>
+    </thead>
+    <tbody data-id="2142">
+        <tr data-id="2143">
+            <td data-id="2144"><strong data-id="2145">S</strong></td>
+            <td data-id="2146">Size</td>
+            <td data-id="2147">How many people, vehicles, or units are involved? Estimate if exact count is unknown.</td>
+            <td data-id="2148">"Approximately 12 people"</td>
+        </tr>
+        <tr data-id="2149">
+            <td data-id="2150"><strong data-id="2151">A</strong></td>
+            <td data-id="2152">Activity</td>
+            <td data-id="2153">What is happening? Be specific: injured, trapped, evacuating, requesting supplies, fire, etc.</td>
+            <td data-id="2154">"Three individuals appear injured and unable to walk"</td>
+        </tr>
+        <tr data-id="2155">
+            <td data-id="2156"><strong data-id="2157">L</strong></td>
+            <td data-id="2158">Location</td>
+            <td data-id="2159">Exact address, cross streets, or landmark. Include direction if relevant. Provide GPS coordinates if available.</td>
+            <td data-id="2160">"Corner of Maple Ave and 5th Street, northeast corner"</td>
+        </tr>
+        <tr data-id="2161">
+            <td data-id="2162"><strong data-id="2163">U</strong></td>
+            <td data-id="2164">Unit / Uniform</td>
+            <td data-id="2165">Who is involved? Civilians, children, elderly, first responders? Are they identifiable by clothing, markings, or identifying features?</td>
+            <td data-id="2166">"All civilians, mix of adults and children, no emergency personnel on scene"</td>
+        </tr>
+        <tr data-id="2167">
+            <td data-id="2168"><strong data-id="2169">T</strong></td>
+            <td data-id="2170">Time</td>
+            <td data-id="2171">When did you observe this? Or: how long has the situation been ongoing? Use 24-hour time where possible.</td>
+            <td data-id="2172">"Observed at 1435 hours, approximately 20 minutes ago"</td>
+        </tr>
+        <tr data-id="2173">
+            <td data-id="2174"><strong data-id="2175">E</strong></td>
+            <td data-id="2176">Equipment</td>
+            <td data-id="2177">What resources are on scene or needed? Include medical supplies, vehicles, personnel, water, structural damage, fire, etc.</td>
+            <td data-id="2178">"Need: first aid, stretcher, at least two additional people for assistance. On scene: none."</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="2179">SALUTE Fill-In Report Form</h3>
+<table data-id="2180">
+    <thead data-id="2181">
+        <tr data-id="2182">
+            <th data-id="2183" colspan="2">SALUTE REPORT — Copy and use for each incident</th>
+        </tr>
+    </thead>
+    <tbody data-id="2184">
+        <tr data-id="2185"><td data-id="2186" style="width:30%;"><strong data-id="2187">Reporting Party:</strong></td><td data-id="2188">&nbsp;</td></tr>
+        <tr data-id="2189"><td data-id="2190"><strong data-id="2191">Call Sign:</strong></td><td data-id="2192">&nbsp;</td></tr>
+        <tr data-id="2193"><td data-id="2194"><strong data-id="2195">Time of Report:</strong></td><td data-id="2196">&nbsp;</td></tr>
+        <tr data-id="2197"><td data-id="2198"><strong data-id="2199">S — Size:</strong></td><td data-id="2200">&nbsp;</td></tr>
+        <tr data-id="2201"><td data-id="2202"><strong data-id="2203">A — Activity:</strong></td><td data-id="2204">&nbsp;</td></tr>
+        <tr data-id="2205"><td data-id="2206"><strong data-id="2207">L — Location:</strong></td><td data-id="2208">&nbsp;</td></tr>
+        <tr data-id="2209"><td data-id="2210"><strong data-id="2211">U — Unit/Uniform:</strong></td><td data-id="2212">&nbsp;</td></tr>
+        <tr data-id="2213"><td data-id="2214"><strong data-id="2215">T — Time Observed:</strong></td><td data-id="2216">&nbsp;</td></tr>
+        <tr data-id="2217"><td data-id="2218"><strong data-id="2219">E — Equipment (On Scene / Needed):</strong></td><td data-id="2220">&nbsp;</td></tr>
+        <tr data-id="2221"><td data-id="2222"><strong data-id="2223">Received By:</strong></td><td data-id="2224">&nbsp;</td></tr>
+        <tr data-id="2225"><td data-id="2226"><strong data-id="2227">Action Taken:</strong></td><td data-id="2228">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<div data-id="2229" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- APPENDIX C — MESH NODE ASSEMBLY CHECKLIST -->
+<!-- ============================================================ -->
+<div data-id="2230" class="appendix-header">APPENDIX C — MESH NODE ASSEMBLY CHECKLIST</div>
+
+<p data-id="2231">Use this checklist when assembling and deploying each new community mesh node. Check off each item as completed. Do not skip steps. Sign and date the completed checklist and file it with the Node Registry.</p>
+
+<h3 data-id="2232">Phase 1 — Procurement and Preparation</h3>
+<ul data-id="2233">
+    <li data-id="2234"><span data-id="2235" class="checkbox">&nbsp;</span> LoRa board received and verified (model: ________________)</li>
+    <li data-id="2236"><span data-id="2237" class="checkbox">&nbsp;</span> Antenna received and inspected for damage (type: ________________)</li>
+    <li data-id="2238"><span data-id="2239" class="checkbox">&nbsp;</span> SMA pigtail cable received (length: ________________)</li>
+    <li data-id="2240"><span data-id="2241" class="checkbox">&nbsp;</span> Solar panel received and tested (watts: ________________)</li>
+    <li data-id="2242"><span data-id="2243" class="checkbox">&nbsp;</span> Battery received and charge-tested (Ah: ________________, chemistry: ________________)</li>
+    <li data-id="2244"><span data-id="2245" class="checkbox">&nbsp;</span> MPPT charge controller received</li>
+    <li data-id="2246"><span data-id="2247" class="checkbox">&nbsp;</span> 5V step-down converter received and tested</li>
+    <li data-id="2248"><span data-id="2249" class="checkbox">&nbsp;</span> Weatherproof enclosure received and inspected</li>
+    <li data-id="2250"><span data-id="2251" class="checkbox">&nbsp;</span> SMA bulkhead connector and cable gland received</li>
+    <li data-id="2252"><span data-id="2253" class="checkbox">&nbsp;</span> Mounting hardware assembled (mast clamp, U-bolts, screws)</li>
+    <li data-id="2254"><span data-id="2255" class="checkbox">&nbsp;</span> All items logged in inventory</li>
+</ul>
+
+<h3 data-id="2256">Phase 2 — Firmware and Configuration</h3>
+<ul data-id="2257">
+    <li data-id="2258"><span data-id="2259" class="checkbox">&nbsp;</span> Downloaded correct Meshtastic firmware for board model</li>
+    <li data-id="2260"><span data-id="2261" class="checkbox">&nbsp;</span> Flashed firmware via USB using Meshtastic Web Flasher (firmware version: ________________)</li>
+    <li data-id="2262"><span data-id="2263" class="checkbox">&nbsp;</span> Verified device appears in Meshtastic app via Bluetooth</li>
+    <li data-id="2264"><span data-id="2265" class="checkbox">&nbsp;</span> Set device name per community naming convention: ________________</li>
+    <li data-id="2266"><span data-id="2267" class="checkbox">&nbsp;</span> Set region to US (915 MHz)</li>
+    <li data-id="2268"><span data-id="2269" class="checkbox">&nbsp;</span> Configured community channel name and pre-shared key (PSK)</li>
+    <li data-id="2270"><span data-id="2271" class="checkbox">&nbsp;</span> Set GPS (if equipped) or entered manual coordinates: Lat ________ / Lon ________</li>
+    <li data-id="2272"><span data-id="2273" class="checkbox">&nbsp;</span> Verified device name and GPS position visible on community mesh</li>
+    <li data-id="2274"><span data-id="2275" class="checkbox">&nbsp;</span> Set hop limit (recommended: 3 for standard nodes, 7 for router nodes)</li>
+    <li data-id="2276"><span data-id="2277" class="checkbox">&nbsp;</span> Set device role (CLIENT, ROUTER, or ROUTER_CLIENT as appropriate)</li>
+</ul>
+
+<h3 data-id="2278">Phase 3 — Hardware Assembly</h3>
+<ul data-id="2279">
+    <li data-id="2280"><span data-id="2281" class="checkbox">&nbsp;</span> Drilled enclosure for cable gland and bulkhead connector</li>
+    <li data-id="2282"><span data-id="2283" class="checkbox">&nbsp;</span> Installed SMA bulkhead connector through enclosure wall (weatherproof)</li>
+    <li data-id="2284"><span data-id="2285" class="checkbox">&nbsp;</span> Installed cable gland for power cable</li>
+    <li data-id="2286"><span data-id="2287" class="checkbox">&nbsp;</span> Connected LoRa board to SMA pigtail to bulkhead connector</li>
+    <li data-id="2288"><span data-id="2289" class="checkbox">&nbsp;</span> Mounted LoRa board inside enclosure (secure, not loose)</li>
+    <li data-id="2290"><span data-id="2291" class="checkbox">&nbsp;</span> Connected step-down converter output to board USB power input</li>
+    <li data-id="2292"><span data-id="2293" class="checkbox">&nbsp;</span> Wired charge controller: solar panel input, battery output, load output</li>
+    <li data-id="2294"><span data-id="2295" class="checkbox">&nbsp;</span> Connected battery to charge controller (correct polarity verified)</li>
+    <li data-id="2296"><span data-id="2297" class="checkbox">&nbsp;</span> Connected solar panel to charge controller (correct polarity verified)</li>
+    <li data-id="2298"><span data-id="2299" class="checkbox">&nbsp;</span> Verified charge controller shows correct charging status</li>
+    <li data-id="2300"><span data-id="2301" class="checkbox">&nbsp;</span> Verified board powers on from battery</li>
+    <li data-id="2302"><span data-id="2303" class="checkbox">&nbsp;</span> Sealed all cable entry points with silicone sealant</li>
+    <li data-id="2304"><span data-id="2305" class="checkbox">&nbsp;</span> Closed and latched weatherproof enclosure</li>
+</ul>
+
+<h3 data-id="2306">Phase 4 — Pre-Deployment Testing</h3>
+<ul data-id="2307">
+    <li data-id="2308"><span data-id="2309" class="checkbox">&nbsp;</span> Pre-mounting radio link test passed (test with nearest existing node)</li>
+    <li data-id="2310"><span data-id="2311" class="checkbox">&nbsp;</span> Message delivery confirmed: sent test message, received on community mesh</li>
+    <li data-id="2312"><span data-id="2313" class="checkbox">&nbsp;</span> GPS fix confirmed (if equipped)</li>
+    <li data-id="2314"><span data-id="2315" class="checkbox">&nbsp;</span> Battery voltage verified (above 12.4V for lead-acid, above 13V for LiFePO4)</li>
+</ul>
+
+<h3 data-id="2316">Phase 5 — Mounting and Deployment</h3>
+<ul data-id="2317">
+    <li data-id="2318"><span data-id="2319" class="checkbox">&nbsp;</span> Antenna mounted at highest practical point and secured</li>
+    <li data-id="2320"><span data-id="2321" class="checkbox">&nbsp;</span> Antenna oriented vertically (unless directional Yagi)</li>
+    <li data-id="2322"><span data-id="2323" class="checkbox">&nbsp;</span> Coax connections weatherproofed with self-amalgamating tape</li>
+    <li data-id="2324"><span data-id="2325" class="checkbox">&nbsp;</span> Enclosure mounted securely (no movement in wind test)</li>
+    <li data-id="2326"><span data-id="2327" class="checkbox">&nbsp;</span> Solar panel mounted at correct angle for latitude (facing south)</li>
+    <li data-id="2328"><span data-id="2329" class="checkbox">&nbsp;</span> All cables secured and protected from abrasion and UV exposure</li>
+    <li data-id="2330"><span data-id="2331" class="checkbox">&nbsp;</span> Post-mounting range test completed</li>
+    <li data-id="2332"><span data-id="2333" class="checkbox">&nbsp;</span> Coverage map updated</li>
+    <li data-id="2334"><span data-id="2335" class="checkbox">&nbsp;</span> Node Registry entry completed and filed</li>
+</ul>
+
+<h3 data-id="2336">Phase 6 — Handoff</h3>
+<ul data-id="2337">
+    <li data-id="2338"><span data-id="2339" class="checkbox">&nbsp;</span> Node Custodian briefed and has physical access to node</li>
+    <li data-id="2340"><span data-id="2341" class="checkbox">&nbsp;</span> Custodian has been shown how to check battery voltage and solar charging status</li>
+    <li data-id="2342"><span data-id="2343" class="checkbox">&nbsp;</span> Custodian has Network Coordinator contact information</li>
+    <li data-id="2344"><span data-id="2345" class="checkbox">&nbsp;</span> Backup Custodian assigned and aware of node location</li>
+    <li data-id="2346"><span data-id="2347" class="checkbox">&nbsp;</span> Node ID: ______________ | Installation Date: ______________ | Custodian: ______________</li>
+    <li data-id="2348"><span data-id="2349" class="checkbox">&nbsp;</span> Completed checklist signed by installer and custodian and filed with Network Coordinator</li>
+</ul>
+
+<p data-id="2350"><strong data-id="2351">Installer Signature:</strong> ________________________________ &nbsp;&nbsp;&nbsp; <strong data-id="2352">Date:</strong> ________________</p>
+<p data-id="2353"><strong data-id="2354">Custodian Signature:</strong> ________________________________ &nbsp;&nbsp;&nbsp; <strong data-id="2355">Date:</strong> ________________</p>
+
+<div data-id="2356" class="page-break"></div>
+
+<!-- ============================================================ -->
+<!-- APPENDIX D — GO-BOX BUILD GUIDE -->
+<!-- ============================================================ -->
+<div data-id="2357" class="appendix-header">APPENDIX D — GO-BOX BUILD GUIDE</div>
+
+<p data-id="2358">A <strong data-id="2359">go-box</strong> is a portable, self-contained emergency communications station assembled in a weatherproof, carry-ready case. The go-box concept comes from military and professional emergency communications practice: when you need to establish communications in an unfamiliar location with no infrastructure, you carry everything you need in one container. A well-built go-box can be deployed and fully operational in under 15 minutes.</p>
+
+<p data-id="2360">The community should maintain at least one go-box, stored at the Network Coordinator's location or a designated community supply point, charged and ready at all times.</p>
+
+<h3 data-id="2361">Case Selection</h3>
+<p data-id="2362">The case must be waterproof, impact-resistant, and carry-ready. Options:</p>
+<ul data-id="2363">
+    <li data-id="2364"><strong data-id="2365">Pelican 1510 or 1550:</strong> Airline carry-on size (1510) or larger. Military-grade waterproof. Excellent choice for a full HF/VHF station. Cost: $150–$350.</li>
+    <li data-id="2366"><strong data-id="2367">Apache 4800 (Harbor Freight):</strong> Budget-friendly waterproof case. Similar internal volume to Pelican 1510. Cost: $30–$60.</li>
+    <li data-id="2368"><strong data-id="2369">Commercial ammo can or military surplus case:</strong> Inexpensive and durable. May require additional weatherproofing.</li>
+</ul>
+
+<h3 data-id="2370">Go-Box Component List</h3>
+<table data-id="2371">
+    <thead data-id="2372">
+        <tr data-id="2373">
+            <th data-id="2374">Component</th>
+            <th data-id="2375">Specification / Model</th>
+            <th data-id="2376">Approximate Cost</th>
+            <th data-id="2377">Purpose</th>
+        </tr>
+    </thead>
+    <tbody data-id="2378">
+        <tr data-id="2379">
+            <td data-id="2380"><strong data-id="2381">Carrying Case</strong></td>
+            <td data-id="2382">Pelican 1510 or Apache 4800</td>
+            <td data-id="2383">$40–$200</td>
+            <td data-id="2384">Weatherproof housing for all components</td>
+        </tr>
+        <tr data-id="2385">
+            <td data-id="2386"><strong data-id="2387">VHF/UHF Transceiver</strong></td>
+            <td data-id="2388">Yaesu FT-60R or FT-3DR, or mobile unit</td>
+            <td data-id="2389">$100–$400</td>
+            <td data-id="2390">Primary voice communications</td>
+        </tr>
+        <tr data-id="2391">
+            <td data-id="2392"><strong data-id="2393">HF Transceiver (optional/advanced)</strong></td>
+            <td data-id="2394">Xiegu G90, IC-705, or portable HF rig</td>
+            <td data-id="2395">$400–$1,200</td>
+            <td data-id="2396">Long-distance HF communications</td>
+        </tr>
+        <tr data-id="2397">
+            <td data-id="2398"><strong data-id="2399">Battery (LiFePO4)</strong></td>
+            <td data-id="2400">12V, 20–40 Ah LiFePO4</td>
+            <td data-id="2401">$80–$200</td>
+            <td data-id="2402">Primary power source for all equipment</td>
+        </tr>
+        <tr data-id="2403">
+            <td data-id="2404"><strong data-id="2405">Solar Panel (foldable)</strong></td>
+            <td data-id="2406">40–100W foldable panel</td>
+            <td data-id="2407">$60–$150</td>
+            <td data-id="2408">Battery recharging in the field</td>
+        </tr>
+        <tr data-id="2409">
+            <td data-id="2410"><strong data-id="2411">MPPT Charge Controller</strong></td>
+            <td data-id="2412">10A MPPT controller</td>
+            <td data-id="2413">$25–$45</td>
+            <td data-id="2414">Solar-to-battery charge management</td>
+        </tr>
+        <tr data-id="2415">
+            <td data-id="2416"><strong data-id="2417">VHF/UHF Antenna + Mount</strong></td>
+            <td data-id="2418">Portable J-pole or magnetic mount whip</td>
+            <td data-id="2419">$20–$60</td>
+            <td data-id="2420">Deployable antenna for handheld or mobile radio</td>
+        </tr>
+        <tr data-id="2421">
+            <td data-id="2422"><strong data-id="2423">HF Antenna (optional)</strong></td>
+            <td data-id="2424">End-fed half-wave (EFHW) wire antenna, 40m–10m</td>
+            <td data-id="2425">$50–$150</td>
+            <td data-id="2426">HF communications; deployable with fishing pole mast or thrown into tree</td>
+        </tr>
+        <tr data-id="2427">
+            <td data-id="2428"><strong data-id="2429">Antenna Mast (collapsible)</strong></td>
+            <td data-id="2430">Fiberglass push-up mast (10–20 ft) or telescoping</td>
+            <td data-id="2431">$40–$120</td>
+            <td data-id="2432">Elevates antenna for improved range</td>
+        </tr>
+        <tr data-id="2433">
+            <td data-id="2434"><strong data-id="2435">Meshtastic Node (handheld)</strong></td>
+            <td data-id="2436">TTGO T-Beam or Heltec LoRa 32</td>
+            <td data-id="2437">$35–$55</td>
+            <td data-id="2438">Mesh network integration from go-box location</td>
+        </tr>
+        <tr data-id="2439">
+            <td data-id="2440"><strong data-id="2441">Laptop or Tablet</strong></td>
+            <td data-id="2442">Any Windows laptop with CHIRP, Winlink, JS8Call installed</td>
+            <td data-id="2443">Existing equipment</td>
+            <td data-id="2444">Digital modes (Winlink, JS8Call), radio programming, USB kit access</td>
+        </tr>
+        <tr data-id="2445">
+            <td data-id="2446"><strong data-id="2447">Soundcard Interface</strong></td>
+            <td data-id="2448">SignaLink USB or Digirig Mobile</td>
+            <td data-id="2449">$30–$110</td>
+            <td data-id="2450">Connects radio to laptop for digital modes (Winlink, JS8Call, etc.)</td>
+        </tr>
+        <tr data-id="2451">
+            <td data-id="2452"><strong data-id="2453">USB Kit Drive</strong></td>
+            <td data-id="2454">32 GB USB, current contents</td>
+            <td data-id="2455">$10</td>
+            <td data-id="2456">All community data, maps, software, documentation</td>
+        </tr>
+        <tr data-id="2457">
+            <td data-id="2458"><strong data-id="2459">Power Distribution Panel</strong></td>
+            <td data-id="2460">Anderson Powerpole fused distribution block</td>
+            <td data-id="2461">$20–$50</td>
+            <td data-id="2462">Clean, fused power distribution to all equipment</td>
+        </tr>
+        <tr data-id="2463">
+            <td data-id="2464"><strong data-id="2465">Cables and Adapters</strong></td>
+            <td data-id="2466">Coax, Anderson Powerpole cables, USB cables, audio patch cables</td>
+            <td data-id="2467">$30–$80</td>
+            <td data-id="2468">Interconnects for all components</td>
+        </tr>
+        <tr data-id="2469">
+            <td data-id="2470"><strong data-id="2471">Operating Supplies</strong></td>
+            <td data-id="2472">Message log pads, pencils, pens, operator's manual, laminated quick-cards</td>
+            <td data-id="2473">$10–$20</td>
+            <td data-id="2474">Paper-based backup; reference materials</td>
+        </tr>
+        <tr data-id="2475">
+            <td data-id="2476"><strong data-id="2477">Headset or Headphones</strong></td>
+            <td data-id="2478">Noise-canceling headset with PTT</td>
+            <td data-id="2479">$20–$80</td>
+            <td data-id="2480">Comfortable extended operation; noise isolation</td>
+        </tr>
+        <tr data-id="2481">
+            <td data-id="2482"><strong data-id="2483">LED Lantern (battery)</strong></td>
+            <td data-id="2484">USB rechargeable LED lantern</td>
+            <td data-id="2485">$15–$30</td>
+            <td data-id="2486">Lighting for nighttime operation</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="2487">Assembly Instructions</h3>
+<ol data-id="2488">
+    <li data-id="2489"><strong data-id="2490">Plan the layout.</strong> Before drilling or mounting anything, arrange all components in the case and confirm everything fits with adequate clearance for ventilation and cable routing.</li>
+    <li data-id="2491"><strong data-id="2492">Install power distribution.</strong> Mount the Anderson Powerpole distribution block in an accessible corner. Run the main positive and negative leads from the battery to the fused distribution block. Fuse each branch circuit individually (transceiver: 20–30A; Meshtastic node: 1A; charge controller: per panel rating).</li>
+    <li data-id="2493"><strong data-id="2494">Mount equipment.</strong> Use hook-and-loop (Velcro) tape, custom foam inserts, or 3D-printed brackets to secure all components. Nothing should slide or rattle. Foam padding protects delicate equipment from impact.</li>
+    <li data-id="2495"><strong data-id="2496">Route cables cleanly.</strong> Use cable ties and cable guides to route all cables neatly. Label every cable at both ends. No cable should be able to pull loose under normal use.</li>
+    <li data-id="2497"><strong data-id="2498">Label everything.</strong> Label all controls, connectors, switches, and fuses. A field operator who did not build the box must be able to operate it without a manual.</li>
+    <li data-id="2499"><strong data-id="2500">Load the USB kit.</strong> Place the current USB kit in a designated compartment or cable pocket. Label it clearly. Verify it contains current data before each deployment.</li>
+    <li data-id="2501"><strong data-id="2502">Document the configuration.</strong> Create a one-page "Go-Box Quick Start Guide" listing: power-up sequence, channel settings, pre-programmed frequencies, and emergency contact frequencies. Laminate it and attach to the inside lid.</li>
+</ol>
+
+<h3 data-id="2503">Maintenance Schedule</h3>
+<table data-id="2504">
+    <thead data-id="2505">
+        <tr data-id="2506">
+            <th data-id="2507">Frequency</th>
+            <th data-id="2508">Maintenance Task</th>
+        </tr>
+    </thead>
+    <tbody data-id="2509">
+        <tr data-id="2510"><td data-id="2511"><strong data-id="2512">Monthly</strong></td><td data-id="2513">Power on all equipment; verify function; update USB kit with current data; check battery voltage; verify solar panel connection</td></tr>
+        <tr data-id="2514"><td data-id="2515"><strong data-id="2516">Quarterly</strong></td><td data-id="2517">Full deployment exercise; check all cable connections; update radio programming files; verify antenna condition; test digital mode operation (Winlink, JS8Call)</td></tr>
+        <tr data-id="2518"><td data-id="2519"><strong data-id="2520">Annually</strong></td><td data-id="2521">Full systems check; firmware updates for all devices; battery capacity test; replace any worn cables or components; update Quick Start Guide if configuration has changed</td></tr>
+        <tr data-id="2522"><td data-id="2523"><strong data-id="2524">After each deployment</strong></td><td data-id="2525">Recharge battery fully; note any issues in the maintenance log; replace any used consumables; report any equipment failures to Network Coordinator</td></tr>
+    </tbody>
+</table>
+
+<!-- ============================================================ -->
+<!-- END NOTES -->
+<!-- ============================================================ -->
+<div data-id="2526" class="end-notes">
+    <blockquote data-id="2527" style="font-size:14pt; font-style:normal; font-weight:bold; border:none; color:#1a1a1a; text-align:center; margin:0 auto; padding:16pt 0;">
+        "This manual is released for free community use.<br data-id="2528">
+        Reproduce freely. Distribute widely.<br data-id="2529">
+        When infrastructure fails, community survives."
+    </blockquote>
+    <p data-id="2530" style="margin-top:14pt; font-size:10pt; color:#444444;">
+        <strong data-id="2531">License:</strong> Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)<br data-id="2532">
+        You are free to copy, distribute, and adapt this material for any purpose, provided you credit the source and distribute any adaptations under the same license.
+    </p>
+    <p data-id="2533" style="font-size:9pt; color:#888888; margin-top:10pt;">
+        OFFLINE NETWORK RESILIENCE FIELD MANUAL — First Edition, 2026 — Version 1.0
+    </p>
+</div>
+
+</body>
+</html>

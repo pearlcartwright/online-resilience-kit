@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Offline Network Resilience — Workshop Curriculum</title>
+    <style>
+        :root { color-scheme: light only; }
+
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #000000;
+            background: #ffffff;
+            max-width: 816px;
+            margin: 0 auto;
+            padding: 72px;
+        }
+
+        h1 { font-family: Calibri, sans-serif; font-size: 22pt; font-weight: bold; margin-top: 22pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h2 { font-family: Calibri, sans-serif; font-size: 16pt; font-weight: bold; margin-top: 16pt; margin-bottom: 6pt; line-height: 1.3; color: #1a1a1a; }
+        h3 { font-family: Calibri, sans-serif; font-size: 13pt; font-weight: bold; margin-top: 12pt; margin-bottom: 4pt; line-height: 1.3; color: #1a1a1a; }
+        h4 { font-family: Calibri, sans-serif; font-size: 11pt; font-weight: bold; margin-top: 10pt; margin-bottom: 3pt; color: #1a1a1a; }
+
+        p { margin-top: 0; margin-bottom: 6pt; }
+
+        table { border-collapse: collapse; width: 100%; margin-top: 10pt; margin-bottom: 10pt; }
+        th, td { border: 1px solid #000000; padding: 6px 8px; text-align: left; vertical-align: top; font-size: 10pt; }
+        th { font-weight: bold; background-color: #e8eef7; }
+
+        ul, ol { margin-top: 4pt; margin-bottom: 6pt; padding-left: 36px; }
+        li { margin-bottom: 3pt; }
+
+        .title-block {
+            border-top: 4px solid #2b5797;
+            border-bottom: 2px solid #2b5797;
+            padding: 18pt 0 14pt 0;
+            margin-bottom: 20pt;
+        }
+        .title-main {
+            font-family: Calibri, sans-serif;
+            font-size: 26pt;
+            font-weight: bold;
+            color: #1a1a1a;
+            line-height: 1.2;
+            margin: 0 0 6pt 0;
+        }
+        .title-subtitle {
+            font-family: Calibri, sans-serif;
+            font-size: 14pt;
+            font-weight: normal;
+            color: #2b5797;
+            margin: 0 0 8pt 0;
+        }
+        .title-meta {
+            font-size: 10pt;
+            color: #555555;
+            margin: 0;
+        }
+
+        .callout {
+            border: 1px solid #cccccc;
+            border-left: 4px solid #cccccc;
+            padding: 10px 14px;
+            margin: 10pt 0;
+        }
+        .callout-label {
+            font-weight: bold;
+            margin-bottom: 4pt;
+            font-size: 10pt;
+        }
+        .callout-tip { border-left-color: #2b5797; background-color: #e8eef7; }
+        .callout-warning { border-left-color: #cc0000; background-color: #fce8e8; }
+        .callout-note { border-left-color: #666666; background-color: #f5f5f5; }
+        .callout-important { border-left-color: #cc7a00; background-color: #fff4e0; }
+
+        .session-banner {
+            background-color: #2b5797;
+            color: #ffffff;
+            padding: 10pt 14pt;
+            margin: 18pt 0 10pt 0;
+            font-size: 15pt;
+            font-weight: bold;
+            font-family: Calibri, sans-serif;
+        }
+        .session-meta {
+            background-color: #e8eef7;
+            border: 1px solid #2b5797;
+            padding: 8px 12px;
+            margin-bottom: 10pt;
+            font-size: 10pt;
+        }
+
+        .segment-header {
+            background-color: #f0f0f0;
+            border-left: 4px solid #2b5797;
+            padding: 6px 12px;
+            margin: 12pt 0 6pt 0;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        .handout-block {
+            border: 1px solid #2b5797;
+            padding: 10px 14px;
+            margin: 10pt 0;
+            background-color: #f7faff;
+        }
+        .handout-label {
+            font-weight: bold;
+            color: #2b5797;
+            font-size: 10pt;
+            margin-bottom: 4pt;
+        }
+
+        .facilitator-note {
+            border: 1px solid #cc7a00;
+            border-left: 4px solid #cc7a00;
+            background-color: #fff4e0;
+            padding: 8px 12px;
+            margin: 8pt 0;
+            font-size: 10pt;
+        }
+        .facilitator-note-label {
+            font-weight: bold;
+            color: #cc7a00;
+            margin-bottom: 3pt;
+        }
+
+        .checklist-item {
+            margin-bottom: 4pt;
+            font-size: 10.5pt;
+        }
+
+        .page-break { page-break-before: always; }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #cccccc;
+            margin: 14pt 0;
+        }
+
+        .footer-block {
+            border-top: 2px solid #2b5797;
+            margin-top: 30pt;
+            padding-top: 10pt;
+            font-size: 9pt;
+            color: #555555;
+        }
+
+        .objectives-block {
+            background-color: #f5f5f5;
+            border: 1px solid #cccccc;
+            border-left: 4px solid #2b5797;
+            padding: 10px 14px;
+            margin: 8pt 0 12pt 0;
+        }
+        .objectives-label {
+            font-weight: bold;
+            color: #2b5797;
+            font-size: 10pt;
+            margin-bottom: 6pt;
+        }
+
+        .inject-row td { background-color: #fff4e0; }
+
+        .role-table th { background-color: #e8eef7; }
+
+        .action-plan-section {
+            border: 1px solid #2b5797;
+            padding: 8px 12px;
+            margin: 6pt 0;
+        }
+        .action-plan-label {
+            font-weight: bold;
+            font-size: 11pt;
+            color: #2b5797;
+            margin-bottom: 4pt;
+        }
+
+        .qa-block {
+            margin-bottom: 10pt;
+        }
+        .qa-question {
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 2pt;
+        }
+        .qa-answer {
+            margin-left: 18pt;
+            margin-bottom: 0;
+            color: #222222;
+        }
+
+        @media print { body { padding: 0; max-width: none; } }
+    </style>
+</head>
+<body data-id="0">
+
+<!-- TITLE BLOCK -->
+<div data-id="1" class="title-block">
+    <p data-id="2" class="title-main">OFFLINE NETWORK RESILIENCE<br data-id="3">WORKSHOP CURRICULUM</p>
+    <p data-id="4" class="title-subtitle">A Three-Session Community Training Program</p>
+    <p data-id="5" class="title-meta">Facilitator Guide &mdash; All materials printable, no internet required.</p>
+    <p data-id="6" class="title-meta">Version 1.0 &mdash; 2026 &mdash; CC BY-SA 4.0</p>
+</div>
+
+<!-- INTRODUCTION FOR FACILITATORS -->
+<h1 data-id="7">Introduction for Facilitators</h1>
+<p data-id="8">This curriculum is designed to be delivered in three standalone sessions of approximately 2.5&ndash;3 hours each. Sessions can be run on consecutive weekends or spread over a month. Each session is self-contained enough that attendees who miss one can still benefit from others.</p>
+
+<!-- MATERIALS NEEDED -->
+<h2 data-id="9">Materials Needed (All Sessions)</h2>
+<ul data-id="10">
+    <li data-id="11">This curriculum guide (facilitator copy, printed)</li>
+    <li data-id="12">Participant handout packet (print one per person &mdash; Sections marked <strong data-id="13">PARTICIPANT</strong>)</li>
+    <li data-id="14">Quick-cards set (pre-printed and laminated &mdash; 1 set per 2 participants)</li>
+    <li data-id="15">Whiteboard or flip chart + markers</li>
+    <li data-id="16">Extension cords and power strips</li>
+    <li data-id="17">Optional: projector or large monitor</li>
+</ul>
+
+<!-- SESSION EQUIPMENT CHECKLIST -->
+<h2 data-id="18">Session Equipment Checklist</h2>
+<p data-id="19">Verify all items below before each session begins. Mark each item as confirmed.</p>
+
+<table data-id="20">
+    <thead data-id="21">
+        <tr data-id="22">
+            <th data-id="23" style="width: 40px;">&#9744;</th>
+            <th data-id="24">Item</th>
+            <th data-id="25">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="26">
+        <tr data-id="27">
+            <td data-id="28">&#9744;</td>
+            <td data-id="29">Baofeng radios or similar</td>
+            <td data-id="30">Minimum 4 units</td>
+        </tr>
+        <tr data-id="31">
+            <td data-id="32">&#9744;</td>
+            <td data-id="33">Meshtastic devices</td>
+            <td data-id="34">Minimum 2 &mdash; ideally 4+</td>
+        </tr>
+        <tr data-id="35">
+            <td data-id="36">&#9744;</td>
+            <td data-id="37">Laptop or tablet with Meshtastic app</td>
+            <td data-id="38">Pre-installed preferred</td>
+        </tr>
+        <tr data-id="39">
+            <td data-id="40">&#9744;</td>
+            <td data-id="41">USB kit drives</td>
+            <td data-id="42">1 per participant or 1 per group</td>
+        </tr>
+        <tr data-id="43">
+            <td data-id="44">&#9744;</td>
+            <td data-id="45">Printed field manual</td>
+            <td data-id="46">At least 2 copies</td>
+        </tr>
+        <tr data-id="47">
+            <td data-id="48">&#9744;</td>
+            <td data-id="49">Printed quick-card sets (laminated)</td>
+            <td data-id="50">1 set per 2 participants</td>
+        </tr>
+        <tr data-id="51">
+            <td data-id="52">&#9744;</td>
+            <td data-id="53">Solar panel + battery demo kit</td>
+            <td data-id="54">Optional but recommended</td>
+        </tr>
+        <tr data-id="55">
+            <td data-id="56">&#9744;</td>
+            <td data-id="57">Go-Box demonstration unit</td>
+            <td data-id="58">Optional</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr data-id="59" class="divider">
+
+<!-- ==================== SESSION 1 ==================== -->
+<div data-id="60" class="session-banner">SESSION 1 &mdash; FOUNDATIONS AND RADIO BASICS</div>
+<div data-id="61" class="session-meta">
+    <strong data-id="62">Duration:</strong> 2.5&ndash;3 hours &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="63">Maximum Participants:</strong> 20 (larger groups work but reduce hands-on time) &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="64">Prerequisites:</strong> None &mdash; this is the entry point
+</div>
+
+<!-- SESSION 1 OBJECTIVES -->
+<div data-id="65" class="objectives-block">
+    <p data-id="66" class="objectives-label">&#9654; SESSION 1 LEARNING OBJECTIVES</p>
+    <p data-id="67">By the end of this session, participants will be able to:</p>
+    <ol data-id="68">
+        <li data-id="69">Explain why offline communication networks matter and when they&apos;re needed</li>
+        <li data-id="70">Identify the three pillars of community communications resilience</li>
+        <li data-id="71">Operate a basic VHF/UHF handheld radio (power on, frequency, transmit, receive)</li>
+        <li data-id="72">Perform a proper radio check-in using standard procedure</li>
+        <li data-id="73">Locate and use the Emergency Frequency Quick-Card</li>
+    </ol>
+</div>
+
+<!-- SEGMENT 1.1 -->
+<div data-id="74" class="segment-header">SEGMENT 1.1 &mdash; WELCOME AND INTRODUCTIONS &mdash; 20 Minutes</div>
+
+<h3 data-id="75">Facilitator Actions</h3>
+<ul data-id="76">
+    <li data-id="77">Welcome participants; introduce yourself and any co-facilitators</li>
+    <li data-id="78">Have participants introduce themselves (name, neighborhood, any radio experience)</li>
+    <li data-id="79">Display or draw the three-pillar diagram: <strong data-id="80">Mesh / Radio / Physical</strong></li>
+</ul>
+
+<div data-id="81" class="callout callout-tip">
+    <p data-id="82" class="callout-label">&#9733; ICE BREAKER ACTIVITY &mdash; &ldquo;What Would You Miss Most?&rdquo; (5 minutes)</p>
+    <p data-id="83">Ask: <em data-id="84">&ldquo;If the internet and cell phones went down right now, what communication would you miss most &mdash; and how would you replace it?&rdquo;</em></p>
+    <p data-id="85">Brief discussion (5 minutes). Record answers on whiteboard.</p>
+    <p data-id="86"><strong data-id="87">Key Teaching Point:</strong> Most of what we &ldquo;need&rdquo; from the internet can be replicated locally with the right preparation. This session is about how.</p>
+</div>
+
+<!-- PARTICIPANT HANDOUT 1.1 -->
+<div data-id="88" class="handout-block">
+    <p data-id="89" class="handout-label">&#9998; PARTICIPANT HANDOUT 1.1 &mdash; THE CASE FOR RESILIENCE</p>
+    <h4 data-id="90">Three Scenarios Where This Matters</h4>
+    <table data-id="91">
+        <thead data-id="92">
+            <tr data-id="93">
+                <th data-id="94">Scenario</th>
+                <th data-id="95">Description</th>
+                <th data-id="96">Core Challenge</th>
+            </tr>
+        </thead>
+        <tbody data-id="97">
+            <tr data-id="98">
+                <td data-id="99"><strong data-id="100">A &mdash; The Ice Storm</strong></td>
+                <td data-id="101">A major ice storm knocks out power for 10 days. Cell towers run on generator for 6 hours, then go dark.</td>
+                <td data-id="102">How do you find out who needs help? How do you coordinate resources?</td>
+            </tr>
+            <tr data-id="103">
+                <td data-id="104"><strong data-id="105">B &mdash; The Earthquake</strong></td>
+                <td data-id="106">A 6.5 magnitude earthquake disrupts fiber optic lines and overwhelms cell networks with traffic. Official emergency broadcasts are sporadic.</td>
+                <td data-id="107">Neighbors two blocks away might as well be in another city.</td>
+            </tr>
+            <tr data-id="108">
+                <td data-id="109"><strong data-id="110">C &mdash; The Cyberattack</strong></td>
+                <td data-id="111">A ransomware attack on regional ISPs knocks out internet for a major metropolitan area for 72 hours. 911 dispatch is impacted.</td>
+                <td data-id="112">How does your neighborhood self-organize?</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 data-id="113">Discussion Questions</h4>
+    <ol data-id="114">
+        <li data-id="115">Which scenario feels most realistic for your community?</li>
+        <li data-id="116">What resources do you already have that could help?</li>
+        <li data-id="117">Who in your neighborhood would you turn to first?</li>
+    </ol>
+</div>
+
+<!-- SEGMENT 1.2 -->
+<div data-id="118" class="segment-header">SEGMENT 1.2 &mdash; UNDERSTANDING THE THREE PILLARS &mdash; 25 Minutes</div>
+
+<div data-id="119" class="facilitator-note">
+    <p data-id="120" class="facilitator-note-label">&#9998; FACILITATOR NOTE</p>
+    <p data-id="121">Draw or display the three pillars as a visual throughout this segment. Keep the diagram visible on the whiteboard for the entire session.</p>
+</div>
+
+<h3 data-id="122">Pillar 1 &mdash; Mesh Networks (8 minutes)</h3>
+<ul data-id="123">
+    <li data-id="124"><strong data-id="125">Definition:</strong> Devices talk directly to each other &mdash; no internet required</li>
+    <li data-id="126"><strong data-id="127">Self-healing:</strong> If one node goes down, traffic routes around it</li>
+    <li data-id="128"><strong data-id="129">Range:</strong> LoRa mesh can reach 1&ndash;15 km depending on terrain</li>
+    <li data-id="130">Text-based messaging, GPS position sharing, limited data</li>
+</ul>
+<div data-id="131" class="callout callout-tip">
+    <p data-id="132" class="callout-label">&#9654; DEMONSTRATION</p>
+    <p data-id="133">If Meshtastic devices are available, turn on two and show a message being sent without any internet or cell connection. Have a participant send a message.</p>
+</div>
+
+<h3 data-id="134">Pillar 2 &mdash; Radio Communications (10 minutes)</h3>
+<ul data-id="135">
+    <li data-id="136">Radio has worked for 100 years without internet</li>
+    <li data-id="137">Multiple layers: handheld (local), mobile (neighborhood), HF (regional/national)</li>
+    <li data-id="138">Licensed vs. unlicensed bands &mdash; brief overview</li>
+    <li data-id="139">Why amateurs are the backbone of emergency comms</li>
+</ul>
+<div data-id="140" class="callout callout-tip">
+    <p data-id="141" class="callout-label">&#9654; DEMONSTRATION</p>
+    <p data-id="142">Power on a radio. Scan for local repeaters. Demonstrate a radio check.</p>
+</div>
+
+<h3 data-id="143">Pillar 3 &mdash; Physical Distribution (7 minutes)</h3>
+<ul data-id="144">
+    <li data-id="145">When everything electronic fails, humans are the network</li>
+    <li data-id="146">Runners, bulletin boards, printed materials</li>
+    <li data-id="147">Pre-agreed meeting places and times</li>
+    <li data-id="148">The oldest and most reliable system</li>
+</ul>
+<div data-id="149" class="callout callout-note">
+    <p data-id="150" class="callout-label">&#9654; GROUP ACTIVITY</p>
+    <p data-id="151">Ask the group: <em data-id="152">&ldquo;Where would you put a community bulletin board in your neighborhood that would reach the most people? Could everyone walk to it?&rdquo;</em></p>
+</div>
+
+<!-- SEGMENT 1.3 -->
+<div data-id="153" class="segment-header">SEGMENT 1.3 &mdash; HANDS-ON RADIO BASICS &mdash; 45 Minutes</div>
+<p data-id="154"><strong data-id="155">Materials:</strong> 4+ handheld radios (Baofeng UV-5R or similar)</p>
+
+<h3 data-id="156">Part A &mdash; Radio Orientation (15 minutes)</h3>
+<p data-id="157">Walk through with all radios powered on:</p>
+<ol data-id="158">
+    <li data-id="159">Power button and volume control</li>
+    <li data-id="160">Channel/frequency display</li>
+    <li data-id="161">PTT (Push-to-Talk) button</li>
+    <li data-id="162">Monitor/scan function</li>
+    <li data-id="163">Squelch &mdash; what it is and how to set it</li>
+    <li data-id="164">Menu navigation &mdash; basic settings</li>
+</ol>
+
+<div data-id="165" class="handout-block">
+    <p data-id="166" class="handout-label">&#9998; PARTICIPANT HANDOUT 1.3A &mdash; RADIO ANATOMY LABELS</p>
+    <p data-id="167"><em data-id="168">[Simple labeled diagram of a handheld radio with arrows pointing to each control. Print one per participant and have them label the parts as the facilitator walks through each one.]</em></p>
+</div>
+
+<h3 data-id="169">Part B &mdash; Standard Radio Procedure (15 minutes)</h3>
+<h4 data-id="170">Standard Format</h4>
+<table data-id="171">
+    <thead data-id="172">
+        <tr data-id="173">
+            <th data-id="174">Step</th>
+            <th data-id="175">Action</th>
+            <th data-id="176">Example / Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="177">
+        <tr data-id="178">
+            <td data-id="179">1</td>
+            <td data-id="180">Listen before transmitting</td>
+            <td data-id="181">Wait at least 3 seconds to confirm channel is clear</td>
+        </tr>
+        <tr data-id="182">
+            <td data-id="183">2</td>
+            <td data-id="184">Identify yourself and destination</td>
+            <td data-id="185">&ldquo;[Your call sign/name], [destination call sign/name]&rdquo;</td>
+        </tr>
+        <tr data-id="186">
+            <td data-id="187">3</td>
+            <td data-id="188">Keep transmissions short</td>
+            <td data-id="189">Say what you need; avoid rambling</td>
+        </tr>
+        <tr data-id="190">
+            <td data-id="191">4</td>
+            <td data-id="192">Say &ldquo;over&rdquo;</td>
+            <td data-id="193">When waiting for response</td>
+        </tr>
+        <tr data-id="194">
+            <td data-id="195">5</td>
+            <td data-id="196">Say &ldquo;out&rdquo;</td>
+            <td data-id="197">When finished with the exchange</td>
+        </tr>
+        <tr data-id="198">
+            <td data-id="199">6</td>
+            <td data-id="200">Say &ldquo;break break break&rdquo;</td>
+            <td data-id="201">For emergencies &mdash; interrupts all traffic immediately</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4 data-id="202">Role Play Exchanges (Pairs Practice)</h4>
+<table data-id="203">
+    <thead data-id="204">
+        <tr data-id="205">
+            <th data-id="206">Exchange</th>
+            <th data-id="207">Type</th>
+            <th data-id="208">Scenario</th>
+        </tr>
+    </thead>
+    <tbody data-id="209">
+        <tr data-id="210">
+            <td data-id="211">1</td>
+            <td data-id="212">Routine</td>
+            <td data-id="213">Request for information about road conditions</td>
+        </tr>
+        <tr data-id="214">
+            <td data-id="215">2</td>
+            <td data-id="216">Urgent</td>
+            <td data-id="217">Reporting a neighbor who needs a welfare check</td>
+        </tr>
+        <tr data-id="218">
+            <td data-id="219">3</td>
+            <td data-id="220">Emergency</td>
+            <td data-id="221">Reporting a structure fire with people inside</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="222">Part C &mdash; Phonetic Alphabet Drill (15 minutes)</h3>
+<p data-id="223">Distribute Quick-Card 1. Practice saying names using phonetics:</p>
+<ul data-id="224">
+    <li data-id="225">Facilitator says a word; participants spell it using phonetics</li>
+    <li data-id="226">Then do locations: street names, neighborhood names</li>
+    <li data-id="227">Finally: practice call signs</li>
+</ul>
+<div data-id="228" class="callout callout-note">
+    <p data-id="229" class="callout-label">&#9654; ACTIVITY &mdash; Speed Round</p>
+    <p data-id="230">Random letters called out; participants respond with phonetic words as fast as possible. Increase pace each round to build reflex recall.</p>
+</div>
+
+<!-- SEGMENT 1.4 -->
+<div data-id="231" class="segment-header">SEGMENT 1.4 &mdash; LICENSE OVERVIEW AND NEXT STEPS &mdash; 20 Minutes</div>
+
+<div data-id="232" class="handout-block">
+    <p data-id="233" class="handout-label">&#9998; PARTICIPANT HANDOUT 1.4 &mdash; LICENSE ROADMAP</p>
+    <table data-id="234">
+        <thead data-id="235">
+            <tr data-id="236">
+                <th data-id="237">License</th>
+                <th data-id="238">Cost</th>
+                <th data-id="239">Time to Get</th>
+                <th data-id="240">What You Can Do</th>
+                <th data-id="241">Who It&apos;s For</th>
+            </tr>
+        </thead>
+        <tbody data-id="242">
+            <tr data-id="243">
+                <td data-id="244">FRS (none required)</td>
+                <td data-id="245">$0</td>
+                <td data-id="246">Immediate</td>
+                <td data-id="247">Local comms, limited power</td>
+                <td data-id="248">Everyone</td>
+            </tr>
+            <tr data-id="249">
+                <td data-id="250">GMRS</td>
+                <td data-id="251">$35 / 10 yr</td>
+                <td data-id="252">1&ndash;2 weeks</td>
+                <td data-id="253">Better local comms, family use, repeater access</td>
+                <td data-id="254">Households</td>
+            </tr>
+            <tr data-id="255">
+                <td data-id="256">Technician</td>
+                <td data-id="257">~$15 exam</td>
+                <td data-id="258">2&ndash;4 weeks study</td>
+                <td data-id="259">Full VHF/UHF, all emergency frequencies</td>
+                <td data-id="260">Serious operators</td>
+            </tr>
+            <tr data-id="261">
+                <td data-id="262">General</td>
+                <td data-id="263">~$15 exam</td>
+                <td data-id="264">Additional study</td>
+                <td data-id="265">HF regional/national communications</td>
+                <td data-id="266">Net coordinators</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div data-id="267" class="facilitator-note">
+    <p data-id="268" class="facilitator-note-label">&#9998; FACILITATOR NOTE</p>
+    <p data-id="269">Emphasize that FRS radios are valuable right now even without any license. Getting a Technician license expands options significantly and the exam is achievable with 2&ndash;3 weeks of study. Research and insert local exam session dates before delivering this session. Offline study resources are available on the USB kit.</p>
+</div>
+
+<!-- SEGMENT 1.5 -->
+<div data-id="270" class="segment-header">SEGMENT 1.5 &mdash; SESSION WRAP-UP AND HOMEWORK &mdash; 10 Minutes</div>
+
+<h3 data-id="271">Recap and Distribute</h3>
+<ul data-id="272">
+    <li data-id="273">Recap the three pillars: Mesh, Radio, Physical</li>
+    <li data-id="274">Distribute: Quick-Card set (Cards 1 and 2 particularly)</li>
+</ul>
+
+<h3 data-id="275">Homework Assignments (Optional but Encouraged)</h3>
+<ol data-id="276">
+    <li data-id="277">Program the local repeater frequency into your radio (use Quick-Card 2)</li>
+    <li data-id="278">Find 3 neighbors who might be interested in this training</li>
+    <li data-id="279">Begin studying for Technician license (HamStudy.org or apps &mdash; offline resources on USB)</li>
+    <li data-id="280">Identify a location in your neighborhood for a community bulletin board</li>
+</ol>
+
+<div data-id="281" class="callout callout-note">
+    <p data-id="282" class="callout-label">&#9654; PREVIEW &mdash; SESSION 2</p>
+    <p data-id="283">Mesh networks hands-on, USB kit setup, data resilience. Participants who attend Session 2 will configure real devices.</p>
+</div>
+
+<!-- SESSION 1 EVALUATION FORM -->
+<div data-id="284" class="handout-block">
+    <p data-id="285" class="handout-label">&#9998; SESSION 1 EVALUATION FORM &mdash; Collect before participants leave</p>
+    <table data-id="286">
+        <thead data-id="287">
+            <tr data-id="288">
+                <th data-id="289">Question</th>
+                <th data-id="290">Response</th>
+            </tr>
+        </thead>
+        <tbody data-id="291">
+            <tr data-id="292">
+                <td data-id="293">What was most valuable?</td>
+                <td data-id="294" style="min-width: 260px;">&nbsp;</td>
+            </tr>
+            <tr data-id="295">
+                <td data-id="296">What questions do you still have?</td>
+                <td data-id="297">&nbsp;</td>
+            </tr>
+            <tr data-id="298">
+                <td data-id="299">Would you like to be contacted about Session 2?</td>
+                <td data-id="300">&#9744; Yes &nbsp;&nbsp; &#9744; No</td>
+            </tr>
+            <tr data-id="301">
+                <td data-id="302">Contact information</td>
+                <td data-id="303">&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr data-id="304" class="divider">
+
+<!-- ==================== SESSION 2 ==================== -->
+<div data-id="305" class="page-break"></div>
+<div data-id="306" class="session-banner">SESSION 2 &mdash; MESH NETWORKS AND DATA RESILIENCE</div>
+<div data-id="307" class="session-meta">
+    <strong data-id="308">Duration:</strong> 2.5&ndash;3 hours &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="309">Maximum Participants:</strong> 20 &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="310">Prerequisites:</strong> Session 1 (recommended but not required)
+</div>
+
+<!-- SESSION 2 OBJECTIVES -->
+<div data-id="311" class="objectives-block">
+    <p data-id="312" class="objectives-label">&#9654; SESSION 2 LEARNING OBJECTIVES</p>
+    <p data-id="313">By the end of this session, participants will be able to:</p>
+    <ol data-id="314">
+        <li data-id="315">Explain how a mesh network functions at a practical level</li>
+        <li data-id="316">Set up and configure a Meshtastic device</li>
+        <li data-id="317">Navigate the USB kit folder structure and access offline resources</li>
+        <li data-id="318">Identify a suitable location for a community mesh node</li>
+        <li data-id="319">Describe the data security practices for offline systems</li>
+    </ol>
+</div>
+
+<!-- SEGMENT 2.1 -->
+<div data-id="320" class="segment-header">SEGMENT 2.1 &mdash; REVIEW AND CONTEXT &mdash; 15 Minutes</div>
+<ul data-id="321">
+    <li data-id="322">Quick review of Session 1 key points (5 minutes)</li>
+    <li data-id="323">New participant orientation (5 minutes &mdash; for those who missed Session 1)</li>
+    <li data-id="324">Preview of today&apos;s hands-on activities (5 minutes)</li>
+</ul>
+<div data-id="325" class="callout callout-note">
+    <p data-id="326" class="callout-label">&#9654; OPENING DISCUSSION</p>
+    <p data-id="327"><em data-id="328">&ldquo;What information would you most need access to in a 10-day outage?&rdquo;</em> Record answers on whiteboard. Refer back throughout session to anchor lessons in real need.</p>
+</div>
+
+<!-- SEGMENT 2.2 -->
+<div data-id="329" class="segment-header">SEGMENT 2.2 &mdash; MESH NETWORKING DEEP DIVE &mdash; 30 Minutes</div>
+
+<h3 data-id="330">Part A &mdash; How Meshtastic Works (15 minutes)</h3>
+<table data-id="331">
+    <thead data-id="332">
+        <tr data-id="333">
+            <th data-id="334">Concept</th>
+            <th data-id="335">Plain-Language Explanation</th>
+        </tr>
+    </thead>
+    <tbody data-id="336">
+        <tr data-id="337">
+            <td data-id="338">LoRa Technology</td>
+            <td data-id="339">Long Range radio &mdash; like Wi-Fi but much longer range, low data rate</td>
+        </tr>
+        <tr data-id="340">
+            <td data-id="341">Flood Routing</td>
+            <td data-id="342">Each device receives and retransmits messages to extend coverage</td>
+        </tr>
+        <tr data-id="343">
+            <td data-id="344">Store-and-Forward</td>
+            <td data-id="345">Messages held at a node until they can be passed along</td>
+        </tr>
+        <tr data-id="346">
+            <td data-id="347">No Infrastructure</td>
+            <td data-id="348">No internet, no servers, no accounts needed &mdash; fully standalone</td>
+        </tr>
+        <tr data-id="349">
+            <td data-id="350">GPS Position Sharing</td>
+            <td data-id="351">Built in and optional; share or hide your location</td>
+        </tr>
+        <tr data-id="352">
+            <td data-id="353">Message Size</td>
+            <td data-id="354">Text messaging only (no voice) &mdash; up to ~228 bytes per message</td>
+        </tr>
+    </tbody>
+</table>
+<div data-id="355" class="callout callout-tip">
+    <p data-id="356" class="callout-label">&#9654; VISUAL DEMONSTRATION</p>
+    <p data-id="357">Use 2&ndash;4 Meshtastic devices placed around the room. Show messages routing through intermediate nodes. Point out the node list on the app to illustrate the mesh forming in real time.</p>
+</div>
+
+<h3 data-id="358">Part B &mdash; Network Planning Exercise (15 minutes)</h3>
+<div data-id="359" class="callout callout-note">
+    <p data-id="360" class="callout-label">&#9654; GROUP ACTIVITY &mdash; &ldquo;Map Your Neighborhood Mesh&rdquo;</p>
+    <p data-id="361"><strong data-id="362">Materials:</strong> Large printed neighborhood map (or hand-drawn), sticky notes, markers</p>
+    <p data-id="363"><strong data-id="364">Instructions</strong> (groups of 4&ndash;5):</p>
+    <ol data-id="365">
+        <li data-id="366">Groups of 4&ndash;5 people take a map section</li>
+        <li data-id="367">Mark high points (hills, tall buildings, church steeples, water towers)</li>
+        <li data-id="368">Mark potential node locations (someone who could host a node)</li>
+        <li data-id="369">Identify coverage gaps</li>
+        <li data-id="370">Note where the most vulnerable community members live</li>
+    </ol>
+    <p data-id="371"><strong data-id="372">Discussion:</strong> What&apos;s the minimum number of nodes to cover your neighborhood? Where are the critical relay points?</p>
+</div>
+
+<!-- SEGMENT 2.3 -->
+<div data-id="373" class="segment-header">SEGMENT 2.3 &mdash; HANDS-ON MESHTASTIC &mdash; 45 Minutes</div>
+<p data-id="374"><strong data-id="375">Materials:</strong> 4+ Meshtastic devices, smartphones with Meshtastic app</p>
+
+<h3 data-id="376">Part A &mdash; Device Setup (20 minutes)</h3>
+<p data-id="377">Walk through step by step (all participants follow along):</p>
+<ol data-id="378">
+    <li data-id="379">Install Meshtastic app (or use pre-installed version from USB)</li>
+    <li data-id="380">Power on device &mdash; observe LED indicators</li>
+    <li data-id="381">Pair via Bluetooth</li>
+    <li data-id="382">Set region: <strong data-id="383">United States</strong></li>
+    <li data-id="384">Set device name (use neighborhood + number, e.g., &ldquo;Riverside-07&rdquo;)</li>
+    <li data-id="385">Confirm channel: LongFast (default) or community-preset channel</li>
+    <li data-id="386">Send a test message to the group</li>
+</ol>
+
+<div data-id="387" class="handout-block">
+    <p data-id="388" class="handout-label">&#9998; PARTICIPANT HANDOUT 2.3A &mdash; MESHTASTIC SETUP CHECKLIST</p>
+    <table data-id="389">
+        <thead data-id="390">
+            <tr data-id="391">
+                <th data-id="392" style="width: 40px;">&#9744;</th>
+                <th data-id="393">Step</th>
+                <th data-id="394">Confirmed By</th>
+            </tr>
+        </thead>
+        <tbody data-id="395">
+            <tr data-id="396"><td data-id="397">&#9744;</td><td data-id="398">App installed and open</td><td data-id="399">&nbsp;</td></tr>
+            <tr data-id="400"><td data-id="401">&#9744;</td><td data-id="402">Bluetooth enabled on phone</td><td data-id="403">&nbsp;</td></tr>
+            <tr data-id="404"><td data-id="405">&#9744;</td><td data-id="406">Device powered on (LED indicator active)</td><td data-id="407">&nbsp;</td></tr>
+            <tr data-id="408"><td data-id="409">&#9744;</td><td data-id="410">Paired to device (appears in app)</td><td data-id="411">&nbsp;</td></tr>
+            <tr data-id="412"><td data-id="413">&#9744;</td><td data-id="414">Region set to United States</td><td data-id="415">&nbsp;</td></tr>
+            <tr data-id="416"><td data-id="417">&#9744;</td><td data-id="418">Device name set</td><td data-id="419">&nbsp;</td></tr>
+            <tr data-id="420"><td data-id="421">&#9744;</td><td data-id="422">Channel confirmed (LongFast or community channel)</td><td data-id="423">&nbsp;</td></tr>
+            <tr data-id="424"><td data-id="425">&#9744;</td><td data-id="426">Test message sent and received</td><td data-id="427">&nbsp;</td></tr>
+            <tr data-id="428"><td data-id="429">&#9744;</td><td data-id="430">GPS enabled (optional &mdash; confirm if desired)</td><td data-id="431">&nbsp;</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h3 data-id="432">Part B &mdash; Range Test Exercise (25 minutes)</h3>
+<p data-id="433">Pair up participants. Give each pair a Meshtastic device. Send pairs to different locations:</p>
+<ul data-id="434">
+    <li data-id="435">Inside the building (various rooms)</li>
+    <li data-id="436">Outside (various distances)</li>
+    <li data-id="437">One pair stays as &ldquo;base station&rdquo;</li>
+</ul>
+<p data-id="438">Each pair sends a message every 5 minutes with their location and signal quality. Record results on whiteboard map.</p>
+<div data-id="439" class="facilitator-note">
+    <p data-id="440" class="facilitator-note-label">&#9998; FACILITATOR NOTE &mdash; Debrief Prompt</p>
+    <p data-id="441">What affected range? Lead discussion around: wall composition, distance, elevation changes, physical obstacles. Reinforce that node placement on rooftops or upper floors dramatically improves coverage.</p>
+</div>
+
+<!-- SEGMENT 2.4 -->
+<div data-id="442" class="segment-header">SEGMENT 2.4 &mdash; THE USB KIT &mdash; 30 Minutes</div>
+
+<h3 data-id="443">Part A &mdash; USB Kit Tour (15 minutes)</h3>
+<p data-id="444">Distribute USB drives (one per participant or group). Walk through the folder structure together:</p>
+
+<table data-id="445">
+    <thead data-id="446">
+        <tr data-id="447">
+            <th data-id="448">Folder</th>
+            <th data-id="449">Contents</th>
+            <th data-id="450">How to Use</th>
+        </tr>
+    </thead>
+    <tbody data-id="451">
+        <tr data-id="452">
+            <td data-id="453"><strong data-id="454">&#128193; MANUALS/</strong></td>
+            <td data-id="455">Field manual PDF</td>
+            <td data-id="456">Open with any PDF viewer; navigate offline</td>
+        </tr>
+        <tr data-id="457">
+            <td data-id="458"><strong data-id="459">&#128193; MAPS/</strong></td>
+            <td data-id="460">Offline map files</td>
+            <td data-id="461">Open in OsmAnd or Maps.me (no internet needed)</td>
+        </tr>
+        <tr data-id="462">
+            <td data-id="463"><strong data-id="464">&#128193; SOFTWARE/</strong></td>
+            <td data-id="465">Meshtastic flasher, Briar, Kiwix</td>
+            <td data-id="466">Install from USB; no download required</td>
+        </tr>
+        <tr data-id="467">
+            <td data-id="468"><strong data-id="469">&#128193; MEDIA/</strong></td>
+            <td data-id="470">Training video clips, quick-card PDFs</td>
+            <td data-id="471">Play locally; print quick-cards from PDF</td>
+        </tr>
+        <tr data-id="472">
+            <td data-id="473"><strong data-id="474">&#128193; DATA/</strong></td>
+            <td data-id="475">Frequency list, contact directory format</td>
+            <td data-id="476">Reference during operations; keep updated</td>
+        </tr>
+        <tr data-id="477">
+            <td data-id="478"><strong data-id="479">&#128193; TEMPLATES/</strong></td>
+            <td data-id="480">Message forms, log sheets</td>
+            <td data-id="481">Print as needed; fill by hand in field</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="482" class="callout callout-important">
+    <p data-id="483" class="callout-label">&#9888; KEY TEACHING POINTS &mdash; USB Kit</p>
+    <ul data-id="484">
+        <li data-id="485">These USB drives work with <strong data-id="486">no internet</strong></li>
+        <li data-id="487">Keep one at home; keep one in your go-bag</li>
+        <li data-id="488">Update on the <strong data-id="489">first Sunday of each month</strong> at community update sessions</li>
+        <li data-id="490">The Kiwix app + Wikipedia ZIM = offline encyclopedia for medical, technical, and legal reference</li>
+    </ul>
+</div>
+
+<h3 data-id="491">Part B &mdash; Offline Resources Practice (15 minutes)</h3>
+<p data-id="492">Participants practice independently:</p>
+<ol data-id="493">
+    <li data-id="494"><strong data-id="495">Task 1:</strong> Navigate to your neighborhood on the offline map</li>
+    <li data-id="496"><strong data-id="497">Task 2:</strong> Find the field manual and navigate to the frequency reference</li>
+    <li data-id="498"><strong data-id="499">Task 3:</strong> Open Kiwix and search for &ldquo;first aid&rdquo; (or similar practical topic)</li>
+    <li data-id="500"><strong data-id="501">Task 4:</strong> Locate and print-preview the information runner message form</li>
+</ol>
+
+<!-- SEGMENT 2.5 -->
+<div data-id="502" class="segment-header">SEGMENT 2.5 &mdash; DATA SECURITY BASICS &mdash; 15 Minutes</div>
+
+<div data-id="503" class="handout-block">
+    <p data-id="504" class="handout-label">&#9998; PARTICIPANT HANDOUT 2.5 &mdash; DATA SECURITY QUICK GUIDE</p>
+    <table data-id="505">
+        <thead data-id="506">
+            <tr data-id="507">
+                <th data-id="508">What to Store</th>
+                <th data-id="509">How to Store</th>
+                <th data-id="510">What to Avoid</th>
+            </tr>
+        </thead>
+        <tbody data-id="511">
+            <tr data-id="512">
+                <td data-id="513">Public docs (manual, maps, frequencies)</td>
+                <td data-id="514">Plain files on USB</td>
+                <td data-id="515">Names and addresses stored together</td>
+            </tr>
+            <tr data-id="516">
+                <td data-id="517">Community contacts</td>
+                <td data-id="518">7-Zip AES-256 encrypted archive</td>
+                <td data-id="519">Passwords, financial information</td>
+            </tr>
+            <tr data-id="520">
+                <td data-id="521">Mesh channel key</td>
+                <td data-id="522">Share verbally or on paper &mdash; in person only</td>
+                <td data-id="523">Posting online or in plain text files</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p data-id="524">Additional topics to cover in this segment:</p>
+<ul data-id="525">
+    <li data-id="526">What <strong data-id="527">NOT</strong> to put on community USB drives: passwords, financial info, medical records, personal identifiers</li>
+    <li data-id="528">How to create an encrypted archive using 7-Zip AES-256 &mdash; live demonstration</li>
+    <li data-id="529">Meshtastic channel encryption &mdash; AES-256 pre-shared key setup</li>
+    <li data-id="530">Physical security: do not leave USB drives unattended at public events</li>
+</ul>
+
+<!-- SEGMENT 2.6 -->
+<div data-id="531" class="segment-header">SEGMENT 2.6 &mdash; SESSION WRAP-UP &mdash; 15 Minutes</div>
+<ul data-id="532">
+    <li data-id="533">Recap key skills: mesh setup, USB navigation, data security</li>
+    <li data-id="534">Distribute: Quick-Cards 3, 7, 9 (Meshtastic, Node Check, Offline Data)</li>
+</ul>
+<h3 data-id="535">Homework</h3>
+<ol data-id="536">
+    <li data-id="537">Install Meshtastic on a device you own</li>
+    <li data-id="538">Identify 2 neighbors with elevated locations for potential nodes</li>
+    <li data-id="539">Make a copy of your USB kit for a household member</li>
+</ol>
+<div data-id="540" class="callout callout-note">
+    <p data-id="541" class="callout-label">&#9654; PREVIEW &mdash; SESSION 3</p>
+    <p data-id="542">Community organization, drills, go-box build, and a simulated blackout exercise. Participants will take on real roles in a tabletop scenario.</p>
+</div>
+
+<hr data-id="543" class="divider">
+
+<!-- ==================== SESSION 3 ==================== -->
+<div data-id="544" class="page-break"></div>
+<div data-id="545" class="session-banner">SESSION 3 &mdash; COMMUNITY ORGANIZATION AND RESILIENCE EXERCISES</div>
+<div data-id="546" class="session-meta">
+    <strong data-id="547">Duration:</strong> 3 hours &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="548">Maximum Participants:</strong> 25 &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong data-id="549">Prerequisites:</strong> Sessions 1 and 2 (recommended)
+</div>
+
+<!-- SESSION 3 OBJECTIVES -->
+<div data-id="550" class="objectives-block">
+    <p data-id="551" class="objectives-label">&#9654; SESSION 3 LEARNING OBJECTIVES</p>
+    <p data-id="552">By the end of this session, participants will be able to:</p>
+    <ol data-id="553">
+        <li data-id="554">Assign and understand community resilience roles</li>
+        <li data-id="555">Design a basic communication tree for their neighborhood cell</li>
+        <li data-id="556">Conduct a basic after-action review</li>
+        <li data-id="557">Operate a deployed go-box setup</li>
+        <li data-id="558">Facilitate a monthly radio net</li>
+    </ol>
+</div>
+
+<!-- SEGMENT 3.1 -->
+<div data-id="559" class="segment-header">SEGMENT 3.1 &mdash; REVIEW AND ASSESSMENT &mdash; 20 Minutes</div>
+<p data-id="560">Brief quiz (ungraded, for self-assessment): 10 questions covering Sessions 1 and 2 material. Review answers as a group &mdash; clarify any confusion before proceeding.</p>
+<div data-id="561" class="callout callout-tip">
+    <p data-id="562" class="callout-label">&#9733; CELEBRATION</p>
+    <p data-id="563">Recognize anyone who has gotten licensed since Session 1! Acknowledge effort publicly &mdash; this encourages others to pursue licensing.</p>
+</div>
+
+<!-- SEGMENT 3.2 -->
+<div data-id="564" class="segment-header">SEGMENT 3.2 &mdash; COMMUNITY ORGANIZATION STRUCTURE &mdash; 30 Minutes</div>
+
+<h3 data-id="565">Part A &mdash; Roles and Responsibility Assignment (15 minutes)</h3>
+<p data-id="566">Present the six core roles (from Section 7 of the field manual):</p>
+
+<table data-id="567">
+    <thead data-id="568">
+        <tr data-id="569">
+            <th data-id="570">#</th>
+            <th data-id="571">Role</th>
+            <th data-id="572">Primary Responsibility</th>
+            <th data-id="573">Assigned To</th>
+        </tr>
+    </thead>
+    <tbody data-id="574">
+        <tr data-id="575">
+            <td data-id="576">1</td>
+            <td data-id="577"><strong data-id="578">Network Coordinator</strong></td>
+            <td data-id="579">Overall coordination of the community network; primary contact for external agencies</td>
+            <td data-id="580">&nbsp;</td>
+        </tr>
+        <tr data-id="581">
+            <td data-id="582">2</td>
+            <td data-id="583"><strong data-id="584">Node Custodians</strong></td>
+            <td data-id="585">Maintain mesh nodes; ensure power and connectivity; report outages</td>
+            <td data-id="586">&nbsp;</td>
+        </tr>
+        <tr data-id="587">
+            <td data-id="588">3</td>
+            <td data-id="589"><strong data-id="590">Radio Operators</strong></td>
+            <td data-id="591">Licensed operators who manage voice radio traffic and nets</td>
+            <td data-id="592">&nbsp;</td>
+        </tr>
+        <tr data-id="593">
+            <td data-id="594">4</td>
+            <td data-id="595"><strong data-id="596">Information Runners</strong></td>
+            <td data-id="597">Physical message delivery between nodes when electronic comms are unavailable</td>
+            <td data-id="598">&nbsp;</td>
+        </tr>
+        <tr data-id="599">
+            <td data-id="600">5</td>
+            <td data-id="601"><strong data-id="602">Supply Custodian</strong></td>
+            <td data-id="603">Track and maintain shared equipment inventory; manage go-box</td>
+            <td data-id="604">&nbsp;</td>
+        </tr>
+        <tr data-id="605">
+            <td data-id="606">6</td>
+            <td data-id="607"><strong data-id="608">Training Coordinator</strong></td>
+            <td data-id="609">Schedule sessions, onboard new participants, coordinate USB updates</td>
+            <td data-id="610">&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+<div data-id="611" class="callout callout-note">
+    <p data-id="612" class="callout-label">&#9654; GROUP ACTIVITY &mdash; Role Matching</p>
+    <p data-id="613">Each participant receives a card describing a scenario/skill set. They self-select or are placed into roles based on skills and interest. Not everyone needs a formal role &mdash; many people are simply &ldquo;network participants.&rdquo; Fill in the community roles table together on the whiteboard. Capture in the participant directory template.</p>
+</div>
+
+<h3 data-id="614">Part B &mdash; The Neighborhood Cell Structure (15 minutes)</h3>
+<p data-id="615">Explain cells: 10&ndash;20 households, one block captain, direct communication with neighbors.</p>
+<div data-id="616" class="callout callout-note">
+    <p data-id="617" class="callout-label">&#9654; ACTIVITY &mdash; &ldquo;Draw Your Cell&rdquo;</p>
+    <p data-id="618">Participants sketch their immediate neighborhood (their block/street/cul-de-sac). Mark:</p>
+    <ul data-id="619">
+        <li data-id="620">Their own home</li>
+        <li data-id="621">Households they already know</li>
+        <li data-id="622">Households with elderly/disabled residents (priority for check-in)</li>
+        <li data-id="623">Potential bulletin board locations</li>
+        <li data-id="624">Best route to the community hub</li>
+    </ul>
+</div>
+
+<!-- SEGMENT 3.3 -->
+<div data-id="625" class="segment-header">SEGMENT 3.3 &mdash; COMMUNICATION TREE BUILD &mdash; 25 Minutes</div>
+<p data-id="626">Explain the tree structure: each person calls/radios 3&ndash;5 others; they each call 3&ndash;5 more. A message can reach 100 people in 2&ndash;3 &ldquo;hops.&rdquo;</p>
+
+<div data-id="627" class="callout callout-note">
+    <p data-id="628" class="callout-label">&#9654; GROUP ACTIVITY &mdash; &ldquo;Build the Tree&rdquo;</p>
+    <p data-id="629">Using sticky notes on a wall or whiteboard:</p>
+    <ol data-id="630">
+        <li data-id="631">Place facilitator at top</li>
+        <li data-id="632">Each participant places their note connected to who would contact them</li>
+        <li data-id="633">Fill gaps &mdash; who has no one to call them?</li>
+        <li data-id="634">Identify single points of failure (someone who is the only link to 10 people)</li>
+        <li data-id="635">Add redundant connections</li>
+    </ol>
+    <p data-id="636"><strong data-id="637">Discussion:</strong> What happens when someone in the tree is unavailable? Plan for substitutes before it matters.</p>
+    <p data-id="638"><em data-id="639">Take a photo of the completed tree. Transcribe to the template in TEMPLATES/ folder on USB.</em></p>
+</div>
+
+<!-- SEGMENT 3.4 -->
+<div data-id="640" class="segment-header">SEGMENT 3.4 &mdash; GO-BOX DEMONSTRATION AND HANDS-ON &mdash; 30 Minutes</div>
+<p data-id="641"><strong data-id="642">Materials:</strong> Go-box (pre-assembled or components laid out)</p>
+
+<h3 data-id="643">Go-Box Component Checklist</h3>
+<table data-id="644">
+    <thead data-id="645">
+        <tr data-id="646">
+            <th data-id="647" style="width: 40px;">&#9744;</th>
+            <th data-id="648">Component</th>
+            <th data-id="649">Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="650">
+        <tr data-id="651"><td data-id="652">&#9744;</td><td data-id="653">VHF/UHF radio (programmed)</td><td data-id="654">Pre-program all local frequencies before deployment</td></tr>
+        <tr data-id="655"><td data-id="656">&#9744;</td><td data-id="657">Antenna + coax</td><td data-id="658">Verify connector compatibility</td></tr>
+        <tr data-id="659"><td data-id="660">&#9744;</td><td data-id="661">Battery (12V LiFePO4 recommended)</td><td data-id="662">Check charge before each deployment</td></tr>
+        <tr data-id="663"><td data-id="664">&#9744;</td><td data-id="665">Solar panel + charge controller + cables</td><td data-id="666">Test outdoors before relying on in emergency</td></tr>
+        <tr data-id="667"><td data-id="668">&#9744;</td><td data-id="669">Meshtastic device</td><td data-id="670">Pre-configured with community channel</td></tr>
+        <tr data-id="671"><td data-id="672">&#9744;</td><td data-id="673">Laptop/tablet</td><td data-id="674">USB kit loaded; Meshtastic app installed</td></tr>
+        <tr data-id="675"><td data-id="676">&#9744;</td><td data-id="677">USB kit</td><td data-id="678">Current version; updated within 30 days</td></tr>
+        <tr data-id="679"><td data-id="680">&#9744;</td><td data-id="681">Quick-card set (laminated)</td><td data-id="682">Full set in protective sleeve</td></tr>
+        <tr data-id="683"><td data-id="684">&#9744;</td><td data-id="685">Logbook + pens</td><td data-id="686">At least 2 pens; waterproof preferred</td></tr>
+        <tr data-id="687"><td data-id="688">&#9744;</td><td data-id="689">License copy</td><td data-id="690">Laminated copy of operator license(s)</td></tr>
+        <tr data-id="691"><td data-id="692">&#9744;</td><td data-id="693">First aid kit (basic)</td><td data-id="694">Check expiry dates annually</td></tr>
+    </tbody>
+</table>
+
+<h3 data-id="695">Deployment Sequence (Quick-Card 12)</h3>
+<ol data-id="696">
+    <li data-id="697">Select location (elevation, line-of-sight, access)</li>
+    <li data-id="698">Deploy antenna</li>
+    <li data-id="699">Connect power</li>
+    <li data-id="700">Power on radio</li>
+    <li data-id="701">Monitor &mdash; confirm channel activity</li>
+    <li data-id="702">Check in using standard procedure</li>
+</ol>
+<div data-id="703" class="callout callout-tip">
+    <p data-id="704" class="callout-label">&#9654; HANDS-ON ROTATION</p>
+    <p data-id="705">Participants rotate through: setting up the antenna, connecting the battery, and performing a radio check using proper procedure. Each rotation approximately 8&ndash;10 minutes.</p>
+</div>
+
+<!-- SEGMENT 3.5 -->
+<div data-id="706" class="segment-header">SEGMENT 3.5 &mdash; SIMULATED EXERCISE &mdash; 35 Minutes</div>
+
+<div data-id="707" class="callout callout-warning">
+    <p data-id="708" class="callout-label">&#9654; &ldquo;BLACKOUT SCENARIO&rdquo; &mdash; Tabletop + Partial Activation</p>
+    <p data-id="709"><strong data-id="710">Scenario:</strong> <em data-id="711">It is Day 2 of a major power outage. Cell networks are down. You have only radio and mesh communications available. Reports are coming in that an elderly resident on Maple Street has not been seen since before the storm.</em></p>
+    <p data-id="712">Participants play their assigned roles. Facilitator injects events and observes without intervening.</p>
+</div>
+
+<table data-id="713">
+    <thead data-id="714">
+        <tr data-id="715">
+            <th data-id="716">Inject</th>
+            <th data-id="717">Time</th>
+            <th data-id="718">Event</th>
+            <th data-id="719">Expected Response</th>
+        </tr>
+    </thead>
+    <tbody data-id="720">
+        <tr data-id="721" class="inject-row">
+            <td data-id="722"><strong data-id="723">INJECT 1</strong></td>
+            <td data-id="724">Minute 5</td>
+            <td data-id="725">Report of elderly resident not responding to door knocks on Maple Street</td>
+            <td data-id="726">Welfare check assigned; runner dispatched or radio contact made</td>
+        </tr>
+        <tr data-id="727" class="inject-row">
+            <td data-id="728"><strong data-id="729">INJECT 2</strong></td>
+            <td data-id="730">Minute 15</td>
+            <td data-id="731">Runner arrives with written note from across the neighborhood &mdash; food shortage at the community center</td>
+            <td data-id="732">Information logged; resource coordinator notified; runner acknowledged</td>
+        </tr>
+        <tr data-id="733" class="inject-row">
+            <td data-id="734"><strong data-id="735">INJECT 3</strong></td>
+            <td data-id="736">Minute 25</td>
+            <td data-id="737">Radio report of possible gas leak two blocks away</td>
+            <td data-id="738">Emergency break used; area alerted; external contact attempted via net</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 data-id="739">After-Action Review (AAR) &mdash; Quick-Card 11 Format</h3>
+<table data-id="740">
+    <thead data-id="741">
+        <tr data-id="742">
+            <th data-id="743">AAR Question</th>
+            <th data-id="744">Group Notes</th>
+        </tr>
+    </thead>
+    <tbody data-id="745">
+        <tr data-id="746"><td data-id="747">What was planned?</td><td data-id="748">&nbsp;</td></tr>
+        <tr data-id="749"><td data-id="750">What happened?</td><td data-id="751">&nbsp;</td></tr>
+        <tr data-id="752"><td data-id="753">What went well?</td><td data-id="754">&nbsp;</td></tr>
+        <tr data-id="755"><td data-id="756">What needs improvement?</td><td data-id="757">&nbsp;</td></tr>
+        <tr data-id="758"><td data-id="759">Action items?</td><td data-id="760">&nbsp;</td></tr>
+    </tbody>
+</table>
+
+<!-- SEGMENT 3.6 -->
+<div data-id="761" class="segment-header">SEGMENT 3.6 &mdash; MONTHLY NET PRACTICE &mdash; 20 Minutes</div>
+<p data-id="762">Simulate a community radio net. Designate one participant as Net Control.</p>
+
+<div data-id="763" class="handout-block">
+    <p data-id="764" class="handout-label">&#9998; NET CONTROL SCRIPT</p>
+    <blockquote data-id="765" style="border-left: 3px solid #2b5797; margin: 8pt 0; padding: 6pt 12pt; color: #222222; font-style: italic;">
+        &ldquo;[Time] hours local. This is the [Community Name] Emergency Communications Net. Net Control is [name/call sign]. All stations please check in with your call sign, location, and status. [First station], go ahead.&rdquo;
+    </blockquote>
+</div>
+
+<ul data-id="766">
+    <li data-id="767">Check-in procedure for all participants</li>
+    <li data-id="768">Pass one piece of &ldquo;traffic&rdquo; (a simulated message)</li>
+    <li data-id="769">Close the net formally</li>
+</ul>
+<div data-id="770" class="facilitator-note">
+    <p data-id="771" class="facilitator-note-label">&#9998; FACILITATOR NOTE &mdash; Debrief</p>
+    <p data-id="772">What was awkward? What needs practice? Use this debrief to schedule a real monthly net. Identify a willing Net Control volunteer before participants leave.</p>
+</div>
+
+<!-- SEGMENT 3.7 -->
+<div data-id="773" class="segment-header">SEGMENT 3.7 &mdash; NEXT STEPS AND PROGRAM CLOSE &mdash; 20 Minutes</div>
+
+<h3 data-id="774">30-60-90 Day Action Plan</h3>
+
+<div data-id="775" class="action-plan-section">
+    <p data-id="776" class="action-plan-label">30 DAYS</p>
+    <table data-id="777">
+        <thead data-id="778">
+            <tr data-id="779">
+                <th data-id="780" style="width: 40px;">&#9744;</th>
+                <th data-id="781">Action Item</th>
+            </tr>
+        </thead>
+        <tbody data-id="782">
+            <tr data-id="783"><td data-id="784">&#9744;</td><td data-id="785">All participants with radios have joined one real radio net</td></tr>
+            <tr data-id="786"><td data-id="787">&#9744;</td><td data-id="788">Node custodians identified for at least 2 community nodes</td></tr>
+            <tr data-id="789"><td data-id="790">&#9744;</td><td data-id="791">Communication tree built and tested</td></tr>
+            <tr data-id="792"><td data-id="793">&#9744;</td><td data-id="794">USB kits distributed to all participants</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div data-id="795" class="action-plan-section">
+    <p data-id="796" class="action-plan-label">60 DAYS</p>
+    <table data-id="797">
+        <thead data-id="798">
+            <tr data-id="799">
+                <th data-id="800" style="width: 40px;">&#9744;</th>
+                <th data-id="801">Action Item</th>
+            </tr>
+        </thead>
+        <tbody data-id="802">
+            <tr data-id="803"><td data-id="804">&#9744;</td><td data-id="805">First community mesh nodes deployed and operational</td></tr>
+            <tr data-id="806"><td data-id="807">&#9744;</td><td data-id="808">Monthly net established and running</td></tr>
+            <tr data-id="809"><td data-id="810">&#9744;</td><td data-id="811">Block captains identified for neighborhood cells</td></tr>
+            <tr data-id="812"><td data-id="813">&#9744;</td><td data-id="814">Go-box assembled and available</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div data-id="815" class="action-plan-section">
+    <p data-id="816" class="action-plan-label">90 DAYS</p>
+    <table data-id="817">
+        <thead data-id="818">
+            <tr data-id="819">
+                <th data-id="820" style="width: 40px;">&#9744;</th>
+                <th data-id="821">Action Item</th>
+            </tr>
+        </thead>
+        <tbody data-id="822">
+            <tr data-id="823"><td data-id="824">&#9744;</td><td data-id="825">Full network coverage across target area</td></tr>
+            <tr data-id="826"><td data-id="827">&#9744;</td><td data-id="828">First full tabletop exercise conducted</td></tr>
+            <tr data-id="829"><td data-id="830">&#9744;</td><td data-id="831">Printed materials (manual, quick-cards) distributed to all households</td></tr>
+            <tr data-id="832"><td data-id="833">&#9744;</td><td data-id="834">Update process established (monthly USB update sessions)</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<h3 data-id="835">Community Commitment Card</h3>
+<div data-id="836" class="handout-block">
+    <p data-id="837" class="handout-label">&#9998; PARTICIPANT COMMITMENT CARD &mdash; Sign before leaving</p>
+    <p data-id="838">I commit to the following as a member of this community resilience network:</p>
+    <table data-id="839">
+        <thead data-id="840">
+            <tr data-id="841">
+                <th data-id="842" style="width: 40px;">&#9744;</th>
+                <th data-id="843">Commitment</th>
+            </tr>
+        </thead>
+        <tbody data-id="844">
+            <tr data-id="845"><td data-id="846">&#9744;</td><td data-id="847">Share this training with at least 3 neighbors</td></tr>
+            <tr data-id="848"><td data-id="849">&#9744;</td><td data-id="850">Maintain my assigned role/equipment</td></tr>
+            <tr data-id="851"><td data-id="852">&#9744;</td><td data-id="853">Participate in monthly net checks</td></tr>
+            <tr data-id="854"><td data-id="855">&#9744;</td><td data-id="856">Attend annual full exercise</td></tr>
+        </tbody>
+    </table>
+    <p data-id="857" style="margin-top: 10pt;">Signed: ______________________________________ &nbsp;&nbsp; Date: ____________________</p>
+</div>
+
+<hr data-id="858" class="divider">
+
+<!-- ==================== FACILITATOR RESOURCES ==================== -->
+<div data-id="859" class="page-break"></div>
+<h1 data-id="860">Facilitator Resources</h1>
+<h2 data-id="861">Common Questions and Answers</h2>
+
+<div data-id="862" class="qa-block">
+    <p data-id="863" class="qa-question">Q: Do I need a license to use a mesh network?</p>
+    <p data-id="864" class="qa-answer">No. Meshtastic operates in the unlicensed 915 MHz ISM band. No FCC license is required.</p>
+</div>
+<div data-id="865" class="qa-block">
+    <p data-id="866" class="qa-question">Q: What if someone in my neighborhood refuses to participate?</p>
+    <p data-id="867" class="qa-answer">You cannot compel participation. Focus on those who are willing. Having even 20% of households connected provides significant benefit for the whole community.</p>
+</div>
+<div data-id="868" class="qa-block">
+    <p data-id="869" class="qa-question">Q: Is this legal?</p>
+    <p data-id="870" class="qa-answer">Yes. All technologies covered in this curriculum are legal when used as described. Amateur radio requires a license for licensed bands. FRS/GMRS are legal with appropriate licensing. Mesh networks in the ISM band require no license.</p>
+</div>
+<div data-id="871" class="qa-block">
+    <p data-id="872" class="qa-question">Q: What about privacy?</p>
+    <p data-id="873" class="qa-answer">Meshtastic messages on the default channel are not encrypted. Use the community channel key for sensitive communications. USB drives should not contain sensitive personal information in unencrypted form.</p>
+</div>
+<div data-id="874" class="qa-block">
+    <p data-id="875" class="qa-question">Q: How do we fund this?</p>
+    <p data-id="876" class="qa-answer">Many community resilience networks operate entirely on volunteer time and donated equipment. Some obtain grants through local emergency management offices, community foundations, or mutual aid networks. Equipment costs can be shared &mdash; one community node can serve 20+ households.</p>
+</div>
+
+<hr data-id="877" class="divider">
+
+<!-- ==================== SUPPLEMENTAL WORKSHOP ==================== -->
+<h1 data-id="878">Supplemental Workshop &mdash; Advanced Topics</h1>
+<div data-id="879" class="callout callout-note">
+    <p data-id="880" class="callout-label">&#9654; OPTIONAL 2-HOUR ADD-ON SESSION</p>
+    <p data-id="881"><strong data-id="882">Prerequisite:</strong> Technician or General license for HF/Winlink topics.</p>
+</div>
+
+<table data-id="883">
+    <thead data-id="884">
+        <tr data-id="885">
+            <th data-id="886">Topic</th>
+            <th data-id="887">Duration</th>
+            <th data-id="888">Prerequisite</th>
+        </tr>
+    </thead>
+    <tbody data-id="889">
+        <tr data-id="890">
+            <td data-id="891">HF Radio and Long-Distance Communications</td>
+            <td data-id="892">30 min</td>
+            <td data-id="893">General license recommended</td>
+        </tr>
+        <tr data-id="894">
+            <td data-id="895">Winlink and JS8Call for digital messaging over radio</td>
+            <td data-id="896">30 min</td>
+            <td data-id="897">Technician or General license</td>
+        </tr>
+        <tr data-id="898">
+            <td data-id="899">APRS for position tracking and messaging</td>
+            <td data-id="900">20 min</td>
+            <td data-id="901">Technician license</td>
+        </tr>
+        <tr data-id="902">
+            <td data-id="903">Raspberry Pi mesh node build</td>
+            <td data-id="904">40 min</td>
+            <td data-id="905">None (technical interest helpful)</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- FOOTER -->
+<div data-id="906" class="footer-block">
+    <p data-id="907"><strong data-id="908">Offline Network Resilience System &mdash; Workshop Curriculum</strong></p>
+    <p data-id="909">This curriculum is part of the Offline Network Resilience System. <strong data-id="910">Reproduce and adapt freely for your community.</strong></p>
+    <p data-id="911">Facilitator questions: Contact your local ARES/CERT coordinator or amateur radio club.</p>
+    <p data-id="912">Version 1.0 &mdash; 2026 &mdash; CC BY-SA 4.0</p>
+</div>
+
+</body>
+</html>
