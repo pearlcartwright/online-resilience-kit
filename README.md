@@ -7,6 +7,19 @@ A free, public resource for building personal, family, and community resilience 
 
 ---
 
+## Use the Online Resilience Kit
+
+🌱 Live Resource:
+
+https://imaginative-dieffenbachia-1c9eb9.netlify.app/
+
+No sign-up required.
+No advertising.
+No paywall.
+Free for everyone.
+
+
+
 ## Purpose
 
 The Online Resilience Kit was created to make practical resilience knowledge freely available to anyone who may find it useful.
