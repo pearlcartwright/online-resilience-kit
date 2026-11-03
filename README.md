@@ -37,4 +37,51 @@ The Online Resilience Kit was created to provide accessible, actionable resource
 
 Use it for yourself.
 
-Share it with friends, family, neighbors, schools, libraries
+Share it with friends, family, neighbors, schools, libraries, community organizations, emergency preparedness groups, or anyone who may benefit from it.
+
+Adapt it to meet the needs of your community.
+
+Build upon it and improve it.
+
+The only request is that it remain freely available to others.
+
+---
+
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)** license.
+
+You are free to:
+
+- Share
+- Copy
+- Redistribute
+- Adapt
+- Remix
+- Build upon this work
+
+Under the following conditions:
+
+- Attribution must be provided.
+- Commercial use is not permitted.
+- Derivative works must be distributed under the same license.
+
+For details, see:
+
+[https://creativecommons.org/licenses/by-nc-sa/4.0/](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+---
+
+## Open Invitation
+
+If this resource helps you, please share it.
+
+If you improve it, please share your improvements.
+
+If you teach from it, adapt it, localize it, or expand it, please help others benefit from your work.
+
+Resilience grows when knowledge is shared.
+
+---
+
+*"The best time to prepare is before you need to."*
